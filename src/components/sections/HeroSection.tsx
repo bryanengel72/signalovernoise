@@ -23,62 +23,43 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
   return (
     <section ref={ref} className="relative min-h-[90vh] flex items-end border-b border-grid overflow-hidden bg-bg">
 
-      {/* Parallax background image */}
-      <motion.img
-        src={HERO_IMAGE}
-        alt="Radio telescope against the night sky"
-        style={{ y: imgY, opacity: 0.15 }}
-        className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center will-change-transform"
-      />
+      {/* Background stack */}
+      <div className="absolute inset-0 bg-bg pointer-events-none" />
+      
+      {/* 1. Base Gradients (very subtle now) */}
+      <div className="absolute inset-0 bg-gradient-to-t from-bg via-transparent to-transparent z-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-r from-bg/40 via-transparent to-transparent z-0 pointer-events-none" />
 
-      {/* Animated technical grid background */}
+      {/* 2. Technical Grid (subtle overlay) */}
       <motion.div
         style={{ y: imgY }}
-        className="absolute inset-0 w-full h-[130%] -top-[15%] pointer-events-none will-change-transform"
+        className="absolute inset-0 w-full h-[130%] -top-[15%] z-10 pointer-events-none will-change-transform opacity-20"
         aria-hidden="true"
       >
-        {/* Grid lines */}
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" className="opacity-[0.14]">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#00E5FF" strokeWidth="0.5"/>
+              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#00E5FF" strokeWidth="0.5" opacity="0.3"/>
             </pattern>
             <pattern id="grid-large" width="300" height="300" patternUnits="userSpaceOnUse">
-              <path d="M 300 0 L 0 0 0 300" fill="none" stroke="#00E5FF" strokeWidth="1"/>
+              <path d="M 300 0 L 0 0 0 300" fill="none" stroke="#00E5FF" strokeWidth="1" opacity="0.5"/>
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#grid)" />
           <rect width="100%" height="100%" fill="url(#grid-large)" />
         </svg>
-
-        {/* Schematic corner marks */}
-        {[
-          { x: '8%',  y: '12%' },
-          { x: '35%', y: '28%' },
-          { x: '65%', y: '18%' },
-          { x: '82%', y: '40%' },
-          { x: '20%', y: '55%' },
-          { x: '55%', y: '70%' },
-        ].map((pos, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-3 h-3 border-l border-t border-signal/40"
-            style={{ left: pos.x, top: pos.y }}
-            animate={{ opacity: [0.4, 0.8, 0.4] }}
-            transition={{ duration: 3 + i * 0.7, repeat: Infinity, ease: 'easeInOut', delay: i * 0.4 }}
-          />
-        ))}
-
-        {/* Diagonal accent line */}
-        <svg className="absolute inset-0 w-full h-full opacity-[0.08]" xmlns="http://www.w3.org/2000/svg">
-          <line x1="0" y1="0" x2="100%" y2="100%" stroke="#00E5FF" strokeWidth="1" />
-          <line x1="100%" y1="0" x2="60%" y2="100%" stroke="#00E5FF" strokeWidth="0.5" />
-        </svg>
       </motion.div>
 
-      {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/80 to-bg/30 pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-r from-bg/90 via-transparent to-transparent pointer-events-none" />
+      {/* 3. The Telescope (in front of grid/gradients) */}
+      <motion.img
+        src={HERO_IMAGE}
+        alt="Radio telescope against the night sky"
+        style={{ y: imgY, opacity: 0.85 }}
+        className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center z-20 will-change-transform"
+      />
+
+      {/* 4. Content Protection Gradient (bottom fade only) */}
+      <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/20 to-transparent z-30 pointer-events-none" />
 
       {/* Content */}
       <motion.div
