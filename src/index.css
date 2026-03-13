@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Outfit", sans-serif;
+  --font-mono: "Inter", sans-serif;
+  --color-bg: #0B0E14;
+  --color-surface: #151821;
+  --color-grid: #1E2330;
+  --color-signal: #00E5FF;
+  --color-text: #F8FAFC;
+  --color-muted: #94A3B8;
+}
+
+:root {
+  --color-bg: #0B0E14;
+  --color-surface: #151821;
+  --color-grid: #1E2330;
+  --color-signal: #00E5FF;
+  --color-text: #F8FAFC;
+  --color-muted: #94A3B8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a, button, input, textarea {
+  cursor: pointer;
+}
+
+/* Noise overlay */
+.noise-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+}
+
+
+/* Custom Selection */
+::selection {
+  background: var(--color-signal);
+  color: #000;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(21, 24, 33, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Signal Glow utility — for box elements like buttons and divs */
+.glow-signal {
+  box-shadow: 0 0 24px -4px var(--color-signal);
+}
+
+/* Text glow — use on spans containing text */
+.text-glow-signal {
+  text-shadow: 0 0 20px var(--color-signal), 0 0 40px var(--color-signal);
+}
