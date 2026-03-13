@@ -1,7 +1,34 @@
+import { useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
-import { Mail, Calendar, ArrowRight } from 'lucide-react';
+import { Mail, Calendar, ArrowRight, Loader2 } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
 
 export const ContactSection = () => {
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus('loading');
+
+    const form = e.currentTarget;
+    const data = {
+      name: (form.elements.namedItem('name') as HTMLInputElement).value,
+      email: (form.elements.namedItem('email') as HTMLInputElement).value,
+      company: (form.elements.namedItem('company') as HTMLInputElement).value,
+      message: (form.elements.namedItem('message') as HTMLTextAreaElement).value,
+    };
+
+    const { error } = await supabase.from('booking_inquiries').insert([data]);
+
+    if (error) {
+      console.error('Supabase error:', error);
+      setStatus('error');
+    } else {
+      setStatus('success');
+      form.reset();
+    }
+  };
+
   return (
     <section className="grid grid-cols-1 lg:grid-cols-2 border-b border-grid" id="contact">
       <div className="p-8 lg:p-16 border-b lg:border-b-0 lg:border-r border-grid">
@@ -49,6 +76,16 @@ export const ContactSection = () => {
             </div>
             Discovery calls within 48h
           </div>
+
+          <button
+            data-cal-link="bryan-engel-amlxcu/30min"
+            data-cal-namespace="30min"
+            data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}'
+            className="mt-4 w-full sm:w-auto px-8 py-4 text-sm font-semibold bg-signal text-bg rounded-full hover:glow-signal border border-signal transition-all flex items-center gap-2 group"
+          >
+            <Calendar size={16} />
+            Schedule a Discovery Call
+          </button>
         </motion.div>
       </div>
       
@@ -57,16 +94,8 @@ export const ContactSection = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="border border-grid bg-bg flex flex-col" 
-          onSubmit={(e) => {
-            e.preventDefault();
-            const btn = e.currentTarget.querySelector('button');
-            if (btn) {
-              btn.innerHTML = 'DATA TRANSMITTED <span class="ml-2">✓</span>';
-              btn.classList.add('bg-white', 'text-black');
-              btn.classList.remove('bg-signal', 'hover:bg-white');
-            }
-          }}
+          className="border border-grid bg-bg flex flex-col"
+          onSubmit={handleSubmit}
         >
           <div className="p-6 border-b border-grid bg-surface/50 backdrop-blur-sm">
             <span className="text-sm font-semibold text-white tracking-widest uppercase">Secure Comms Channel</span>
@@ -75,26 +104,44 @@ export const ContactSection = () => {
           <div className="p-6 space-y-6">
             <div className="space-y-2">
               <label className="text-[10px] text-signal uppercase tracking-widest">ID / Name</label>
-              <input type="text" required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="Enter designation..." />
+              <input name="name" type="text" required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="Enter designation..." />
             </div>
             <div className="space-y-2">
               <label className="text-[10px] text-signal uppercase tracking-widest">Comm / Email</label>
-              <input type="email" required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="Enter routing address..." />
+              <input name="email" type="email" required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="Enter routing address..." />
             </div>
             <div className="space-y-2">
               <label className="text-[10px] text-signal uppercase tracking-widest">Org / Company</label>
-              <input type="text" className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="Enter affiliation..." />
+              <input name="company" type="text" className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="Enter affiliation..." />
             </div>
             <div className="space-y-2">
               <label className="text-[10px] text-signal uppercase tracking-widest">Parameters / Challenge</label>
-              <textarea rows={4} required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30 resize-none" placeholder="Define objective..." />
+              <textarea name="message" rows={4} required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30 resize-none" placeholder="Define objective..." />
             </div>
           </div>
+
           <div className="p-6 bg-surface/30">
-            <button type="submit" className="w-full p-4 bg-signal text-bg font-semibold text-sm rounded-full hover:glow-signal border border-signal transition-all flex justify-between items-center group">
-              Transmit Data
-              <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
-            </button>
+            {status === 'success' ? (
+              <div className="w-full p-4 bg-white text-black font-semibold text-sm rounded-full flex justify-between items-center">
+                DATA TRANSMITTED <span>✓</span>
+              </div>
+            ) : status === 'error' ? (
+              <div className="w-full p-4 border border-red-500 text-red-400 font-semibold text-sm rounded-full text-center">
+                Transmission failed — try again
+              </div>
+            ) : (
+              <button
+                type="submit"
+                disabled={status === 'loading'}
+                className="w-full p-4 bg-signal text-bg font-semibold text-sm rounded-full hover:glow-signal border border-signal transition-all flex justify-between items-center group disabled:opacity-60"
+              >
+                {status === 'loading' ? 'Transmitting...' : 'Transmit Data'}
+                {status === 'loading'
+                  ? <Loader2 size={16} className="animate-spin" />
+                  : <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
+                }
+              </button>
+            )}
           </div>
         </motion.form>
       </div>

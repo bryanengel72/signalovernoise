@@ -4,6 +4,7 @@ import { Navbar } from './components/sections/Navbar';
 import { HeroSection } from './components/sections/HeroSection';
 import { ProblemSection } from './components/sections/ProblemSection';
 import { ServicesSection } from './components/sections/ServicesSection';
+import { EfficiencySection } from './components/sections/EfficiencySection';
 import { ProcessSection } from './components/sections/ProcessSection';
 import { AboutSection } from './components/sections/AboutSection';
 import { ContactSection } from './components/sections/ContactSection';
@@ -31,6 +32,7 @@ export default function App() {
         <Marquee />
         <ProblemSection />
         <ServicesSection />
+        <EfficiencySection />
         <ProcessSection />
         <AboutSection />
         <ContactSection />
