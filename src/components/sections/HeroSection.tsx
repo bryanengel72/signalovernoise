@@ -38,30 +38,8 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
       <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/60 to-transparent z-20 pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-r from-bg via-bg/40 to-transparent z-20 pointer-events-none" />
 
-      {/* 3. Technical Grid Overlay (Scientific Layer) */}
-      <motion.div
-        style={{ y: imgY }}
-        className="absolute inset-0 w-full h-[130%] -top-[15%] z-30 pointer-events-none will-change-transform opacity-[0.08]"
-        aria-hidden="true"
-      >
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#00E5FF" strokeWidth="0.5"/>
-            </pattern>
-            <pattern id="grid-large" width="300" height="300" patternUnits="userSpaceOnUse">
-              <path d="M 300 0 L 0 0 0 300" fill="none" stroke="#00E5FF" strokeWidth="1"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-          <rect width="100%" height="100%" fill="url(#grid-large)" />
-        </svg>
-
-        {/* Diagonal accent line inside grid */}
-        <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
-          <line x1="0" y1="0" x2="100%" y2="100%" stroke="#00E5FF" strokeWidth="1" />
-        </svg>
-      </motion.div>
+      {/* 3. Content Protection Gradient (bottom fade only) */}
+      <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/20 to-transparent z-30 pointer-events-none" />
 
       {/* Content */}
       <motion.div
