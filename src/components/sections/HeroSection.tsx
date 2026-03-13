@@ -21,25 +21,19 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
   const imgY = useSpring(rawY, { stiffness: 60, damping: 20 });
 
   return (
-    <section ref={ref} className="relative min-h-[90vh] flex items-end border-b border-grid overflow-hidden bg-bg">
+    <section ref={ref} className="relative min-h-[90vh] flex items-end border-b border-grid overflow-hidden bg-black">
 
-      {/* Background stack */}
-      <div className="absolute inset-0 bg-bg z-0" />
-      
-      {/* 1. The Telescope Image (Focal Background) */}
+      {/* 1. Higher Opacity Image */}
       <motion.img
         src={HERO_IMAGE}
         alt="Radio telescope"
         style={{ y: imgY }}
-        className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center opacity-40 z-10 will-change-transform"
+        className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center opacity-75 z-10 will-change-transform"
       />
 
-      {/* 2. Legibility Gradients (Protects text) */}
-      <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/60 to-transparent z-20 pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-r from-bg via-bg/40 to-transparent z-20 pointer-events-none" />
-
-      {/* 3. Content Protection Gradient (bottom fade only) */}
-      <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/20 to-transparent z-30 pointer-events-none" />
+      {/* 2. Refined Overlay: Darker on left (text side), clear on right (image side) */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent z-20 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-20 pointer-events-none" />
 
       {/* Content */}
       <motion.div
@@ -60,7 +54,7 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
-          className="font-display text-5xl lg:text-8xl font-light tracking-tight mb-8 leading-tight"
+          className="font-display text-5xl lg:text-8xl font-light tracking-tight mb-8 leading-tight text-white"
         >
           Automate the Noise.{' '}
           <span className="font-bold text-signal text-glow-signal">Scale the Signal.</span>
@@ -70,7 +64,7 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
-          className="text-muted text-sm lg:text-base max-w-xl mb-10 leading-relaxed"
+          className="text-white/90 text-sm lg:text-base max-w-xl mb-10 leading-relaxed"
         >
           We engineer custom AI agentic workflows that eliminate operational friction for B2B enterprises. Move past the hype with ROI-driven automation.
         </motion.p>
@@ -83,16 +77,14 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
         >
           <button
             onClick={() => scrollTo('contact')}
-            className="bg-signal text-bg px-8 py-4 text-sm font-semibold rounded-full hover:glow-signal border border-signal transition-all flex items-center gap-2 group"
+            className="bg-signal text-black px-8 py-4 text-sm font-semibold rounded-full hover:glow-signal border border-signal transition-all flex items-center gap-2 group"
           >
             Request an Efficiency Audit
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </button>
           <button
             data-cal-link="bryan-engel-amlxcu/30min"
-            data-cal-namespace="30min"
-            data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}'
-            className="px-8 py-4 text-sm font-semibold text-white border border-white/20 rounded-full hover:bg-white/5 glass transition-all"
+            className="px-8 py-4 text-sm font-semibold text-white border border-white/20 rounded-full hover:bg-white/10 glass transition-all"
           >
             Book Consultation
           </button>
