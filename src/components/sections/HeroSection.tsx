@@ -6,6 +6,8 @@ interface HeroSectionProps {
   scrollTo: (id: string) => void;
 }
 
+const HERO_IMAGE = 'https://www.maxim.com/wp-content/uploads/2021/05/gettyimages-595463638-radio-telescope-scaled.jpg';
+
 export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
   const ref = useRef<HTMLElement>(null);
 
@@ -16,14 +18,22 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
 
   const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '-12%']);
   const rawY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-  const gridY = useSpring(rawY, { stiffness: 60, damping: 20 });
+  const imgY = useSpring(rawY, { stiffness: 60, damping: 20 });
 
   return (
     <section ref={ref} className="relative min-h-[90vh] flex items-end border-b border-grid overflow-hidden bg-bg">
 
+      {/* Parallax background image */}
+      <motion.img
+        src={HERO_IMAGE}
+        alt="Radio telescope against the night sky"
+        style={{ y: imgY, opacity: 0.15 }}
+        className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center will-change-transform"
+      />
+
       {/* Animated technical grid background */}
       <motion.div
-        style={{ y: gridY }}
+        style={{ y: imgY }}
         className="absolute inset-0 w-full h-[130%] -top-[15%] pointer-events-none will-change-transform"
         aria-hidden="true"
       >
