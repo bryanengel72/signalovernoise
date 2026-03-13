@@ -24,47 +24,49 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
     <section ref={ref} className="relative min-h-[90vh] flex items-end border-b border-grid overflow-hidden bg-bg">
 
       {/* Background stack */}
-      <div className="absolute inset-0 bg-bg pointer-events-none" />
+      <div className="absolute inset-0 bg-bg z-0" />
       
-      {/* 1. Base Gradients (very subtle now) */}
-      <div className="absolute inset-0 bg-gradient-to-t from-bg via-transparent to-transparent z-0 pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-r from-bg/40 via-transparent to-transparent z-0 pointer-events-none" />
+      {/* 1. The Telescope Image (Focal Background) */}
+      <motion.img
+        src={HERO_IMAGE}
+        alt="Radio telescope"
+        style={{ y: imgY }}
+        className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center opacity-40 z-10 will-change-transform"
+      />
 
-      {/* 2. Technical Grid (subtle overlay) */}
+      {/* 2. Legibility Gradients (Protects text) */}
+      <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/60 to-transparent z-20 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-r from-bg via-bg/40 to-transparent z-20 pointer-events-none" />
+
+      {/* 3. Technical Grid Overlay (Scientific Layer) */}
       <motion.div
         style={{ y: imgY }}
-        className="absolute inset-0 w-full h-[130%] -top-[15%] z-10 pointer-events-none will-change-transform opacity-20"
+        className="absolute inset-0 w-full h-[130%] -top-[15%] z-30 pointer-events-none will-change-transform opacity-[0.08]"
         aria-hidden="true"
       >
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#00E5FF" strokeWidth="0.5" opacity="0.3"/>
+              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#00E5FF" strokeWidth="0.5"/>
             </pattern>
             <pattern id="grid-large" width="300" height="300" patternUnits="userSpaceOnUse">
-              <path d="M 300 0 L 0 0 0 300" fill="none" stroke="#00E5FF" strokeWidth="1" opacity="0.5"/>
+              <path d="M 300 0 L 0 0 0 300" fill="none" stroke="#00E5FF" strokeWidth="1"/>
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#grid)" />
           <rect width="100%" height="100%" fill="url(#grid-large)" />
         </svg>
+
+        {/* Diagonal accent line inside grid */}
+        <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="0" x2="100%" y2="100%" stroke="#00E5FF" strokeWidth="1" />
+        </svg>
       </motion.div>
-
-      {/* 3. The Telescope (in front of grid/gradients) */}
-      <motion.img
-        src={HERO_IMAGE}
-        alt="Radio telescope against the night sky"
-        style={{ y: imgY, opacity: 0.85 }}
-        className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center z-20 will-change-transform"
-      />
-
-      {/* 4. Content Protection Gradient (bottom fade only) */}
-      <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/20 to-transparent z-30 pointer-events-none" />
 
       {/* Content */}
       <motion.div
         style={{ y: contentY }}
-        className="relative z-10 w-full max-w-4xl p-8 lg:p-16 pb-16 lg:pb-24 will-change-transform"
+        className="relative z-40 w-full max-w-4xl p-8 lg:p-16 pb-16 lg:pb-24 will-change-transform"
       >
         <motion.div
           initial={{ opacity: 0, x: -20 }}
