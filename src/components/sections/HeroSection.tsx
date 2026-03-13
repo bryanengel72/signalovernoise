@@ -28,7 +28,7 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
         src={HERO_IMAGE}
         alt="Radio telescope"
         style={{ y: imgY }}
-        className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center opacity-85 z-10 will-change-transform"
+        className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center opacity-77 z-10 will-change-transform"
       />
 
       {/* 2. Refined Overlay: Darker on left (text side), clear on right (image side) */}
