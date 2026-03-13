@@ -28,7 +28,7 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
         aria-hidden="true"
       >
         {/* Grid lines */}
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" className="opacity-[0.06]">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" className="opacity-[0.14]">
           <defs>
             <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
               <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#00E5FF" strokeWidth="0.5"/>
@@ -52,15 +52,15 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
         ].map((pos, i) => (
           <motion.div
             key={i}
-            className="absolute w-3 h-3 border-l border-t border-signal/20"
+            className="absolute w-3 h-3 border-l border-t border-signal/40"
             style={{ left: pos.x, top: pos.y }}
-            animate={{ opacity: [0.2, 0.6, 0.2] }}
+            animate={{ opacity: [0.4, 0.8, 0.4] }}
             transition={{ duration: 3 + i * 0.7, repeat: Infinity, ease: 'easeInOut', delay: i * 0.4 }}
           />
         ))}
 
         {/* Diagonal accent line */}
-        <svg className="absolute inset-0 w-full h-full opacity-[0.04]" xmlns="http://www.w3.org/2000/svg">
+        <svg className="absolute inset-0 w-full h-full opacity-[0.08]" xmlns="http://www.w3.org/2000/svg">
           <line x1="0" y1="0" x2="100%" y2="100%" stroke="#00E5FF" strokeWidth="1" />
           <line x1="100%" y1="0" x2="60%" y2="100%" stroke="#00E5FF" strokeWidth="0.5" />
         </svg>
