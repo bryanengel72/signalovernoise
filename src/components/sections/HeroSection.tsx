@@ -47,39 +47,60 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
           className="flex items-center gap-4 text-signal text-xs tracking-widest uppercase mb-8"
         >
           <Crosshair size={14} />
-          <span>AI Signal Intelligence</span>
+          <span>B2B AI Consulting</span>
         </motion.div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
-          className="font-display text-5xl lg:text-8xl font-light tracking-tight mb-8 leading-tight text-white"
-        >
-          Automate the Noise.{' '}
-          <span className="font-bold text-signal text-glow-signal">Scale the Signal.</span>
-        </motion.h1>
+        <h1 className="font-display text-5xl lg:text-8xl tracking-tight mb-8 leading-tight">
+          {[
+            { text: 'Simple AI.', delay: 0.1, bold: false },
+            { text: 'Clear Strategy.', delay: 0.25, bold: false },
+            { text: 'Real Growth.', delay: 0.4, bold: true },
+          ].map(({ text, delay, bold }) => (
+            <motion.span
+              key={text}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: 'easeOut', delay }}
+              className={`block ${bold ? 'font-bold text-signal text-glow-signal' : 'font-light text-white'}`}
+            >
+              {text}
+            </motion.span>
+          ))}
+        </h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
-          className="text-white/90 text-sm lg:text-base max-w-xl mb-10 leading-relaxed"
+          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.55 }}
+          className="text-white/80 text-sm lg:text-base max-w-xl mb-8 leading-relaxed"
         >
-          We engineer custom AI agentic workflows that eliminate operational friction for B2B enterprises. Move past the hype with ROI-driven automation.
+          We build custom AI systems that cut costs, accelerate decisions, and deliver measurable ROI — without the hype, lock-in, or guesswork.
         </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: 'easeOut', delay: 0.65 }}
+          className="flex items-center gap-6 mb-10 text-xs tracking-widest uppercase text-white/40"
+        >
+          <span>No Lock-In</span>
+          <span className="text-white/20">·</span>
+          <span>90-Day ROI Focus</span>
+          <span className="text-white/20">·</span>
+          <span>Enterprise-Grade</span>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
+          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.75 }}
           className="flex flex-wrap items-center gap-6"
         >
           <button
             onClick={() => scrollTo('contact')}
             className="bg-signal text-black px-8 py-4 text-sm font-semibold rounded-full hover:glow-signal border border-signal transition-all flex items-center gap-2 group"
           >
-            Request an Efficiency Audit
+            Get Your Free AI Audit
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </button>
           <button
