@@ -6,19 +6,19 @@ const pillars = [
     icon: Cpu,
     label: 'Technical Architecture',
     title: 'Systems, Not Prompts.',
-    desc: 'Led by an AI Agent Developer with an MS in Innovation & Technology. Every solution is engineered as a deployable system — not a wrapper around a chatbot.',
+    desc: 'Led by an AI developer with an MS in Innovation & Technology. Every solution is a real working system — not just a chatbot.',
   },
   {
     icon: TrendingUp,
     label: 'Business ROI',
-    title: 'MBA-Backed Strategy.',
-    desc: 'Every engagement is scoped around bottom-line efficiency metrics and scalable growth targets. If the ROI cannot be measured, the project is not scoped.',
+    title: 'Strategy That Pays Off.',
+    desc: 'Every engagement is built around measurable results and growth targets. If we can\'t track the impact, we don\'t take the project.',
   },
   {
     icon: Network,
     label: 'Advanced Frameworks',
     title: '"Council of 5" Architecture.',
-    desc: 'Pioneers of multi-perspective decision engines. Our proprietary agentic framework deploys five specialized agents in parallel to synthesize high-fidelity outputs with built-in adversarial review.',
+    desc: 'Our proprietary "Council of 5" system runs five specialized AI roles in parallel — each one checking the others\' work — to deliver better, more reliable results.',
   },
 ];
 

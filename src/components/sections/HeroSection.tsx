@@ -87,7 +87,7 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
           <span className="text-white/20">·</span>
           <span>90-Day ROI Focus</span>
           <span className="text-white/20">·</span>
-          <span>Enterprise-Grade</span>
+          <span>Professional-Grade</span>
         </motion.div>
 
         <motion.div

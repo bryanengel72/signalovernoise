@@ -62,7 +62,7 @@ export const Navbar = ({ scrollTo }: NavbarProps) => {
       >
         {/* Hover fill */}
         <span className="absolute inset-0 bg-signal/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
-        <span className="relative z-10 group-hover:text-signal transition-colors duration-300">Initialize</span>
+        <span className="relative z-10 group-hover:text-signal transition-colors duration-300">Get Started</span>
       </button>
     </motion.nav>
   );

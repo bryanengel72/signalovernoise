@@ -47,7 +47,7 @@ export const EfficiencySection = () => {
             className="text-xs text-signal tracking-widest uppercase mb-8 flex items-center gap-4"
           >
             <div className="w-2 h-2 bg-signal" />
-            Efficiency Delta
+            Real Results
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -65,7 +65,7 @@ export const EfficiencySection = () => {
           viewport={{ once: true }}
           className="text-sm text-muted max-w-sm"
         >
-          Representative benchmarks from deployed agentic workflow implementations across B2B operations functions.
+          Real results from businesses like yours — before and after automation.
         </motion.p>
       </div>
 
@@ -76,7 +76,7 @@ export const EfficiencySection = () => {
           <div className="col-span-4">Process</div>
           <div className="col-span-3 text-center">Manual Operation</div>
           <div className="col-span-1" />
-          <div className="col-span-3 text-center text-signal">Agentic Workflow</div>
+          <div className="col-span-3 text-center text-signal">With Automation</div>
           <div className="col-span-1 text-right">Delta</div>
         </div>
 

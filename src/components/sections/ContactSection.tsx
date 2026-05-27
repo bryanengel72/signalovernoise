@@ -39,15 +39,15 @@ export const ContactSection = () => {
           className="text-xs text-signal tracking-widest uppercase mb-12 flex items-center gap-4"
         >
           <div className="w-2 h-2 bg-signal" />
-          Comm Link
+          Get in Touch
         </motion.div>
-        <motion.h2 
+        <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="font-display text-5xl lg:text-6xl font-light tracking-tight mb-8"
         >
-          Initiate <span className="font-bold text-signal text-glow-signal">Contact.</span>
+          Let's <span className="font-bold text-signal text-glow-signal">Talk.</span>
         </motion.h2>
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
@@ -98,32 +98,32 @@ export const ContactSection = () => {
           onSubmit={handleSubmit}
         >
           <div className="p-6 border-b border-grid bg-surface/50 backdrop-blur-sm">
-            <span className="text-sm font-semibold text-white tracking-widest uppercase">Secure Comms Channel</span>
+            <span className="text-sm font-semibold text-white tracking-widest uppercase">Send a Message</span>
           </div>
           
           <div className="p-6 space-y-6">
             <div className="space-y-2">
-              <label className="text-[10px] text-signal uppercase tracking-widest">ID / Name</label>
-              <input name="name" type="text" required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="Enter designation..." />
+              <label className="text-[10px] text-signal uppercase tracking-widest">Name</label>
+              <input name="name" type="text" required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="Your name" />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] text-signal uppercase tracking-widest">Comm / Email</label>
-              <input name="email" type="email" required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="Enter routing address..." />
+              <label className="text-[10px] text-signal uppercase tracking-widest">Email</label>
+              <input name="email" type="email" required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="your@email.com" />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] text-signal uppercase tracking-widest">Org / Company</label>
-              <input name="company" type="text" className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="Enter affiliation..." />
+              <label className="text-[10px] text-signal uppercase tracking-widest">Company</label>
+              <input name="company" type="text" className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="Your company (optional)" />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] text-signal uppercase tracking-widest">Parameters / Challenge</label>
-              <textarea name="message" rows={4} required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30 resize-none" placeholder="Define objective..." />
+              <label className="text-[10px] text-signal uppercase tracking-widest">What are you working on?</label>
+              <textarea name="message" rows={4} required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30 resize-none" placeholder="Tell us what you need..." />
             </div>
           </div>
 
           <div className="p-6 bg-surface/30">
             {status === 'success' ? (
               <div className="w-full p-4 bg-white text-black font-semibold text-sm rounded-full flex justify-between items-center">
-                DATA TRANSMITTED <span>✓</span>
+                Message Sent <span>✓</span>
               </div>
             ) : status === 'error' ? (
               <div className="w-full p-4 border border-red-500 text-red-400 font-semibold text-sm rounded-full text-center">
@@ -135,7 +135,7 @@ export const ContactSection = () => {
                 disabled={status === 'loading'}
                 className="w-full p-4 bg-signal text-bg font-semibold text-sm rounded-full hover:glow-signal border border-signal transition-all flex justify-between items-center group disabled:opacity-60"
               >
-                {status === 'loading' ? 'Transmitting...' : 'Transmit Data'}
+                {status === 'loading' ? 'Sending...' : 'Send Message'}
                 {status === 'loading'
                   ? <Loader2 size={16} className="animate-spin" />
                   : <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />

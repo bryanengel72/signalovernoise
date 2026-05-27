@@ -3,10 +3,10 @@ import { Activity, Cpu, Database, Terminal } from 'lucide-react';
 import { useRef } from 'react';
 
 const problems = [
-  { icon: Activity,  title: "Unstructured Data Overhead",       desc: "Disparate data sources consume analyst bandwidth without producing actionable output.",  color: "#00E5FF" },
-  { icon: Database,  title: "Process Inefficiency",             desc: "Repetitive manual workflows consume capacity that should be allocated to high-leverage tasks.", color: "#00E5FF" },
-  { icon: Terminal,  title: "Deployment Failure Rate",          desc: "Pilot-stage AI tools fail to reach production due to poor systems integration and no deployment framework.", color: "#00E5FF" },
-  { icon: Cpu,       title: "No Implementation Framework",      desc: "No prioritized roadmap means AI investment is scattered. No sequencing. No measurable ROI targets.", color: "#00E5FF" },
+  { icon: Activity,  title: "Scattered Data",                   desc: "Data spread across too many places wastes hours every week without producing anything useful.",  color: "#00E5FF" },
+  { icon: Database,  title: "Process Inefficiency",             desc: "Repetitive manual work eats up time that should go toward growth and higher-value tasks.", color: "#00E5FF" },
+  { icon: Terminal,  title: "AI Tools That Never Stick",        desc: "Most AI experiments never make it into daily use — they stall out before anyone sees results.", color: "#00E5FF" },
+  { icon: Cpu,       title: "No Clear Plan",                    desc: "Without a prioritized roadmap, AI spending is scattered and nothing gets measured.", color: "#00E5FF" },
 ];
 
 function TiltCard({ item, index }: { item: typeof problems[0]; index: number }) {
@@ -90,7 +90,7 @@ export const ProblemSection = () => {
           className="text-xs text-signal tracking-widest uppercase mb-12 flex items-center gap-4"
         >
           <div className="w-2 h-2 bg-signal" />
-          Diagnostic
+          The Problem
         </motion.div>
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
@@ -108,7 +108,7 @@ export const ProblemSection = () => {
           transition={{ delay: 0.15 }}
           className="text-sm text-muted leading-relaxed"
         >
-          Most B2B organizations are running AI as an experiment, not an infrastructure decision. The result: compounding inefficiency, failed deployments, and zero ROI attribution.
+          Most businesses are treating AI like an experiment. The result: wasted time, failed tools, and nothing to show for the investment.
         </motion.p>
       </div>
       <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6 p-8 lg:p-16" style={{ perspective: '1000px' }}>

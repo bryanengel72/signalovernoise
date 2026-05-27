@@ -1,9 +1,9 @@
 import { motion } from 'motion/react';
 
 const phases = [
-  { step: "01", title: "Discover", desc: "Map current workflows, identify friction points, surface high-leverage automation opportunities.", tag: "30-60 MIN SCAN" },
-  { step: "02", title: "Design", desc: "Architect the solution. Scope exactly what to build, tools to use, and integration points.", tag: "1-2 WEEK SPRINT" },
-  { step: "03", title: "Deploy", desc: "Build, test, and deploy in your environment. Leave with working automation and training.", tag: "LIVE SYSTEM" }
+  { step: "01", title: "Discover", desc: "Map how your business operates today, find the biggest time-wasters, and identify where automation can help most.", tag: "30-60 MIN SCAN" },
+  { step: "02", title: "Design", desc: "Plan the solution. Define exactly what to build, what tools to use, and how everything connects.", tag: "1-2 WEEKS" },
+  { step: "03", title: "Deploy", desc: "Build, test, and launch in your environment. You leave with working automation and training to use it.", tag: "LIVE SYSTEM" }
 ];
 
 export const ProcessSection = () => {
@@ -17,7 +17,7 @@ export const ProcessSection = () => {
           className="text-xs text-signal tracking-widest uppercase mb-8 flex items-center gap-4"
         >
           <div className="w-2 h-2 bg-signal rounded-full" />
-          Execution Protocol
+          How It Works
         </motion.div>
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
