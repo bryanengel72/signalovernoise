@@ -1,20 +1,12 @@
-import { motion, useScroll, useTransform } from 'motion/react';
-
 interface NavbarProps {
   scrollTo: (id: string) => void;
 }
 
 export const Navbar = ({ scrollTo }: NavbarProps) => {
-  const { scrollY } = useScroll();
-
-  // Border and background intensify slightly as user scrolls
-  const bgOpacity = useTransform(scrollY, [0, 80], [0.1, 0.55]);
-  const borderOpacity = useTransform(scrollY, [0, 80], [0.04, 0.12]);
-
   return (
-    <motion.nav
+    <nav
       style={{
-        backgroundColor: `rgba(11, 14, 20, var(--nav-bg, 0.1))`,
+        backgroundColor: 'rgba(11, 14, 20, 0.1)',
         backdropFilter: 'blur(24px) saturate(180%)',
         WebkitBackdropFilter: 'blur(24px) saturate(180%)',
         boxShadow: '0 1px 0 rgba(255,255,255,0.05), 0 8px 32px rgba(0,0,0,0.4)',
@@ -64,6 +56,6 @@ export const Navbar = ({ scrollTo }: NavbarProps) => {
         <span className="absolute inset-0 bg-signal/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
         <span className="relative z-10 group-hover:text-signal transition-colors duration-300">Get Started</span>
       </button>
-    </motion.nav>
+    </nav>
   );
 };

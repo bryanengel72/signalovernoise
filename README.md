@@ -1,20 +1,34 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Signal Over Noise AI
 
-# Run and deploy your AI Studio app
+Marketing site for [Signal Over Noise AI](https://www.signalovernoiseai.com) — AI automation consulting for mid-market B2B.
 
-This contains everything you need to run your app locally.
+Built with React 19, Vite, Tailwind CSS 4, and Motion. Contact form submissions are stored in Supabase; discovery-call booking is handled by a Cal.com embed.
 
-View your app in AI Studio: https://ai.studio/apps/3d93055d-b61f-46a4-98bb-f8a909ecf165
+## Run locally
 
-## Run Locally
-
-**Prerequisites:**  Node.js
-
+**Prerequisites:** Node.js
 
 1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+   ```
+   npm install
+   ```
+2. Create `.env.local` with the Supabase credentials (used by the contact form):
+   ```
+   VITE_SUPABASE_URL=<project url>
+   VITE_SUPABASE_ANON_KEY=<anon key>
+   ```
+3. Start the dev server:
+   ```
+   npm run dev
+   ```
+
+## Scripts
+
+- `npm run dev` — dev server on port 3000
+- `npm run build` — production build to `dist/`
+- `npm run preview` — serve the production build locally
+- `npm run lint` — type-check with `tsc --noEmit`
+
+## Deployment
+
+Deployed on Vercel as a static Vite site (see `vercel.json`). Set the `VITE_SUPABASE_*` environment variables in the Vercel project settings.
