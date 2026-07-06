@@ -25,11 +25,11 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Scale the whole layout to 75% on desktop (all sizing is rem-based).
+/* Scale the whole layout to 85% on desktop (all sizing is rem-based).
    Tailwind breakpoints use the initial font size, so they are unaffected. */
 @media (min-width: 1024px) {
   html {
-    font-size: 12px;
+    font-size: 13.6px;
   }
 }
 
