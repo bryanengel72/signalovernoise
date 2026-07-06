@@ -6,7 +6,7 @@ interface HeroSectionProps {
   scrollTo: (id: string) => void;
 }
 
-const HERO_IMAGE = 'https://www.maxim.com/wp-content/uploads/2021/05/gettyimages-595463638-radio-telescope-scaled.jpg';
+const HERO_IMAGE = '/hero-radar.webp';
 
 export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
   const ref = useRef<HTMLElement>(null);
@@ -26,7 +26,8 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
       {/* 1. Higher Opacity Image */}
       <motion.img
         src={HERO_IMAGE}
-        alt="Radio telescope"
+        alt="Radio telescope array under the Milky Way at night"
+        fetchPriority="high"
         style={{ y: imgY }}
         className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center opacity-73 z-10 will-change-transform"
       />
@@ -81,13 +82,13 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.65 }}
-          className="flex items-center gap-6 mb-10 text-xs tracking-widest uppercase text-white/40"
+          className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-10 text-xs tracking-widest uppercase text-white/40"
         >
-          <span>No Lock-In</span>
+          <span className="whitespace-nowrap">No Lock-In</span>
           <span className="text-white/20">·</span>
-          <span>90-Day ROI Focus</span>
+          <span className="whitespace-nowrap">90-Day ROI Focus</span>
           <span className="text-white/20">·</span>
-          <span>Professional-Grade</span>
+          <span className="whitespace-nowrap">Professional-Grade</span>
         </motion.div>
 
         <motion.div
