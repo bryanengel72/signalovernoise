@@ -11,6 +11,14 @@ export const ContactSection = () => {
     setStatus('loading');
 
     const form = e.currentTarget;
+
+    // Honeypot: hidden field humans never fill — silently drop bot submissions
+    if ((form.elements.namedItem('website') as HTMLInputElement).value) {
+      setStatus('success');
+      form.reset();
+      return;
+    }
+
     const data = {
       name: (form.elements.namedItem('name') as HTMLInputElement).value,
       email: (form.elements.namedItem('email') as HTMLInputElement).value,
@@ -102,21 +110,22 @@ export const ContactSection = () => {
           </div>
           
           <div className="p-6 space-y-6">
+            <input name="website" type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 opacity-0" />
             <div className="space-y-2">
-              <label className="text-[10px] text-signal uppercase tracking-widest">Name</label>
-              <input name="name" type="text" required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="Your name" />
+              <label htmlFor="contact-name" className="text-[10px] text-signal uppercase tracking-widest">Name</label>
+              <input id="contact-name" name="name" type="text" required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="Your name" />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] text-signal uppercase tracking-widest">Email</label>
-              <input name="email" type="email" required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="your@email.com" />
+              <label htmlFor="contact-email" className="text-[10px] text-signal uppercase tracking-widest">Email</label>
+              <input id="contact-email" name="email" type="email" required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="your@email.com" />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] text-signal uppercase tracking-widest">Company</label>
-              <input name="company" type="text" className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="Your company (optional)" />
+              <label htmlFor="contact-company" className="text-[10px] text-signal uppercase tracking-widest">Company</label>
+              <input id="contact-company" name="company" type="text" className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="Your company (optional)" />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] text-signal uppercase tracking-widest">What are you working on?</label>
-              <textarea name="message" rows={4} required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30 resize-none" placeholder="Tell us what you need..." />
+              <label htmlFor="contact-message" className="text-[10px] text-signal uppercase tracking-widest">What are you working on?</label>
+              <textarea id="contact-message" name="message" rows={4} required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30 resize-none" placeholder="Tell us what you need..." />
             </div>
           </div>
 
