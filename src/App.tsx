@@ -27,7 +27,7 @@ export default function App() {
       
       <Navbar scrollTo={scrollTo} />
 
-      <main className="pt-[73px]">
+      <main className="pt-[4.5625rem]">
         <HeroSection scrollTo={scrollTo} />
         <Marquee />
         <ProblemSection />
