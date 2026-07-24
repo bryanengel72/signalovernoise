@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { X } from 'lucide-react';
 
 interface PrivacyPageProps {
@@ -7,8 +7,7 @@ interface PrivacyPageProps {
 
 export const PrivacyPage = ({ onClose }: PrivacyPageProps) => {
   return (
-    <AnimatePresence>
-      <motion.div
+    <motion.div
         key="privacy-overlay"
         initial={{ opacity: 0, y: '100%' }}
         animate={{ opacity: 1, y: 0 }}
@@ -108,7 +107,6 @@ To exercise any of these rights, contact us at bryan@signalovernoiseai.com.`
             © 2026 Signal Over Noise AI. All rights reserved.
           </div>
         </div>
-      </motion.div>
-    </AnimatePresence>
+    </motion.div>
   );
 };

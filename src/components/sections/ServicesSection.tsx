@@ -42,8 +42,10 @@ export const ServicesSection = () => {
         ].map((svc, i) => (
           <motion.div
             key={i}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}
+            initial={{ opacity: 0, y: 40, filter: 'blur(6px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            viewport={{ once: true, margin: '-10% 0px' }}
+            transition={{ delay: i * 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="p-8 border border-white/5 rounded-2xl glass mb-6 lg:mb-0 relative group overflow-hidden"
           >
             <div className="absolute inset-0 bg-signal translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out z-0" />

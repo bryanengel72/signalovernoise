@@ -80,3 +80,31 @@ a, button, input, textarea {
 .text-glow-signal {
   text-shadow: 0 0 20px var(--color-signal), 0 0 40px var(--color-signal);
 }
+
+/* Marquee track */
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Periodic diagonal shine sweep on primary CTAs */
+.btn-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.55) 50%, transparent 60%);
+  transform: translateX(-100%);
+  animation: btn-shine-sweep 4.5s ease-in-out infinite;
+}
+
+@keyframes btn-shine-sweep {
+  0%, 55%  { transform: translateX(-100%); }
+  75%, 100% { transform: translateX(100%); }
+}
+
+/* Respect reduced-motion for CSS-driven animation */
+@media (prefers-reduced-motion: reduce) {
+  .btn-shine { animation: none; }
+  [style*="marquee-scroll"] { animation: none !important; }
+  html { scroll-behavior: auto; }
+}

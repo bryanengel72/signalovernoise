@@ -1,10 +1,26 @@
+import { useState } from 'react';
+import { motion, useMotionValueEvent, useScroll } from 'motion/react';
+import { EASE } from '../ui/Reveal';
+
 interface NavbarProps {
   scrollTo: (id: string) => void;
 }
 
 export const Navbar = ({ scrollTo }: NavbarProps) => {
+  const { scrollY } = useScroll();
+  const [hidden, setHidden] = useState(false);
+
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    const prev = scrollY.getPrevious() ?? 0;
+    // Hide when scrolling down past the hero chrome, reveal on any upward scroll
+    setHidden(latest > prev && latest > 160);
+  });
+
   return (
-    <nav
+    <motion.nav
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: hidden ? '-100%' : 0, opacity: 1 }}
+      transition={{ duration: 0.45, ease: EASE }}
       style={{
         backgroundColor: 'rgba(11, 14, 20, 0.1)',
         backdropFilter: 'blur(24px) saturate(180%)',
@@ -56,6 +72,6 @@ export const Navbar = ({ scrollTo }: NavbarProps) => {
         <span className="absolute inset-0 bg-signal/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
         <span className="relative z-10 group-hover:text-signal transition-colors duration-300">Get Started</span>
       </button>
-    </nav>
+    </motion.nav>
   );
 };

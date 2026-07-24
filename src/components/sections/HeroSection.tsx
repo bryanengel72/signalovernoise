@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform, useSpring } from 'motion/react';
 import { useRef } from 'react';
 import { ArrowRight, Crosshair } from 'lucide-react';
+import { EASE } from '../ui/Reveal';
 
 interface HeroSectionProps {
   scrollTo: (id: string) => void;
@@ -29,7 +30,10 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
         alt="Radio telescope array under the Milky Way at night"
         fetchPriority="high"
         style={{ y: imgY }}
-        className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center opacity-73 z-10 will-change-transform"
+        initial={{ scale: 1.08, opacity: 0 }}
+        animate={{ scale: 1, opacity: 0.73 }}
+        transition={{ scale: { duration: 2.4, ease: EASE }, opacity: { duration: 1.2, ease: 'easeOut' } }}
+        className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center z-10 will-change-transform"
       />
 
       {/* 2. Refined Overlay: Darker on left (text side), clear on right (image side) */}
@@ -59,9 +63,9 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
           ].map(({ text, delay, bold }) => (
             <motion.span
               key={text}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: 'easeOut', delay }}
+              initial={{ opacity: 0, y: 32, filter: 'blur(8px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{ duration: 0.9, ease: EASE, delay }}
               className={`block ${bold ? 'font-bold text-signal text-glow-signal' : 'font-light text-white'}`}
             >
               {text}
@@ -97,13 +101,17 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
           transition={{ duration: 0.8, ease: 'easeOut', delay: 0.75 }}
           className="flex flex-wrap items-center gap-6"
         >
-          <button
+          <motion.button
             onClick={() => scrollTo('contact')}
-            className="bg-signal text-black px-8 py-4 text-sm font-semibold rounded-full hover:glow-signal border border-signal transition-all flex items-center gap-2 group"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ duration: 0.25, ease: EASE }}
+            className="relative overflow-hidden bg-signal text-black px-8 py-4 text-sm font-semibold rounded-full hover:glow-signal border border-signal transition-shadow flex items-center gap-2 group"
           >
+            <span className="btn-shine" aria-hidden="true" />
             Get Your Free AI Audit
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </button>
+          </motion.button>
           <button
             data-cal-link="bryan-engel-amlxcu/30min"
             className="px-8 py-4 text-sm font-semibold text-white border border-white/20 rounded-full hover:bg-white/10 glass transition-all"
@@ -111,6 +119,21 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
             Book Consultation
           </button>
         </motion.div>
+      </motion.div>
+
+      {/* Scroll cue */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.6, duration: 1 }}
+        className="absolute bottom-6 right-8 lg:right-16 z-40 hidden lg:flex flex-col items-center gap-2 text-white/40"
+      >
+        <span className="text-[10px] tracking-[0.3em] uppercase [writing-mode:vertical-rl]">Scroll</span>
+        <motion.div
+          animate={{ y: [0, 8, 0], opacity: [0.3, 1, 0.3] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          className="w-[1px] h-10 bg-gradient-to-b from-signal to-transparent"
+        />
       </motion.div>
     </section>
   );

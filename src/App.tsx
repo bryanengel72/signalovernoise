@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AnimatePresence, MotionConfig, motion, useScroll, useSpring } from 'motion/react';
 import { Marquee } from './components/ui/Marquee';
 import { Navbar } from './components/sections/Navbar';
 import { HeroSection } from './components/sections/HeroSection';
@@ -14,6 +15,9 @@ import { PrivacyPage } from './components/sections/PrivacyPage';
 export default function App() {
   const [showPrivacy, setShowPrivacy] = useState(false);
 
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, mass: 0.4 });
+
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -22,8 +26,15 @@ export default function App() {
   };
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className="min-h-screen bg-bg text-text font-mono selection:bg-signal selection:text-black">
       <div className="noise-bg opacity-[0.03]" />
+
+      {/* Scroll progress indicator */}
+      <motion.div
+        style={{ scaleX: progress }}
+        className="fixed top-0 left-0 right-0 h-[2px] bg-signal origin-left z-[60] glow-signal"
+      />
       
       <Navbar scrollTo={scrollTo} />
 
@@ -40,7 +51,10 @@ export default function App() {
       
       <Footer onPrivacy={() => setShowPrivacy(true)} />
 
-      {showPrivacy && <PrivacyPage onClose={() => setShowPrivacy(false)} />}
+      <AnimatePresence>
+        {showPrivacy && <PrivacyPage onClose={() => setShowPrivacy(false)} />}
+      </AnimatePresence>
     </div>
+    </MotionConfig>
   );
 }
