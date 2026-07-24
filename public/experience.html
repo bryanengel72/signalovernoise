@@ -5,6 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Signal Over Noise — The Lock</title>
 <meta name="description" content="From noise to signal. An AI consultancy that cuts through the hype and locks onto measurable ROI.">
+<link rel="canonical" href="https://www.signalovernoiseai.com/experience.html" />
+
+<!-- Open Graph (LinkedIn, Slack, iMessage previews) -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.signalovernoiseai.com/experience.html" />
+<meta property="og:title" content="Signal Over Noise AI | THE LOCK" />
+<meta property="og:description" content="From noise to signal. We build AI systems that cut through the hype and lock onto measurable ROI — no lock-in, no guesswork, no noise." />
+<meta property="og:image" content="https://www.signalovernoiseai.com/og-image.png" />
+<meta property="og:site_name" content="Signal Over Noise AI" />
+<meta property="og:locale" content="en_US" />
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Signal Over Noise AI | THE LOCK" />
+<meta name="twitter:description" content="From noise to signal. We build AI systems that cut through the hype and lock onto measurable ROI." />
+<meta name="twitter:image" content="https://www.signalovernoiseai.com/og-image.png" />
+
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -238,9 +255,9 @@
         <!-- Resolve beat: wordmark + tagline + CTA -->
         <div class="beat mid" id="beat-resolve">
           <h1 id="wordmark">
-            <span class="line" data-word="sig"></span>
+            <span class="line" data-word="sig">SIGNAL</span>
             <span class="line"><span class="over">over</span></span>
-            <span class="line" data-word="noise"></span>
+            <span class="line" data-word="noise">NOISE</span>
           </h1>
           <p id="tagline">We build AI systems that cut through the hype and lock onto measurable ROI — no lock-in, no guesswork, no noise.</p>
           <div id="film-cta">
@@ -364,6 +381,7 @@
 
   /* ---------- build char-split wordmark ---------- */
   function splitWord(lineEl, text, cls){
+    lineEl.textContent='';   // drop the crawler-visible plain-text fallback
     const frag=document.createDocumentFragment();
     for(const c of text){
       const s=document.createElement('span');
