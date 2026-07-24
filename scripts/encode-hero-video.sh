@@ -14,8 +14,14 @@ set -euo pipefail
 SRC="${1:-experiments/scroll-film/clips/lock.mp4}"
 OUT="public"
 
-if ! command -v ffmpeg >/dev/null 2>&1; then
-  echo "ffmpeg not found — run: brew install ffmpeg" >&2
+# Falls back to PATH. Set FFMPEG to use a static build instead, e.g. the one
+# from `npm i ffmpeg-static` — no Homebrew or system install required:
+#   FFMPEG=$(node -e "console.log(require('ffmpeg-static'))") ./scripts/encode-hero-video.sh
+FFMPEG="${FFMPEG:-ffmpeg}"
+
+if ! command -v "$FFMPEG" >/dev/null 2>&1; then
+  echo "ffmpeg not found. Either install it (brew install ffmpeg) or set FFMPEG" >&2
+  echo "to a static binary: npm i ffmpeg-static" >&2
   exit 1
 fi
 
@@ -27,21 +33,21 @@ echo "==> H.264 (universal)"
 # -movflags +faststart moves the moov index ahead of mdat so the browser can
 # render frame 1 without downloading the whole file. This is the fix that
 # matters most — the Higgsfield original ships moov last.
-ffmpeg -y -loglevel error -i "$SRC" -an \
+"$FFMPEG" -y -loglevel error -i "$SRC" -an \
   -c:v libx264 -profile:v high -pix_fmt yuv420p \
   -crf 24 -preset slow -g 60 \
   -movflags +faststart \
   "$OUT/hero-lock.mp4"
 
 echo "==> VP9 (smaller where supported)"
-ffmpeg -y -loglevel error -i "$SRC" -an \
+"$FFMPEG" -y -loglevel error -i "$SRC" -an \
   -c:v libvpx-vp9 -crf 36 -b:v 0 -row-mt 1 -deadline good -cpu-used 2 \
   "$OUT/hero-lock.webm"
 
 echo "==> Frame-0 poster"
 # Only needed if you want the seamless handoff described in the component
 # header. The hero ships against hero-radar.webp until you opt in.
-ffmpeg -y -loglevel error -i "$SRC" -frames:v 1 \
+"$FFMPEG" -y -loglevel error -i "$SRC" -frames:v 1 \
   -c:v libwebp -quality 82 \
   "$OUT/hero-lock-poster.webp"
 

@@ -8,9 +8,10 @@ interface HeroSectionProps {
 }
 
 // The poster is the LCP element and the only asset fetched on first paint.
-// Swap to '/hero-lock-poster.webp' (frame 0, produced by scripts/encode-hero-video.sh)
-// for a seamless still-to-motion handoff; hero-radar.webp keeps today's look.
-const HERO_POSTER = '/hero-radar.webp';
+// It is frame 0 of the clip, so the handoff to motion has nothing to cross-fade
+// between — the still simply starts moving. '/hero-radar.webp' is the previous
+// art if you want the old look back.
+const HERO_POSTER = '/hero-lock-poster.webp';
 const HERO_VIDEO_WEBM = '/hero-lock.webm';
 const HERO_VIDEO_MP4 = '/hero-lock.mp4';
 
@@ -73,7 +74,7 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
       >
         <motion.img
           src={HERO_POSTER}
-          alt="Radio telescope array under the Milky Way at night"
+          alt="A radio telescope dish silhouetted against a starfield, with a glowing signal waveform across it"
           fetchPriority="high"
           initial={{ opacity: 0 }}
           animate={{ opacity: videoPlaying ? 0 : HERO_OPACITY }}
