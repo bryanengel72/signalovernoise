@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform, useSpring } from 'motion/react';
+import { motion, useScroll, useTransform, useSpring, useReducedMotion } from 'motion/react';
 import { useRef } from 'react';
 import { ArrowRight, Crosshair } from 'lucide-react';
 import { EASE } from '../ui/Reveal';
@@ -7,10 +7,11 @@ interface HeroSectionProps {
   scrollTo: (id: string) => void;
 }
 
-const HERO_IMAGE = '/hero-radar.webp';
+const HERO_POSTER = '/hero-lock-poster.jpg';
 
 export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
   const ref = useRef<HTMLElement>(null);
+  const prefersReduced = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -24,17 +25,37 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
   return (
     <section ref={ref} className="relative min-h-[90vh] flex items-end border-b border-grid overflow-hidden bg-black">
 
-      {/* Backdrop image with a slow load-in settle */}
-      <motion.img
-        src={HERO_IMAGE}
-        alt="Radio telescope array under the Milky Way at night"
-        fetchPriority="high"
-        style={{ y: imgY }}
-        initial={{ scale: 1.08, opacity: 0 }}
-        animate={{ scale: 1, opacity: 0.73 }}
-        transition={{ scale: { duration: 2.4, ease: EASE }, opacity: { duration: 1.2, ease: 'easeOut' } }}
-        className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center z-10 will-change-transform"
-      />
+      {/* Backdrop: a seamless cinematic loop of the signal lock, with a slow load-in settle.
+          Reduced-motion users get the poster still instead of the video. */}
+      {prefersReduced ? (
+        <motion.img
+          src={HERO_POSTER}
+          alt="Radio telescope dish locked onto a signal under the Milky Way at night"
+          fetchPriority="high"
+          style={{ y: imgY }}
+          initial={{ scale: 1.08, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.85 }}
+          transition={{ scale: { duration: 2.4, ease: EASE }, opacity: { duration: 1.2, ease: 'easeOut' } }}
+          className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center z-10 will-change-transform"
+        />
+      ) : (
+        <motion.video
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster={HERO_POSTER}
+          aria-hidden="true"
+          style={{ y: imgY }}
+          initial={{ scale: 1.08, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.9 }}
+          transition={{ scale: { duration: 2.4, ease: EASE }, opacity: { duration: 1.4, ease: 'easeOut' } }}
+          className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center z-10 will-change-transform"
+        >
+          <source src="/hero-lock.webm" type="video/webm" />
+          <source src="/hero-lock.mp4" type="video/mp4" />
+        </motion.video>
+      )}
 
       {/* Refined Overlay: Darker on left (text side), clear on right (image side) */}
       <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent z-20 pointer-events-none" />

@@ -21,3 +21,6 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
+
+# Scroll-film / hero-loop working files (large intermediates, ffmpeg symlink)
+experiments/
