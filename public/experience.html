@@ -132,8 +132,8 @@
   }
   .btn-primary{background:var(--cyan);color:#04121a;border:1px solid var(--cyan);}
   .btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 34px -6px var(--cyan);}
-  .btn-ghost{border:1px solid rgba(255,255,255,.2);color:#fff;background:rgba(255,255,255,.03);backdrop-filter:blur(8px);}
-  .btn-ghost:hover{border-color:rgba(255,255,255,.45);transform:translateY(-2px);}
+  .btn-ghost{border:1px solid rgba(255,255,255,.32);color:#fff;background:rgba(6,10,18,.55);backdrop-filter:blur(14px);box-shadow:0 4px 24px rgba(0,0,0,.35);}
+  .btn-ghost:hover{border-color:rgba(255,255,255,.6);background:rgba(6,10,18,.7);transform:translateY(-2px);}
   .btn .arr{transition:transform .25s;}
   .btn:hover .arr{transform:translateX(4px);}
 
@@ -568,10 +568,14 @@
     document.querySelectorAll('.reveal').forEach((n,i)=>{ n.style.transitionDelay=(Math.min(i%4,3)*0.06)+'s'; io.observe(n); });
   }
 
-  /* ---------- frame loading (concurrency-capped pump + progress readout) ---------- */
+  /* ---------- frame loading (concurrency-capped pump + progress readout) ----------
+     Every frame must be buffered before scrubbing starts. The payload is tiny
+     (~8MB/161 frames) so this is fast — and it's the only way to guarantee
+     pickSource()'s nearest-loaded fallback never has to reach for a frame from
+     a completely different part of the story mid-scroll. */
   function loadFrames(onReady){
     const label=document.getElementById('loader-label');
-    const READY_AT=Math.min(FRAME_COUNT, 30);   // start once a runway of frames is buffered
+    const READY_AT=FRAME_COUNT;
     const MAX=10;
     let next=0, inFlight=0, fired=false;
     function fire(){ if(!fired){ fired=true; onReady(); } }
