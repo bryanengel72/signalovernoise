@@ -57,6 +57,19 @@ export const Navbar = ({ scrollTo }: NavbarProps) => {
             <span className="absolute -bottom-0.5 left-0 w-0 group-hover:w-full h-[1px] bg-signal transition-all duration-300" />
           </button>
         ))}
+
+        {/* Cinematic scroll-film — full-page experience */}
+        <a
+          href="/experience.html"
+          className="relative group flex items-center gap-2 text-signal/80 hover:text-signal transition-colors duration-200"
+        >
+          <span className="relative flex w-1.5 h-1.5">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-signal opacity-60 animate-ping" />
+            <span className="relative inline-flex rounded-full w-1.5 h-1.5 bg-signal" />
+          </span>
+          Experience
+          <span className="absolute -bottom-0.5 left-0 w-0 group-hover:w-full h-[1px] bg-signal transition-all duration-300" />
+        </a>
       </div>
 
       {/* CTA pill — glass style */}
