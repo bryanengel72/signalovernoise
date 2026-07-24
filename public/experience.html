@@ -330,53 +330,21 @@
     CX = W/2; CY = H/2;
   }
 
-  /* ---------- procedural noise tiles ---------- */
-  const TILE_W=340, TILE_H=Math.round(340*0.5625), NUM_TILES=8;
-  const tiles=[];
-  function buildTiles(){
-    tiles.length=0;
-    for(let t=0;t<NUM_TILES;t++){
-      const off=document.createElement('canvas');
-      off.width=TILE_W; off.height=TILE_H;
-      const octx=off.getContext('2d');
-      const img=octx.createImageData(TILE_W,TILE_H);
-      const d=img.data;
-      for(let i=0;i<d.length;i+=4){
-        const n=Math.random();
-        // slight cyan-cool tint rather than pure gray — premium, not TV-shop
-        const v=n*255;
-        d[i]=v*0.82; d[i+1]=v*0.95; d[i+2]=Math.min(255,v*1.05+8); d[i+3]=255;
-      }
-      octx.putImageData(img,0,0);
-      tiles.push(off);
-    }
-  }
-
-  /* ---------- starfield (emerges as noise clears) ---------- */
-  let stars=[];
-  function buildStars(){
-    stars=[];
-    const count=Math.round((W*H)/9000);
-    for(let i=0;i<count;i++){
-      stars.push({x:Math.random(),y:Math.random(),r:Math.random()*1.3+0.2,tw:Math.random()*6.28,sp:Math.random()*1.5+0.4});
-    }
-  }
-
-  /* ---------- waveform sample buffer ---------- */
-  const WF_N=170;
-  const wfNoise=new Float32Array(WF_N);
-  for(let i=0;i<WF_N;i++) wfNoise[i]=Math.random()*2-1;
+  /* ---------- footage frames (real Seedance film, scrubbed) ---------- */
+  const FRAME_COUNT=161;
+  const framePath=i=>`/film/f${String(i+1).padStart(4,'0')}.jpg`;
+  const images=new Array(FRAME_COUNT);   // HTMLImageElement per frame
+  let loadedCount=0;
 
   /* ---------- film state ---------- */
   const film = { target:0, current:0 };
-  let lastNoiseSwap=0, noiseIdx=0;
 
   // scenes for the chapter readout
   const scenes=[
-    {n:'01',name:'Noise',   to:0.20},
-    {n:'02',name:'Sweep',   to:0.44},
-    {n:'03',name:'Waveform',to:0.68},
-    {n:'04',name:'Lock',    to:0.90},
+    {n:'01',name:'Noise',   to:0.24},
+    {n:'02',name:'Carrier', to:0.42},
+    {n:'03',name:'Sweep',   to:0.60},
+    {n:'04',name:'Lock',    to:0.80},
     {n:'05',name:'Signal',  to:1.01},
   ];
 
@@ -412,153 +380,86 @@
   const allChars=sigChars.concat(noiseChars);
   const overEl=document.querySelector('#wordmark .over');
 
-  /* ---------- draw ---------- */
-  function drawNoise(intensity, time){
-    if(intensity<=0.01) return;
-    if(time-lastNoiseSwap>33){ noiseIdx=(noiseIdx+1)%NUM_TILES; lastNoiseSwap=time; }
-    ctx.globalAlpha=intensity;
-    ctx.imageSmoothingEnabled=false;
-    ctx.drawImage(tiles[noiseIdx],0,0,W,H);
-    ctx.imageSmoothingEnabled=true;
-    ctx.globalAlpha=1;
-    // faint scanline shimmer while noisy
-    if(intensity>0.3){
-      ctx.globalAlpha=intensity*0.12;
-      ctx.fillStyle='#000';
-      for(let y=0;y<H;y+=4) ctx.fillRect(0,y,W,1);
-      ctx.globalAlpha=1;
+  /* ---------- frame-scrubbing engine (ImageBitmap sliding window) ----------
+     drawImage(HTMLImage) forces a synchronous JPEG decode on the main thread;
+     decode off-thread around the playhead so every scroll draw is a pure blit. */
+  const bitmaps=new Map(), decoding=new Set();
+  const B_AHEAD=18, B_KEEP=28;
+  let bmpCenter=-999, displayed=-1;
+
+  function ensureBitmaps(center){
+    if(Math.abs(center-bmpCenter)<3) return;
+    bmpCenter=center;
+    const lo=Math.max(0,center-B_AHEAD), hi=Math.min(FRAME_COUNT-1,center+B_AHEAD);
+    for(let i=lo;i<=hi;i++){
+      if(bitmaps.has(i)||decoding.has(i)||!images[i]||!images[i].complete||!images[i].naturalWidth) continue;
+      decoding.add(i);
+      createImageBitmap(images[i]).then(b=>{
+        decoding.delete(i);
+        if(Math.abs(i-bmpCenter)>B_KEEP){ b.close(); return; }
+        bitmaps.set(i,b);
+        if(i===displayed) blit(i);       // repaint if the shown frame just upgraded
+      }).catch(()=>decoding.delete(i));
     }
+    for(const k of Array.from(bitmaps.keys()))
+      if(k<center-B_KEEP||k>center+B_KEEP){ bitmaps.get(k).close(); bitmaps.delete(k); }
   }
 
-  function drawStars(alpha, time){
-    if(alpha<=0.01) return;
-    ctx.save();
-    for(const s of stars){
-      const tw=0.55+0.45*Math.sin(time*0.001*s.sp+s.tw);
-      ctx.globalAlpha=alpha*tw*0.9;
-      ctx.fillStyle='#cfefff';
-      ctx.beginPath();
-      ctx.arc(s.x*W,s.y*H,s.r,0,6.283);
-      ctx.fill();
+  // prefer the exact bitmap, else exact image, else scan outward for any loaded frame
+  function pickSource(idx){
+    if(bitmaps.has(idx)) return bitmaps.get(idx);
+    if(images[idx]&&images[idx].complete&&images[idx].naturalWidth) return images[idx];
+    for(let d=1;d<FRAME_COUNT;d++){
+      if(bitmaps.has(idx-d)) return bitmaps.get(idx-d);
+      if(bitmaps.has(idx+d)) return bitmaps.get(idx+d);
+      const a=images[idx-d], b=images[idx+d];
+      if(a&&a.complete&&a.naturalWidth) return a;
+      if(b&&b.complete&&b.naturalWidth) return b;
     }
-    ctx.restore();
-  }
-
-  function drawRadar(p, time){
-    // active roughly p 0.16 -> 0.72
-    const appear=smooth(0.16,0.30,p);
-    const fade=1-smooth(0.72,0.90,p);
-    const a=appear*fade;
-    if(a<=0.01) return;
-    const R=Math.min(W,H)*0.42;
-    ctx.save();
-    ctx.translate(CX,CY);
-    // range rings
-    ctx.globalAlpha=a*0.5;
-    ctx.strokeStyle='rgba(0,229,255,0.35)';
-    ctx.lineWidth=1;
-    for(let i=1;i<=4;i++){
-      ctx.beginPath();ctx.arc(0,0,R*i/4,0,6.283);ctx.stroke();
-    }
-    // crosshair ticks
-    ctx.globalAlpha=a*0.3;
-    ctx.beginPath();ctx.moveTo(-R,0);ctx.lineTo(R,0);ctx.moveTo(0,-R);ctx.lineTo(0,R);ctx.stroke();
-
-    // sweep angle: ~2 rotations across the acquisition window
-    const sweepT=smooth(0.16,0.70,p);
-    const ang=sweepT*Math.PI*4 - Math.PI/2;
-    // trailing wedge via conic gradient (guard for support)
-    if(typeof ctx.createConicGradient==='function'){
-      const g=ctx.createConicGradient(ang,0,0);
-      g.addColorStop(0.00,'rgba(0,229,255,0.0)');
-      g.addColorStop(0.02,'rgba(0,229,255,0.30)');
-      g.addColorStop(0.16,'rgba(0,229,255,0.0)');
-      g.addColorStop(1.00,'rgba(0,229,255,0.0)');
-      ctx.globalAlpha=a;
-      ctx.beginPath();ctx.arc(0,0,R,0,6.283);
-      ctx.fillStyle=g;ctx.fill();
-    }
-    // leading edge line
-    ctx.globalAlpha=a;
-    ctx.strokeStyle='rgba(120,245,255,0.9)';
-    ctx.lineWidth=2;
-    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(ang)*R,Math.sin(ang)*R);ctx.stroke();
-    // center dot
-    ctx.fillStyle='rgba(0,229,255,0.9)';
-    ctx.beginPath();ctx.arc(0,0,3,0,6.283);ctx.fill();
-    ctx.restore();
-  }
-
-  function drawLockPing(p){
-    const t=smooth(0.66,0.86,p);
-    if(t<=0||t>=1) return;
-    const R=Math.min(W,H)*0.7*t;
-    ctx.save();ctx.translate(CX,CY);
-    ctx.globalAlpha=(1-t)*0.7;
-    ctx.strokeStyle='rgba(0,229,255,0.9)';
-    ctx.lineWidth=2;
-    ctx.beginPath();ctx.arc(0,0,R,0,6.283);ctx.stroke();
-    ctx.restore();
-  }
-
-  function drawWave(p, time){
-    // lock: 0 = jagged noise line, 1 = clean sine
-    const lock=smooth(0.40,0.80,p);
-    const appear=smooth(0.20,0.34,p);
-    const vanish=1-smooth(0.80,0.92,p); // hand off to wordmark
-    const a=appear*vanish;
-    if(a<=0.01) return;
-    const noiseAmp=H*0.16*(1-lock*0.5);
-    const sineAmp=H*0.11;
-    const freq=6*Math.PI;
-    const phase=time*0.0016;
-    const scroll=time*0.02;
-    ctx.save();
-    const path=new Path2D();
-    for(let i=0;i<WF_N;i++){
-      const tt=i/(WF_N-1);
-      const x=tt*W;
-      // scrolling noise sample
-      const ni=(i+Math.floor(scroll))%WF_N;
-      const nz=wfNoise[ni]*noiseAmp*(0.5+0.5*Math.sin(time*0.004+i));
-      const sn=Math.sin(tt*freq+phase)*sineAmp;
-      const y=CY+lerp(nz,sn,lock);
-      if(i===0) path.moveTo(x,y); else path.lineTo(x,y);
-    }
-    // glow underlay
-    ctx.globalAlpha=a*0.35;
-    ctx.strokeStyle='rgba(0,229,255,0.7)';
-    ctx.lineWidth=9;ctx.lineJoin='round';ctx.lineCap='round';
-    ctx.stroke(path);
-    // bright core
-    ctx.globalAlpha=a;
-    ctx.strokeStyle='rgba(180,250,255,0.95)';
-    ctx.lineWidth=2;
-    ctx.stroke(path);
-    ctx.restore();
+    return null;
   }
 
   function drawVignette(){
-    const g=ctx.createRadialGradient(CX,CY,Math.min(W,H)*0.2,CX,CY,Math.max(W,H)*0.72);
+    const g=ctx.createRadialGradient(CX,CY,Math.min(W,H)*0.28,CX,CY,Math.max(W,H)*0.78);
     g.addColorStop(0,'rgba(0,0,0,0)');
-    g.addColorStop(1,'rgba(0,0,0,0.55)');
+    g.addColorStop(1,'rgba(0,0,0,0.40)');
     ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
   }
 
-  function render(p, time){
-    // background
-    ctx.fillStyle='#0B0E14';
-    ctx.fillRect(0,0,W,H);
+  // legibility scrim: darkens the footage behind the resolving wordmark/tagline,
+  // ramping in only as the text appears (p 0.50 -> 0.72) so early chapters stay clean
+  let curP=0;
+  function drawScrim(p){
+    const a=smooth(0.50,0.72,p)*0.55;
+    if(a<=0.01) return;
+    const cy=CY*0.9;
+    const g=ctx.createRadialGradient(CX,cy,0,CX,cy,Math.max(W,H)*0.62);
+    g.addColorStop(0,`rgba(4,8,14,${a})`);
+    g.addColorStop(0.55,`rgba(4,8,14,${a*0.68})`);
+    g.addColorStop(1,'rgba(4,8,14,0)');
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  }
 
-    const noiseIntensity = 1 - smooth(0.05,0.62,p)*0.985; // 1 -> ~0.015
-    const starAlpha = smooth(0.30,0.62,p) * (1-smooth(0.92,1.0,p)*0.3);
-
-    drawStars(starAlpha, time);
-    drawNoise(noiseIntensity, time);
-    drawRadar(p, time);
-    drawWave(p, time);
-    drawLockPing(p);
+  // object-cover blit of frame idx
+  function blit(idx){
+    const src=pickSource(idx);
+    ctx.fillStyle='#05070c'; ctx.fillRect(0,0,W,H);
+    if(src){
+      displayed=idx;
+      const iw=src.width, ih=src.height;
+      const scale=Math.max(W/iw,H/ih);
+      const dw=iw*scale, dh=ih*scale;
+      ctx.drawImage(src,(W-dw)/2,(H-dh)/2,dw,dh);
+    }
     drawVignette();
+    drawScrim(curP);
+  }
+
+  function render(p){
+    curP=p;
+    const idx=Math.round(p*(FRAME_COUNT-1));
+    ensureBitmaps(idx);
+    blit(idx);
   }
 
   /* ---------- beat / overlay updates ---------- */
@@ -569,31 +470,30 @@
   }
 
   function updateOverlays(p){
-    // opening eyebrow: visible at 0, gone by ~0.2
-    const openA=1-smooth(0.10,0.22,p);
+    // opening eyebrow: visible at 0, gone by ~0.18 (during NOISE)
+    const openA=1-smooth(0.08,0.20,p);
     el.beatOpen.style.opacity=openA;
-    el.beatOpen.style.transform=`translateY(${-50 - p*40}%)`.replace('%,','%');
     el.beatOpen.style.transform=`translateY(calc(-50% - ${p*30}px))`;
 
-    // wordmark chars resolve p 0.70 -> 0.90
+    // wordmark chars resolve as the beam locks, p 0.60 -> 0.75
     for(let i=0;i<allChars.length;i++){
       const stagger=i*0.006;
-      const local=clamp((p-(0.70+stagger))/0.11,0,1);
+      const local=clamp((p-(0.60+stagger))/0.13,0,1);
       const ease=local*local*(3-2*local);
       const ch=allChars[i];
       ch.style.opacity=ease;
       ch.style.transform=`translateY(${(1-ease)*46}px)`;
       ch.style.filter=`blur(${(1-ease)*9}px)`;
     }
-    const overA=clamp((p-0.74)/0.10,0,1);
+    const overA=clamp((p-0.64)/0.10,0,1);
     overEl.style.opacity=overA;
     overEl.style.transform=`translateY(${(1-overA)*20}px)`;
 
-    // tagline + CTA
-    const tagA=clamp((p-0.86)/0.08,0,1);
+    // tagline + CTA follow during the SIGNAL pullback
+    const tagA=clamp((p-0.80)/0.08,0,1);
     el.tagline.style.opacity=tagA;
     el.tagline.style.transform=`translateY(${(1-tagA)*22}px)`;
-    const ctaA=clamp((p-0.90)/0.07,0,1);
+    const ctaA=clamp((p-0.85)/0.07,0,1);
     el.cta.style.opacity=ctaA;
     el.cta.style.transform=`translateY(${(1-ctaA)*22}px)`;
     el.cta.style.pointerEvents=ctaA>0.9?'auto':'none';
@@ -601,8 +501,8 @@
     // seam fade over the last stretch
     el.seam.style.opacity=smooth(0.90,1.0,p);
 
-    // telemetry
-    const snr=lerp(-8,42,smooth(0.16,0.9,p));
+    // telemetry: SNR climbs from the noise floor to a locked signal
+    const snr=lerp(-18,24,smooth(0.12,0.90,p));
     el.snr.textContent=(snr>=0?'+':'−')+Math.abs(snr).toFixed(1)+' dB';
     el.prog.style.width=(p*100).toFixed(1)+'%';
     let sc=scenes[scenes.length-1];
@@ -636,7 +536,7 @@
     const r=filmEl.getBoundingClientRect();
     const onScreen=r.bottom>0 && r.top<window.innerHeight;
     if(onScreen){
-      render(film.current, time);
+      render(film.current);
       updateOverlays(film.current);
     }
     requestAnimationFrame(frame);
@@ -644,18 +544,11 @@
 
   /* ---------- reduced-motion static path ---------- */
   function renderStatic(){
-    // collapse the film to one screen, show the resolved signal
+    // collapse the film to one screen, show the resolved final frame
     filmEl.style.height='100vh';
     resize();
-    // draw calm final frame
-    ctx.fillStyle='#0B0E14';ctx.fillRect(0,0,W,H);
-    drawStars(0.8, 0);
-    // clean sine
-    const path=new Path2D();const amp=H*0.11;
-    for(let i=0;i<WF_N;i++){const tt=i/(WF_N-1);const x=tt*W;const y=CY+Math.sin(tt*6*Math.PI)*amp;i===0?path.moveTo(x,y):path.lineTo(x,y);}
-    ctx.globalAlpha=0.35;ctx.strokeStyle='rgba(0,229,255,0.7)';ctx.lineWidth=9;ctx.lineJoin='round';ctx.stroke(path);
-    ctx.globalAlpha=1;ctx.strokeStyle='rgba(180,250,255,0.95)';ctx.lineWidth=2;ctx.stroke(path);
-    drawVignette();
+    curP=1;
+    blit(FRAME_COUNT-1);
     // resolve overlays fully
     allChars.forEach(c=>{c.style.opacity=1;c.style.transform='none';c.style.filter='none';});
     overEl.style.opacity=1;overEl.style.transform='none';
@@ -663,7 +556,7 @@
     el.cta.style.opacity=1;el.cta.style.transform='none';el.cta.style.pointerEvents='auto';
     el.beatOpen.style.opacity=0;
     el.seam.style.opacity=1;
-    el.snr.textContent='+42.0 dB';el.prog.style.width='100%';el.chapter.textContent='05 / Signal';
+    el.snr.textContent='+24.0 dB';el.prog.style.width='100%';el.chapter.textContent='05 / Signal';
     el.hint.style.opacity=0;
   }
 
@@ -675,40 +568,64 @@
     document.querySelectorAll('.reveal').forEach((n,i)=>{ n.style.transitionDelay=(Math.min(i%4,3)*0.06)+'s'; io.observe(n); });
   }
 
-  /* ---------- boot ---------- */
-  function boot(){
-    resize();
-    buildTiles();
-    buildStars();
-    initReveals();
+  /* ---------- frame loading (concurrency-capped pump + progress readout) ---------- */
+  function loadFrames(onReady){
+    const label=document.getElementById('loader-label');
+    const READY_AT=Math.min(FRAME_COUNT, 30);   // start once a runway of frames is buffered
+    const MAX=10;
+    let next=0, inFlight=0, fired=false;
+    function fire(){ if(!fired){ fired=true; onReady(); } }
+    function pump(){
+      while(inFlight<MAX && next<FRAME_COUNT){
+        const i=next++; const img=new Image(); img.decoding='async';
+        img.onload=img.onerror=()=>{
+          inFlight--; loadedCount++;
+          if(label) label.textContent='Calibrating receiver · '+Math.round(loadedCount/FRAME_COUNT*100)+'%';
+          if(loadedCount>=READY_AT) fire();
+          pump();
+        };
+        images[i]=img; img.src=framePath(i); inFlight++;
+      }
+    }
+    pump();
+  }
 
-    window.addEventListener('resize',()=>{ resize(); buildStars(); }, {passive:true});
+  /* ---------- boot ---------- */
+  let booted=false;
+  function boot(){
+    if(booted) return; booted=true;
+    resize();
+    initReveals();
+    window.addEventListener('resize',()=>{ resize(); if(displayed>=0) blit(displayed); }, {passive:true});
 
     if(REDUCED){
-      renderStatic();
-      finishReady();
+      // static path needs only the final frame
+      const img=new Image();
+      img.onload=img.onerror=()=>{ images[FRAME_COUNT-1]=img; renderStatic(); finishReady(); };
+      img.src=framePath(FRAME_COUNT-1);
       return;
     }
 
-    // Lenis smooth scroll (skip if jumping for deterministic verification)
-    if(JUMP===null){
-      const lenis=new Lenis({ lerp:0.09, smoothWheel:true });
-      function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
-      requestAnimationFrame(raf);
-    }else{
-      history.scrollRestoration='manual';
-    }
-
-    requestAnimationFrame(frame);
-
-    if(JUMP!==null){
-      // settle to the requested scroll position and paint one deterministic frame
-      window.scrollTo(0, +JUMP||0);
-      film.current=film.target=computeProgress();
-      render(film.current, 0);
-      updateOverlays(film.current);
-    }
-    finishReady();
+    loadFrames(()=>{
+      // Lenis smooth scroll (skip if jumping for deterministic verification)
+      if(JUMP===null){
+        const lenis=new Lenis({ lerp:0.09, smoothWheel:true });
+        function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+      }else{
+        history.scrollRestoration='manual';
+      }
+      ensureBitmaps(0);            // pre-warm bitmaps around the opening frame
+      requestAnimationFrame(frame);
+      if(JUMP!==null){
+        // settle to the requested scroll position and paint one deterministic frame
+        window.scrollTo(0, +JUMP||0);
+        film.current=film.target=computeProgress();
+        render(film.current);
+        updateOverlays(film.current);
+      }
+      finishReady();
+    });
   }
 
   function finishReady(){
@@ -721,7 +638,7 @@
   if(document.fonts&&document.fonts.ready){
     document.fonts.ready.then(boot).catch(boot);
     // hard fallback
-    setTimeout(()=>{ if(!window.__ready) boot(); }, 2500);
+    setTimeout(()=>{ if(!booted) boot(); }, 2500);
   }else{
     boot();
   }
