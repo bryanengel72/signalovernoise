@@ -34,15 +34,30 @@ where schemaname = 'public'
 -- to), but you can drop them for tidiness:
 --   drop policy "<policyname>" on public.booking_inquiries;
 
--- 4. Prove the bypass is closed. This impersonates the public `anon` role — the
---    one the browser's anon key authenticates as — and tries the exact insert a
---    scammer would send straight at the REST API, skipping the form entirely.
+-- 4. Prove the bypass is closed. RUN THIS BLOCK ON ITS OWN, as a separate query,
+--    *after* everything above has been run and committed. The Supabase SQL
+--    editor executes a whole script as one transaction, so the deliberate error
+--    below would otherwise roll back the revokes along with it.
 --
---    Expected result: ERROR: permission denied for table booking_inquiries
---    If it succeeds instead, the lockdown did not take. Either way the rollback
---    means nothing is written.
-begin;
-set local role anon;
-insert into public.booking_inquiries (name, email, message)
-values ('bypass-test', 'test@example.com', 'should not be allowed');
-rollback;
+--    It impersonates the public `anon` role — the one the browser's anon key
+--    authenticates as — and tries the exact insert a scammer would send straight
+--    at the REST API, skipping the form entirely.
+--
+--    Expected result: ERROR: 42501 permission denied for table booking_inquiries
+--    That error is the pass. Ignore Postgres's hint about granting INSERT back
+--    to anon — doing so reopens the hole. Nothing is written either way.
+--
+-- begin;
+-- set local role anon;
+-- insert into public.booking_inquiries (name, email, message)
+-- values ('bypass-test', 'test@example.com', 'should not be allowed');
+-- rollback;
+
+-- 5. Confirm the revokes actually persisted. Run this on its own too. An empty
+--    result means anon and authenticated hold no privileges — locked down.
+--    Any rows returned means step 2 was rolled back; re-run it by itself.
+select grantee, privilege_type
+from information_schema.role_table_grants
+where table_schema = 'public'
+  and table_name = 'booking_inquiries'
+  and grantee in ('anon', 'authenticated');
