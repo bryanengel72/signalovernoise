@@ -33,3 +33,16 @@ where schemaname = 'public'
 -- Any leftover policies from step 3 are now inert (no privileges to apply them
 -- to), but you can drop them for tidiness:
 --   drop policy "<policyname>" on public.booking_inquiries;
+
+-- 4. Prove the bypass is closed. This impersonates the public `anon` role — the
+--    one the browser's anon key authenticates as — and tries the exact insert a
+--    scammer would send straight at the REST API, skipping the form entirely.
+--
+--    Expected result: ERROR: permission denied for table booking_inquiries
+--    If it succeeds instead, the lockdown did not take. Either way the rollback
+--    means nothing is written.
+begin;
+set local role anon;
+insert into public.booking_inquiries (name, email, message)
+values ('bypass-test', 'test@example.com', 'should not be allowed');
+rollback;
