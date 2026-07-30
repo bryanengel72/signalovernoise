@@ -111,8 +111,16 @@ export async function POST(request: Request) {
     message: clean(payload.message, 5000),
   };
 
-  if (!inquiry.name || !EMAIL_PATTERN.test(inquiry.email) || inquiry.message.length < 5) {
-    return reply({ error: 'Please add your name, a valid email, and a short message.' }, 400);
+  // Turnstile is the spam gate, so keep these checks to genuinely empty or
+  // malformed input and name the field that actually failed.
+  if (!inquiry.name) {
+    return reply({ error: 'Please add your name.' }, 400);
+  }
+  if (!EMAIL_PATTERN.test(inquiry.email)) {
+    return reply({ error: "That email address doesn't look right." }, 400);
+  }
+  if (!inquiry.message) {
+    return reply({ error: "Please tell us what you're working on." }, 400);
   }
 
   const supabase = createClient(supabaseUrl, serviceRoleKey, {
