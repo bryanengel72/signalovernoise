@@ -1,39 +1,58 @@
-import { useState, type FormEvent } from 'react';
+import { useRef, useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
 import { Mail, Calendar, ArrowRight, Loader2 } from 'lucide-react';
-import { supabase } from '../../lib/supabase';
+import { Turnstile, type TurnstileHandle } from '../ui/Turnstile';
+
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
 
 export const ContactSection = () => {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [humanToken, setHumanToken] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const turnstileRef = useRef<TurnstileHandle>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus('loading');
 
-    const form = e.currentTarget;
-
-    // Honeypot: hidden field humans never fill — silently drop bot submissions
-    if ((form.elements.namedItem('website') as HTMLInputElement).value) {
-      setStatus('success');
-      form.reset();
+    if (!humanToken) {
+      setErrorMessage('Please complete the human check below.');
       return;
     }
 
-    const data = {
-      name: (form.elements.namedItem('name') as HTMLInputElement).value,
-      email: (form.elements.namedItem('email') as HTMLInputElement).value,
-      company: (form.elements.namedItem('company') as HTMLInputElement).value,
-      message: (form.elements.namedItem('message') as HTMLTextAreaElement).value,
-    };
+    const form = e.currentTarget;
+    const fields = new FormData(form);
 
-    const { error } = await supabase.from('booking_inquiries').insert([data]);
+    setStatus('loading');
+    setErrorMessage(null);
 
-    if (error) {
-      console.error('Supabase error:', error);
-      setStatus('error');
-    } else {
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          name: fields.get('name'),
+          email: fields.get('email'),
+          company: fields.get('company'),
+          message: fields.get('message'),
+          website: fields.get('website'), // honeypot — verified server-side
+          turnstileToken: humanToken,
+        }),
+      });
+
+      const result = (await response.json().catch(() => ({}))) as { error?: string };
+      if (!response.ok) throw new Error(result.error ?? 'Transmission failed — try again.');
+
       setStatus('success');
       form.reset();
+    } catch (error) {
+      console.error('Contact form error:', error);
+      setStatus('error');
+      setErrorMessage(
+        error instanceof Error ? error.message : 'Transmission failed — try again.',
+      );
+      // Turnstile tokens are single-use — clear the spent one and re-challenge.
+      setHumanToken(null);
+      turnstileRef.current?.reset();
     }
   };
 
@@ -129,27 +148,48 @@ export const ContactSection = () => {
             </div>
           </div>
 
-          <div className="p-6 bg-surface/30">
+          <div className="p-6 bg-surface/30 space-y-4">
             {status === 'success' ? (
               <div className="w-full p-4 bg-white text-black font-semibold text-sm rounded-full flex justify-between items-center">
                 Message Sent <span>✓</span>
               </div>
-            ) : status === 'error' ? (
-              <div className="w-full p-4 border border-red-500 text-red-400 font-semibold text-sm rounded-full text-center">
-                Transmission failed — try again
-              </div>
             ) : (
-              <button
-                type="submit"
-                disabled={status === 'loading'}
-                className="w-full p-4 bg-signal text-bg font-semibold text-sm rounded-full hover:glow-signal border border-signal transition-all flex justify-between items-center group disabled:opacity-60"
-              >
-                {status === 'loading' ? 'Sending...' : 'Send Message'}
-                {status === 'loading'
-                  ? <Loader2 size={16} className="animate-spin" />
-                  : <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
-                }
-              </button>
+              <>
+                {TURNSTILE_SITE_KEY ? (
+                  <Turnstile
+                    ref={turnstileRef}
+                    siteKey={TURNSTILE_SITE_KEY}
+                    onToken={(token) => {
+                      setHumanToken(token);
+                      if (token) setErrorMessage(null);
+                    }}
+                    onError={setErrorMessage}
+                  />
+                ) : (
+                  <p className="text-[11px] text-red-400 leading-relaxed">
+                    Human verification isn't configured (<code>VITE_TURNSTILE_SITE_KEY</code> is
+                    missing). Email bryan@signalovernoiseai.com in the meantime.
+                  </p>
+                )}
+
+                {errorMessage && (
+                  <p role="alert" className="text-[11px] text-red-400 leading-relaxed">
+                    {errorMessage}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={status === 'loading' || !humanToken}
+                  className="w-full p-4 bg-signal text-bg font-semibold text-sm rounded-full hover:glow-signal border border-signal transition-all flex justify-between items-center group disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {status === 'loading' ? 'Sending...' : 'Send Message'}
+                  {status === 'loading'
+                    ? <Loader2 size={16} className="animate-spin" />
+                    : <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
+                  }
+                </button>
+              </>
             )}
           </div>
         </motion.form>
