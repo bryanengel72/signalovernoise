@@ -14,8 +14,11 @@ alter table public.booking_inquiries enable row level security;
 --    `anon` for unauthenticated requests, so this alone blocks direct inserts
 --    regardless of which policies exist. `service_role` is a separate role and
 --    is unaffected, so /api/contact keeps working.
-revoke insert, select, update, delete on public.booking_inquiries from anon;
-revoke insert, select, update, delete on public.booking_inquiries from authenticated;
+--
+--    `all` rather than an enumerated list: these roles also hold TRUNCATE,
+--    REFERENCES and TRIGGER by default, and TRUNCATE would let anyone holding
+--    the public anon key wipe the table.
+revoke all on public.booking_inquiries from anon, authenticated;
 
 -- 3. Verify. Both of these should come back empty (or show no anon/authenticated
 --    grants) after the revoke above.
