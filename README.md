@@ -54,7 +54,12 @@ straight at the Supabase REST API.
 ## Deployment
 
 Deployed on Vercel as a static Vite site plus the `api/` function (see `vercel.json`).
-Set all four variables from `.env.example` in the Vercel project settings —
-`VITE_TURNSTILE_SITE_KEY` is needed at build time, the other three at runtime. The
-old `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` variables are no longer used by
-the client and can be removed.
+Set the variables from `.env.example` in the Vercel project settings —
+`VITE_TURNSTILE_SITE_KEY` is needed at build time, the rest at runtime. Env var
+changes only take effect on a **redeploy**; editing them alone does nothing.
+
+⚠️ `api/contact.ts` reads `SUPABASE_URL` but falls back to `VITE_SUPABASE_URL`.
+If `SUPABASE_URL` is not set, **do not delete `VITE_SUPABASE_URL`** — it is what
+the function is actually using, and removing it takes the contact form down. Add
+`SUPABASE_URL` first, redeploy, then it is safe to remove. `VITE_SUPABASE_ANON_KEY`
+is genuinely unused now and can go at any time.
