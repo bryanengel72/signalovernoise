@@ -32,7 +32,11 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Smoke the deployment
-        run: node scripts/smoke.mjs "$URL"
-        env:
-          URL: ${{ github.event.deployment_status.environment_url }}
+      # The event's environment_url is the immutable per-deployment URL, which
+      # sits behind deployment protection and answers with an auth page — so the
+      # event tells us WHEN to check, and the production alias tells us WHERE.
+      # The alias is the script's default, and it is what visitors actually hit.
+      - name: Smoke production
+        run: |
+          echo "triggered by ${{ github.event.deployment_status.environment_url }}"
+          node scripts/smoke.mjs

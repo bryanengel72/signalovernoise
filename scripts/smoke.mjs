@@ -35,7 +35,18 @@ const assert = (condition, message) => {
 
 const get = async (path) => {
   const response = await fetch(base + path, { redirect: 'follow' });
-  return { status: response.status, body: await response.text() };
+  const body = await response.text();
+
+  // A protected deployment answers 401 with a perfectly valid HTML auth page,
+  // which will satisfy any assertion loose enough to just look for markup. Fail
+  // loudly instead of quietly checking Vercel's login screen.
+  if (response.status === 401 || body.includes('Protected deployment')) {
+    throw new Error(
+      `${base} is behind deployment protection — smoke the production alias, not a deployment URL`,
+    );
+  }
+
+  return { status: response.status, body };
 };
 
 const postContact = (payload) =>
@@ -63,6 +74,10 @@ await check('POST /api/contact rejects a missing human check with 400', async ()
   const text = await response.text();
 
   assert(
+    response.status !== 401,
+    `${base} is behind deployment protection — smoke the production alias, not a deployment URL`,
+  );
+  assert(
     response.status !== 500,
     `function failed to invoke — HTTP 500: ${text.slice(0, 160)}`,
   );
@@ -84,19 +99,32 @@ await check('POST /api/contact swallows a filled honeypot', async () => {
 
 /* ---------- the pages are served ---------- */
 
-for (const path of ['/', '/experience.html', '/experience']) {
-  await check(`GET ${path} serves HTML`, async () => {
+// Each marker is something only the real page has, so a protection page, an
+// error page or a stale placeholder cannot satisfy it.
+const PAGES = [
+  ['/', 'id="root"'],
+  ['/', 'Signal Over Noise'],
+  ['/experience.html', 'id="film-canvas"'],
+  ['/experience', 'id="film-canvas"'],
+];
+
+for (const [path, marker] of PAGES) {
+  await check(`GET ${path} serves the real page (${marker})`, async () => {
     const { status, body } = await get(path);
     assert(status === 200, `expected 200, got ${status}`);
-    assert(body.includes('<html'), 'response is not HTML');
+    assert(body.includes(marker), `page did not contain ${JSON.stringify(marker)}`);
   });
 }
 
 /* ---------- the build-time substitution actually ran ---------- */
 
 await check('no unsubstituted %TOKEN% reached production', async () => {
-  for (const path of ['/', '/experience.html']) {
+  for (const [path, marker] of [['/', 'id="root"'], ['/experience.html', 'id="film-canvas"']]) {
     const { body } = await get(path);
+    // Without this the check passes vacuously on any page that happens to have
+    // no tokens in it — an auth page, an error page, anything at all.
+    assert(body.includes(marker), `${path} is not the real page, so this proves nothing`);
+
     const leftover = body.match(/%[A-Z_]{3,}%/g);
     assert(!leftover, `${path} still contains ${leftover?.join(', ')}`);
   }
