@@ -83,6 +83,23 @@ function logs `contact: falling back to VITE_SUPABASE_URL` on every request. If
 that line is absent from the runtime logs after a deploy, `SUPABASE_URL` is set
 and the VITE_ name is safe to remove.
 
+## Checks
+
+Three layers, each catching something the others cannot:
+
+- `npm run verify` — type-check, tests, build. This is also `vercel.json`'s
+  `buildCommand`, so a failing test fails the deploy.
+- `.github/workflows/ci.yml` — the same on every push and pull request.
+- `npm run smoke` — runs against a **deployed** URL (production by default).
+  `.github/workflows/smoke.yml` fires it automatically when Vercel reports a
+  production deployment live.
+
+The smoke check exists because the first two cannot see a deployed artifact that
+is broken while the source is fine. The contact endpoint returned 500 for three
+refactors: the function runs as ESM under Node, which requires file extensions on
+relative imports, and Vite, Vitest and tsc all resolve them without. Green build,
+green tests, dead endpoint.
+
 ## Tests
 
 `npm test` runs the Vitest suite. The contact endpoint is tested through its

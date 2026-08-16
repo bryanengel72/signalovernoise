@@ -1,0 +1,38 @@
+name: Smoke
+
+# Runs against the real deployment, once Vercel reports it live.
+#
+# The CI workflow and the Vercel build both check the *code*. This checks the
+# *artifact* — the class of failure where everything compiles, every test
+# passes, and the deployed function still cannot boot. That happened: the
+# contact endpoint returned 500 for three refactors because the function runs as
+# ESM under Node, which needs file extensions on relative imports, while Vite,
+# Vitest and tsc do not.
+#
+# `deployment_status` fires when Vercel marks a deployment successful and hands
+# over its URL, so there is nothing to poll and no sleep to guess at.
+
+on: deployment_status
+
+jobs:
+  smoke:
+    name: smoke
+    # Preview deployments sit behind Vercel's deployment protection and answer
+    # 401 to an unauthenticated request, so only production is worth checking.
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment.environment == 'Production'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Smoke the deployment
+        run: node scripts/smoke.mjs "$URL"
+        env:
+          URL: ${{ github.event.deployment_status.environment_url }}
