@@ -18,6 +18,8 @@ export const identity = {
   founderTitle: 'Founder & Principal AI Consultant',
   email: 'bryan@signalovernoiseai.com',
   domain: 'signalovernoiseai.com',
+  siteUrl: 'https://www.signalovernoiseai.com',
+  linkedin: 'https://www.linkedin.com/in/bryanengel/',
   copyrightYear: 2026,
 
   /** Cal.com element-click embed. The namespace must match index.html's Cal("init", ...). */

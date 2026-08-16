@@ -1,5 +1,7 @@
 import Lenis from 'lenis';
 import { experienceCopy } from '@/content/sections/experience';
+import { clamp, smooth } from './math';
+import { formatSnr, snrAt } from './telemetry';
 
 /**
  * THE LOCK — the scroll-film engine.
@@ -23,15 +25,6 @@ declare global {
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const JUMP = new URLSearchParams(location.search).get('jump');
 
-/* ---------- utils ---------- */
-const clamp = (v: number, a: number, b: number) => (v < a ? a : v > b ? b : v);
-const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-const invlerp = (a: number, b: number, v: number) => clamp((v - a) / (b - a), 0, 1);
-const smooth = (a: number, b: number, v: number) => {
-  const t = invlerp(a, b, v);
-  return t * t * (3 - 2 * t);
-};
-
 /* ---------- canvas setup ---------- */
 const canvas = document.getElementById('film-canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d', { alpha: false }) as CanvasRenderingContext2D;
@@ -53,12 +46,8 @@ let loadedCount = 0;
 /* ---------- film state ---------- */
 const film = { target: 0, current: 0 };
 
-// scenes for the chapter readout — names come from Copy
-const scenes = experienceCopy.chapters.map((chapter, i) => ({
-  n: chapter.n,
-  name: chapter.name,
-  to: [0.24, 0.42, 0.6, 0.8, 1.01][i] ?? 1.01,
-}));
+// scenes for the chapter readout — names and boundaries both come from Copy
+const scenes = experienceCopy.chapters;
 
 const byId = (id: string) => document.getElementById(id) as HTMLElement;
 
@@ -212,11 +201,10 @@ function updateOverlays(p: number) {
   el.seam.style.opacity = String(smooth(0.90, 1.0, p));
 
   // telemetry: SNR climbs from the noise floor to a locked signal
-  const snr = lerp(-18, 24, smooth(0.12, 0.90, p));
-  el.snr.textContent = (snr >= 0 ? '+' : '−') + Math.abs(snr).toFixed(1) + ' dB';
+  el.snr.textContent = formatSnr(snrAt(p));
   el.prog.style.width = (p * 100).toFixed(1) + '%';
   let sc = scenes[scenes.length - 1];
-  for (const s of scenes) { if (p < s.to) { sc = s; break; } }
+  for (const s of scenes) { if (p < s.until) { sc = s; break; } }
   el.chapter.textContent = `${sc.n} / ${sc.name}`;
 
   // fade telemetry + hint as we hand off to content
@@ -264,7 +252,9 @@ function renderStatic() {
   el.cta.style.opacity = '1'; el.cta.style.transform = 'none'; el.cta.style.pointerEvents = 'auto';
   el.beatOpen.style.opacity = '0';
   el.seam.style.opacity = '1';
-  el.snr.textContent = '+24.0 dB'; el.prog.style.width = '100%'; el.chapter.textContent = '05 / Signal';
+  const last = scenes[scenes.length - 1];
+  el.snr.textContent = formatSnr(snrAt(1)); el.prog.style.width = '100%';
+  el.chapter.textContent = `${last.n} / ${last.name}`;
   el.hint.style.opacity = '0';
 }
 

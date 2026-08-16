@@ -3,26 +3,38 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { identity } from '@/content/identity';
-import { experienceReplacements, renderExperienceHtml } from '@/content/experience-html';
+import { experienceTokens, renderHtml, tokensFor } from '@/content/html-tokens';
 import { experienceCopy } from '@/content/sections/experience';
 
 const ROOT = join(__dirname, '..');
 const source = readFileSync(join(ROOT, 'experience.html'), 'utf8');
-const rendered = renderExperienceHtml(source);
+const indexSource = readFileSync(join(ROOT, 'index.html'), 'utf8');
+const rendered = renderHtml(source, 'experience.html');
+const indexRendered = renderHtml(indexSource, 'index.html');
 
-describe('every placeholder the film declares has a value', () => {
-  const declared = [...new Set(source.match(/%[A-Z_]+%/g) ?? [])];
+describe.each([
+  ['experience.html', source, rendered],
+  ['index.html', indexSource, indexRendered],
+])('every placeholder %s declares has a value', (filename, src, out) => {
+  const declared = [...new Set(src.match(/%[A-Z_]+%/g) ?? [])];
 
   it('finds placeholders to check', () => {
-    expect(declared.length).toBeGreaterThan(20);
+    expect(declared.length).toBeGreaterThan(0);
   });
 
   it.each(declared)('%s has a replacement', (token) => {
-    expect(Object.keys(experienceReplacements)).toContain(token);
+    expect(Object.keys(tokensFor(filename))).toContain(token);
   });
 
   it('leaves no placeholder in the rendered output', () => {
-    expect(rendered.match(/%[A-Z_]+%/g)).toBeNull();
+    expect(out.match(/%[A-Z_]+%/g)).toBeNull();
+  });
+});
+
+describe('the film declares the tokens only it needs', () => {
+  it('keeps its Copy tokens out of index.html', () => {
+    expect(Object.keys(experienceTokens)).toContain('%DELTA_ROWS%');
+    expect(Object.keys(tokensFor('index.html'))).not.toContain('%DELTA_ROWS%');
   });
 });
 

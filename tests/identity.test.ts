@@ -23,9 +23,9 @@ const sourceFiles = SOURCE_DIRS.flatMap((dir) => walk(join(ROOT, dir)));
  * The address used to appear at ten sites across six modules, and one of them
  * read "byan@". Identity is the only place it is allowed to be spelled out.
  *
- * index.html is deliberately out of scope: it is static markup with no build
- * step, so it cannot import Identity. Its JSON-LD and OG tags still carry a
- * literal address.
+ * Both HTML entries are in scope now — they take %EMAIL% and
+ * %BOOKING_NAMESPACE% at build time, so the exemption index.html used to need
+ * is gone.
  */
 describe('Identity is the only source of the contact address', () => {
   it('finds source files to check', () => {
@@ -46,6 +46,18 @@ describe('Identity is the only source of the contact address', () => {
     );
 
     expect(offenders.map((f) => relative(ROOT, f))).toEqual([]);
+  });
+
+  it.each(['index.html', 'experience.html'])('%s spells out neither the address nor the booking slug', (page) => {
+    const html = readFileSync(join(ROOT, page), 'utf8');
+    expect(html).not.toContain(identity.email);
+    expect(html).not.toContain(identity.booking.slug);
+  });
+
+  it('index.html takes the Cal namespace from Identity rather than hardcoding it', () => {
+    const html = readFileSync(join(ROOT, 'index.html'), 'utf8');
+    expect(html).toContain('%BOOKING_NAMESPACE%');
+    expect(html).not.toContain(`"${identity.booking.namespace}"`);
   });
 
   it('the address is well-formed', () => {

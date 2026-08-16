@@ -15,6 +15,11 @@
   --color-signal: #00E5FF;
   --color-text: #F8FAFC;
   --color-muted: #94A3B8;
+
+  /* The fixed navbar's height. It sets the navbar and the offset the page
+     content starts at, so the two are equal by construction rather than by a
+     constant in one file matching a computed height in another. */
+  --spacing-nav: 4.1875rem;
 }
 
 html {
@@ -77,7 +82,13 @@ a, button, input, textarea {
   text-shadow: 0 0 20px var(--color-signal), 0 0 40px var(--color-signal);
 }
 
-/* Marquee track */
+/* Marquee track. The animation is a class, not an inline style: reduced motion
+   used to reach it by matching a substring of the inline style attribute, which
+   would have silently stopped applying the moment this moved to a class. */
+.marquee-track {
+  animation: marquee-scroll 25s linear infinite;
+}
+
 @keyframes marquee-scroll {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
@@ -101,6 +112,6 @@ a, button, input, textarea {
 /* Respect reduced-motion for CSS-driven animation */
 @media (prefers-reduced-motion: reduce) {
   .btn-shine { animation: none; }
-  [style*="marquee-scroll"] { animation: none !important; }
+  .marquee-track { animation: none; }
   html { scroll-behavior: auto; }
 }

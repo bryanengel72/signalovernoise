@@ -17,7 +17,8 @@ export type ExperienceCopy = {
   meta: { title: string; description: string; ogTitle: string; ogDescription: string };
   nav: ReadonlyArray<{ label: string; href: string }>;
   navCta: string;
-  chapters: ReadonlyArray<{ n: string; name: string }>;
+  /** `until` is the film-progress boundary this chapter runs to — paired with its name so the two cannot fall out of step. */
+  chapters: ReadonlyArray<{ n: string; name: string; until: number }>;
   openingBeat: string;
   tagline: string;
   filmCtaPrimary: string;
@@ -66,11 +67,11 @@ export const experienceCopy: ExperienceCopy = {
   navCta: 'Get a Free AI Audit',
 
   chapters: [
-    { n: '01', name: 'Noise' },
-    { n: '02', name: 'Carrier' },
-    { n: '03', name: 'Sweep' },
-    { n: '04', name: 'Lock' },
-    { n: '05', name: 'Signal' },
+    { n: '01', name: 'Noise', until: 0.24 },
+    { n: '02', name: 'Carrier', until: 0.42 },
+    { n: '03', name: 'Sweep', until: 0.6 },
+    { n: '04', name: 'Lock', until: 0.8 },
+    { n: '05', name: 'Signal', until: 1.01 },
   ],
 
   openingBeat: 'Somewhere in the noise',

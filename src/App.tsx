@@ -33,7 +33,7 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="user">
     <div className="min-h-screen bg-bg text-text font-body selection:bg-signal selection:text-black">
-      <div className="noise-bg opacity-[0.03]" />
+      <div className="noise-bg" />
 
       {/* Scroll progress indicator */}
       <motion.div
@@ -43,7 +43,7 @@ export default function App() {
       
       <Navbar scrollTo={scrollTo} />
 
-      <main className="pt-[4.5625rem]">
+      <main className="pt-nav">
         <HeroSection scrollTo={scrollTo} />
         <Marquee />
         <ProblemSection />

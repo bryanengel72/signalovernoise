@@ -1,8 +1,15 @@
 import { identity } from './identity';
 import { experienceCopy } from './sections/experience';
+import { snrSeed } from '../src/experience/telemetry';
 
 /**
- * The scroll-film's Copy, rendered to the HTML fragments its markup expects.
+ * The values every HTML entry needs, rendered into its markup at build time.
+ *
+ * Identity tokens apply to both pages. Before they existed, the contact address
+ * and the Cal.com namespace were spelled out in index.html — which is why
+ * tests/identity.test.ts used to have to exempt it.
+ *
+ * The rest is the scroll-film's Copy, rendered to the fragments its markup expects.
  *
  * /experience is a build entry but not a React page — it keeps its own runtime
  * and its markup stays static in the output, which is what a marketing page
@@ -17,11 +24,25 @@ import { experienceCopy } from './sections/experience';
 const c = experienceCopy;
 const headline = (h: { lead: string; emphasis: string }) => `${h.lead} <b>${h.emphasis}</b>`;
 
-export const experienceReplacements: Record<string, string> = {
+/** Substituted into every HTML entry. */
+export const identityTokens: Record<string, string> = {
   '%EMAIL%': identity.email,
   '%BOOKING_SLUG%': identity.booking.slug,
   '%BOOKING_NAMESPACE%': identity.booking.namespace,
   '%BOOKING_CONFIG%': identity.booking.config,
+  '%SITE_NAME%': identity.name,
+  '%SITE_URL%': identity.siteUrl,
+  '%FOUNDER%': identity.founder,
+  '%FOUNDER_TITLE%': identity.founderTitle,
+  '%LINKEDIN%': identity.linkedin,
+};
+
+/** Substituted into experience.html only. */
+export const experienceTokens: Record<string, string> = {
+
+  // Seeded from the same formula the engine animates, so the readout is not
+  // wrong for the frame between the loader leaving and the first paint.
+  '%SNR_SEED%': snrSeed(),
 
   '%META_TITLE%': c.meta.title,
   '%META_DESCRIPTION%': c.meta.description,
@@ -82,9 +103,15 @@ export const experienceReplacements: Record<string, string> = {
     .join('\n        '),
 };
 
-/** Substitute every %TOKEN% the film's HTML declares. */
-export const renderExperienceHtml = (html: string): string =>
-  Object.entries(experienceReplacements).reduce(
-    (out, [token, value]) => out.split(token).join(value),
-    html,
-  );
+const apply = (html: string, tokens: Record<string, string>) =>
+  Object.entries(tokens).reduce((out, [token, value]) => out.split(token).join(value), html);
+
+/** Every token available to a given HTML entry. */
+export const tokensFor = (filename: string): Record<string, string> =>
+  filename.endsWith('experience.html')
+    ? { ...identityTokens, ...experienceTokens }
+    : identityTokens;
+
+/** Substitute every %TOKEN% an HTML entry declares. */
+export const renderHtml = (html: string, filename: string): string =>
+  apply(html, tokensFor(filename));

@@ -13,8 +13,7 @@ export const Marquee = ({ copy = marqueeCopy }: { copy?: MarqueeCopy }) => {
       <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-black/25 to-transparent z-10 pointer-events-none" />
       <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-black/25 to-transparent z-10 pointer-events-none" />
       <div
-        className="flex gap-8 items-center text-xs font-bold tracking-widest uppercase min-w-max group-hover:[animation-play-state:paused]"
-        style={{ animation: 'marquee-scroll 25s linear infinite' }}
+        className="marquee-track flex gap-8 items-center text-xs font-bold tracking-widest uppercase min-w-max group-hover:[animation-play-state:paused]"
       >
         {[...Array(REPEATS)].map((_, i) => (
           <div key={i} className="flex gap-8 items-center">

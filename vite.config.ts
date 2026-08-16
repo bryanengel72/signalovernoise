@@ -2,30 +2,28 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig, type Plugin } from 'vite';
-import { renderExperienceHtml } from './content/experience-html';
+import { renderHtml } from './content/html-tokens';
 
 /**
- * The scroll-film's Copy, rendered into its HTML at build time.
+ * Identity and Copy, rendered into the HTML entries at build time.
  *
- * /experience is a hand-written page with its own runtime — it is deliberately
- * not React — but it used to be a full fork: its own nav, its own copy, its own
- * hardcoded contact address. It is a build entry now, so its words come from
- * content/ like everything else and Identity is not duplicated. The markup is
- * still static in the output, which is what a marketing page wants.
+ * Both pages get the Identity tokens, so the contact address and the Cal.com
+ * namespace are spelled out in exactly one place. The scroll-film additionally
+ * gets its Copy: it is a hand-written page with its own runtime — deliberately
+ * not React — but its words come from content/ like everything else, and the
+ * markup is still static in the output, which is what a marketing page wants.
  */
-const experienceContent = (): Plugin => ({
-  name: 'experience-content',
+const htmlTokens = (): Plugin => ({
+  name: 'html-tokens',
   transformIndexHtml: {
     order: 'pre',
-    handler(html, { filename }) {
-      return filename.endsWith('experience.html') ? renderExperienceHtml(html) : html;
-    },
+    handler: (html, { filename }) => renderHtml(html, filename),
   },
 });
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss(), experienceContent()],
+    plugins: [react(), tailwindcss(), htmlTokens()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
