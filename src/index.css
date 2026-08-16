@@ -1,18 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
+/* The theme, declared once.
+   Tailwind 4 emits every @theme entry as a :root custom property, so there is
+   no second declaration to keep in sync — `bg-signal` and `var(--color-signal)`
+   both come from here. public/experience.html uses the same names and values,
+   by hand: it is served raw with no build step, so it cannot import this. */
 @theme {
-  --font-display: "Outfit", sans-serif;
-  --font-mono: "Inter", sans-serif;
-  --color-bg: #0B0E14;
-  --color-surface: #151821;
-  --color-grid: #1E2330;
-  --color-signal: #00E5FF;
-  --color-text: #F8FAFC;
-  --color-muted: #94A3B8;
-}
-
-:root {
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
   --color-bg: #0B0E14;
   --color-surface: #151821;
   --color-grid: #1E2330;
@@ -36,7 +32,7 @@ html {
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -65,7 +61,7 @@ a, button, input, textarea {
 
 /* Glassmorphism utility */
 .glass {
-  background: rgba(21, 24, 33, 0.4);
+  background: color-mix(in srgb, var(--color-surface) 40%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.05);

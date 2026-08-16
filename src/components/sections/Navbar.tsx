@@ -24,12 +24,11 @@ export const Navbar = ({ scrollTo, copy = navCopy }: NavbarProps) => {
       animate={{ y: hidden ? '-100%' : 0, opacity: 1 }}
       transition={{ duration: 0.45, ease: EASE }}
       style={{
-        backgroundColor: 'rgba(11, 14, 20, 0.1)',
         backdropFilter: 'blur(24px) saturate(180%)',
         WebkitBackdropFilter: 'blur(24px) saturate(180%)',
         boxShadow: '0 1px 0 rgba(255,255,255,0.05), 0 8px 32px rgba(0,0,0,0.4)',
       }}
-      className="fixed top-0 w-full z-40 px-6 lg:px-8 py-4 flex justify-between items-center border-b border-white/[0.06]"
+      className="fixed top-0 w-full z-40 px-6 lg:px-8 py-4 flex justify-between items-center border-b border-white/[0.06] bg-bg/10"
     >
       {/* Subtle inner highlight at top edge */}
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />

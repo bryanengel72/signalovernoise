@@ -40,7 +40,7 @@ function TiltCard({ item, index }: { item: Card; index: number }) {
     >
       <motion.div
         className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-        style={{ background: 'radial-gradient(circle at 50% 30%, rgba(0,229,255,0.07) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--color-signal) 7%, transparent) 0%, transparent 70%)' }}
       />
       <motion.div
         className="absolute top-0 left-0 h-[1px] bg-gradient-to-r from-transparent via-signal to-transparent w-full opacity-0 group-hover:opacity-100"

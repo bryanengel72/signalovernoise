@@ -23,7 +23,7 @@ export const ProcessSection = ({ copy = processCopy }: { copy?: ProcessCopy }) =
             <motion.div
               className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
               style={{
-                background: 'linear-gradient(135deg, rgba(0,229,255,0.08) 0%, transparent 60%)',
+                background: 'linear-gradient(135deg, color-mix(in srgb, var(--color-signal) 8%, transparent) 0%, transparent 60%)',
                 boxShadow: 'inset 0 0 40px -20px var(--color-signal)'
               }}
             />

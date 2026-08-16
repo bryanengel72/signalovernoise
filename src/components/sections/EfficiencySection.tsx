@@ -43,7 +43,7 @@ export const EfficiencySection = ({ copy = efficiencyCopy }: { copy?: Efficiency
 
             {/* Before */}
             <div className="col-span-3 text-center">
-              <span className="text-sm text-muted/70 font-mono line-through decoration-white/20">{row.before}</span>
+              <span className="text-sm text-muted/70 tabular-nums line-through decoration-white/20">{row.before}</span>
             </div>
 
             {/* Arrow */}
@@ -53,12 +53,12 @@ export const EfficiencySection = ({ copy = efficiencyCopy }: { copy?: Efficiency
 
             {/* After */}
             <div className="col-span-3 text-center">
-              <span className="text-sm font-bold text-signal font-mono">{row.after}</span>
+              <span className="text-sm font-bold text-signal tabular-nums">{row.after}</span>
             </div>
 
             {/* Gain */}
             <div className="col-span-1 text-right">
-              <span className="text-[10px] text-signal/70 tracking-wide font-mono">{row.gain}</span>
+              <span className="text-[10px] text-signal/70 tracking-wide tabular-nums">{row.gain}</span>
             </div>
           </Reveal>
         ))}

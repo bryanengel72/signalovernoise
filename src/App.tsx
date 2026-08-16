@@ -27,7 +27,7 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion="user">
-    <div className="min-h-screen bg-bg text-text font-mono selection:bg-signal selection:text-black">
+    <div className="min-h-screen bg-bg text-text font-body selection:bg-signal selection:text-black">
       <div className="noise-bg opacity-[0.03]" />
 
       {/* Scroll progress indicator */}
