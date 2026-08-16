@@ -13,11 +13,8 @@ import type { Inquiry } from './inquiry';
  * bypass with the public key.
  */
 
-/**
- * Deliberately not a discriminated union: this project does not compile with
- * `strict`, so `if (!result.ok)` would not narrow one.
- */
-export type SaveResult = { ok: boolean; error?: unknown };
+/** A discriminated union: `if (!result.ok)` narrows, so `error` is only reachable when it exists. */
+export type SaveResult = { ok: true } | { ok: false; error: unknown };
 
 export type InquiryStore = {
   save: (inquiry: Inquiry) => Promise<SaveResult>;
