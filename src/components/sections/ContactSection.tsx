@@ -4,6 +4,8 @@ import { Mail, Calendar, ArrowRight, Loader2 } from 'lucide-react';
 import { contactCopy, type ContactCopy } from '@/content/sections/contact';
 import { clientMessages } from '@/content/messages';
 import { Turnstile, type TurnstileHandle } from '../ui/Turnstile';
+import { Reveal, reveal } from '../ui/Reveal';
+import { SectionHeader } from '../ui/SectionHeader';
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
 
@@ -61,39 +63,17 @@ export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) =
   return (
     <section className="grid grid-cols-1 lg:grid-cols-2 border-b border-grid" id="contact">
       <div className="p-8 lg:p-16 border-b lg:border-b-0 lg:border-r border-grid">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-xs text-signal tracking-widest uppercase mb-12 flex items-center gap-4"
-        >
-          <div className="w-2 h-2 bg-signal" />
-          {copy.eyebrow}
-        </motion.div>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="font-display text-5xl lg:text-6xl font-light tracking-tight mb-8"
-        >
-          {copy.headline.lead}{' '}
-          <span className="font-bold text-signal text-glow-signal">{copy.headline.emphasis}</span>
-        </motion.h2>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-sm text-muted mb-12 max-w-sm"
-        >
+        <SectionHeader
+          eyebrow={copy.eyebrow}
+          headline={copy.headline}
+          looseEyebrow
+          headlineClassName="mb-8"
+        />
+        <motion.p {...reveal()} className="text-sm text-muted mb-12 max-w-sm">
           {copy.intro}
         </motion.p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="space-y-6"
-        >
+        <Reveal className="space-y-6">
           <div className="flex items-center gap-4 text-sm text-muted">
             <div className="w-10 h-10 border border-grid flex items-center justify-center text-signal bg-surface">
               <Mail size={16} />
@@ -116,14 +96,12 @@ export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) =
             <Calendar size={16} />
             {copy.bookingCta}
           </button>
-        </motion.div>
+        </Reveal>
       </div>
 
       <div className="p-8 lg:p-16 bg-surface">
         <motion.form
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
+          {...reveal('scale')}
           className="border border-grid bg-bg flex flex-col"
           onSubmit={handleSubmit}
         >

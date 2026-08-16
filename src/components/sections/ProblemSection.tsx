@@ -2,6 +2,8 @@ import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { useRef } from 'react';
 import { problemCopy, type ProblemCopy } from '@/content/sections/problem';
 import { ICONS } from '../ui/icons';
+import { reveal } from '../ui/Reveal';
+import { SectionHeader } from '../ui/SectionHeader';
 
 type Card = ProblemCopy['cards'][number];
 
@@ -79,31 +81,14 @@ export const ProblemSection = ({ copy = problemCopy }: { copy?: ProblemCopy }) =
   return (
     <section className="grid grid-cols-1 lg:grid-cols-12 border-b border-grid">
       <div className="lg:col-span-5 p-8 lg:p-16 border-b lg:border-b-0 lg:border-r border-grid">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-xs text-signal tracking-widest uppercase mb-12 flex items-center gap-4"
-        >
-          <div className="w-2 h-2 bg-signal" />
-          {copy.eyebrow}
-        </motion.div>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="font-display text-4xl lg:text-5xl font-light tracking-tight leading-tight mb-6"
-        >
-          {copy.headline.lead}{' '}
-          <span className="font-semibold text-signal text-glow-signal">{copy.headline.emphasis}</span>
-        </motion.h2>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.15 }}
-          className="text-sm text-muted leading-relaxed"
-        >
+        <SectionHeader
+          eyebrow={copy.eyebrow}
+          headline={copy.headline}
+          compact
+          looseEyebrow
+          headlineClassName="mb-6"
+        />
+        <motion.p {...reveal('rise', { delay: 0.15 })} className="text-sm text-muted leading-relaxed">
           {copy.intro}
         </motion.p>
       </div>

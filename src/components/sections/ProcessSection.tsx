@@ -1,38 +1,21 @@
 import { motion } from 'motion/react';
 import { processCopy, type ProcessCopy } from '@/content/sections/process';
+import { reveal } from '../ui/Reveal';
+import { SectionHeader } from '../ui/SectionHeader';
 
 export const ProcessSection = ({ copy = processCopy }: { copy?: ProcessCopy }) => {
   return (
     <section className="border-b border-grid" id="process">
       <div className="p-8 lg:p-16 border-b border-grid">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-xs text-signal tracking-widest uppercase mb-8 flex items-center gap-4"
-        >
-          <div className="w-2 h-2 bg-signal rounded-full" />
-          {copy.eyebrow}
-        </motion.div>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="font-display text-5xl lg:text-6xl font-light tracking-tight"
-        >
-          {copy.headline.lead}{' '}
-          <span className="font-bold text-signal text-glow-signal">{copy.headline.emphasis}</span>
-        </motion.h2>
+        <SectionHeader eyebrow={copy.eyebrow} headline={copy.headline} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8 lg:p-16">
         {copy.phases.map((phase, i) => (
+          // Hand-rolled: these cards carry a hover lift on top of the reveal.
           <motion.div
             key={phase.step}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.15, duration: 0.6, ease: 'easeOut' }}
+            {...reveal('rise', { delay: i * 0.15, duration: 0.6 })}
             whileHover={{ y: -8, transition: { duration: 0.3 } }}
             className="p-8 lg:p-12 border border-white/5 rounded-2xl glass relative group cursor-default overflow-hidden"
           >
@@ -74,7 +57,7 @@ export const ProcessSection = ({ copy = processCopy }: { copy?: ProcessCopy }) =
               {phase.tag}
             </motion.div>
 
-            {/* Connector arrow between cards */}
+            {/* Connector arrow between cards — its own draw-in, not a reveal */}
             {i < copy.phases.length - 1 && (
               <motion.div
                 className="hidden md:flex absolute top-1/2 -right-6 -translate-y-1/2 items-center gap-1 z-10"

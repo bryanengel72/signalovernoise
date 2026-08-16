@@ -1,32 +1,19 @@
-import { motion } from 'motion/react';
 import { ChevronRight } from 'lucide-react';
 import { aboutCopy, type AboutCopy } from '@/content/sections/about';
 import { ICONS } from '../ui/icons';
+import { Reveal } from '../ui/Reveal';
+import { SectionHeader } from '../ui/SectionHeader';
 
 export const AboutSection = ({ copy = aboutCopy }: { copy?: AboutCopy }) => {
   return (
     <section className="border-b border-grid" id="about">
       {/* Section header */}
       <div className="p-8 lg:p-16 border-b border-grid">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-xs text-signal tracking-widest uppercase mb-8 flex items-center gap-4"
-        >
-          <div className="w-2 h-2 bg-signal" />
-          {copy.eyebrow}
-        </motion.div>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="font-display text-5xl lg:text-6xl font-light tracking-tight max-w-3xl"
-        >
-          {copy.headline.lead}{' '}
-          <span className="font-bold text-signal text-glow-signal">{copy.headline.emphasis}</span>
-          <br />{copy.headline.trail}
-        </motion.h2>
+        <SectionHeader
+          eyebrow={copy.eyebrow}
+          headline={copy.headline}
+          headlineClassName="max-w-3xl"
+        />
       </div>
 
       {/* 3-pillar grid */}
@@ -34,12 +21,10 @@ export const AboutSection = ({ copy = aboutCopy }: { copy?: AboutCopy }) => {
         {copy.pillars.map((pillar, i) => {
           const Icon = ICONS[pillar.icon];
           return (
-            <motion.div
+            <Reveal
               key={pillar.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.12, duration: 0.6, ease: 'easeOut' }}
+              delay={i * 0.12}
+              duration={0.6}
               className={`p-8 lg:p-12 relative group ${i < copy.pillars.length - 1 ? 'border-b lg:border-b-0 lg:border-r border-grid' : ''}`}
             >
               {/* Top accent */}
@@ -52,18 +37,13 @@ export const AboutSection = ({ copy = aboutCopy }: { copy?: AboutCopy }) => {
               <div className="text-[10px] text-signal tracking-widest uppercase mb-3">{pillar.label}</div>
               <h3 className="font-display text-2xl font-bold text-white mb-4 tracking-tight">{pillar.title}</h3>
               <p className="text-sm text-muted leading-relaxed">{pillar.desc}</p>
-            </motion.div>
+            </Reveal>
           );
         })}
       </div>
 
       {/* Credentials row */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="p-8 lg:p-16 bg-surface/40"
-      >
+      <Reveal className="p-8 lg:p-16 bg-surface/40">
         <div className="text-[10px] text-muted tracking-widest uppercase mb-6">{copy.credentialsLabel}</div>
         <div className="flex flex-wrap gap-x-10 gap-y-3">
           {copy.credentials.map((cred) => (
@@ -73,7 +53,7 @@ export const AboutSection = ({ copy = aboutCopy }: { copy?: AboutCopy }) => {
             </div>
           ))}
         </div>
-      </motion.div>
+      </Reveal>
     </section>
   );
 };

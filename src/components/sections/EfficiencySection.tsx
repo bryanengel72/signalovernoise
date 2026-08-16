@@ -1,6 +1,8 @@
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { efficiencyCopy, type EfficiencyCopy } from '@/content/sections/efficiency';
+import { Reveal, reveal } from '../ui/Reveal';
+import { SectionHeader } from '../ui/SectionHeader';
 
 export const EfficiencySection = ({ copy = efficiencyCopy }: { copy?: EfficiencyCopy }) => {
   return (
@@ -8,31 +10,9 @@ export const EfficiencySection = ({ copy = efficiencyCopy }: { copy?: Efficiency
       {/* Header */}
       <div className="p-8 lg:p-16 border-b border-grid flex flex-col lg:flex-row justify-between items-end gap-8">
         <div>
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-xs text-signal tracking-widest uppercase mb-8 flex items-center gap-4"
-          >
-            <div className="w-2 h-2 bg-signal" />
-            {copy.eyebrow}
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="font-display text-5xl lg:text-6xl font-light tracking-tight"
-          >
-            {copy.headline.lead}{' '}
-            <span className="font-bold text-signal text-glow-signal">{copy.headline.emphasis}</span>
-          </motion.h2>
+          <SectionHeader eyebrow={copy.eyebrow} headline={copy.headline} />
         </div>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-sm text-muted max-w-sm"
-        >
+        <motion.p {...reveal()} className="text-sm text-muted max-w-sm">
           {copy.intro}
         </motion.p>
       </div>
@@ -49,12 +29,11 @@ export const EfficiencySection = ({ copy = efficiencyCopy }: { copy?: Efficiency
         </div>
 
         {copy.rows.map((row, i) => (
-          <motion.div
+          <Reveal
             key={row.process}
-            initial={{ opacity: 0, x: -16 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.08, duration: 0.5, ease: 'easeOut' }}
+            variant="slide"
+            delay={i * 0.08}
+            duration={0.5}
             className="grid grid-cols-12 py-6 border-b border-grid/60 items-center group hover:bg-surface/30 transition-colors duration-200 -mx-8 lg:-mx-16 px-8 lg:px-16"
           >
             {/* Process name */}
@@ -81,7 +60,7 @@ export const EfficiencySection = ({ copy = efficiencyCopy }: { copy?: Efficiency
             <div className="col-span-1 text-right">
               <span className="text-[10px] text-signal/70 tracking-wide font-mono">{row.gain}</span>
             </div>
-          </motion.div>
+          </Reveal>
         ))}
       </div>
     </section>

@@ -1,49 +1,25 @@
 import { motion } from 'motion/react';
 import { servicesCopy, type ServicesCopy } from '@/content/sections/services';
-import { EASE } from '../ui/Reveal';
+import { Reveal, reveal } from '../ui/Reveal';
+import { SectionHeader } from '../ui/SectionHeader';
 
 export const ServicesSection = ({ copy = servicesCopy }: { copy?: ServicesCopy }) => {
   return (
     <section className="border-b border-grid" id="services">
       <div className="p-8 lg:p-16 border-b border-grid flex flex-col lg:flex-row justify-between items-end gap-8">
         <div>
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-xs text-signal tracking-widest uppercase mb-8 flex items-center gap-4"
-          >
-            <div className="w-2 h-2 bg-signal" />
-            {copy.eyebrow}
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="font-display text-5xl lg:text-6xl font-light tracking-tight"
-          >
-            {copy.headline.lead}{' '}
-            <span className="font-bold text-signal text-glow-signal">{copy.headline.emphasis}</span>
-          </motion.h2>
+          <SectionHeader eyebrow={copy.eyebrow} headline={copy.headline} />
         </div>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-sm text-muted max-w-md"
-        >
+        <motion.p {...reveal()} className="text-sm text-muted max-w-md">
           {copy.intro}
         </motion.p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-8 lg:px-16 pb-16">
         {copy.services.map((svc, i) => (
-          <motion.div
+          <Reveal
             key={svc.num}
-            initial={{ opacity: 0, y: 40, filter: 'blur(6px)' }}
-            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            viewport={{ once: true, margin: '-10% 0px' }}
-            transition={{ delay: i * 0.1, duration: 0.7, ease: EASE }}
+            delay={i * 0.1}
             className="p-8 border border-white/5 rounded-2xl glass mb-6 lg:mb-0 relative group overflow-hidden"
           >
             <div className="absolute inset-0 bg-signal translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out z-0" />
@@ -52,7 +28,7 @@ export const ServicesSection = ({ copy = servicesCopy }: { copy?: ServicesCopy }
               <h3 className="font-display text-xl font-bold uppercase mb-4">{svc.title}</h3>
               <p className="text-xs text-muted group-hover:text-black/70 transition-colors duration-500">{svc.desc}</p>
             </div>
-          </motion.div>
+          </Reveal>
         ))}
       </div>
     </section>
