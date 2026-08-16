@@ -58,8 +58,21 @@ Set the variables from `.env.example` in the Vercel project settings —
 `VITE_TURNSTILE_SITE_KEY` is needed at build time, the rest at runtime. Env var
 changes only take effect on a **redeploy**; editing them alone does nothing.
 
-⚠️ `api/contact.ts` reads `SUPABASE_URL` but falls back to `VITE_SUPABASE_URL`.
+⚠️ `contact/config.ts` reads `SUPABASE_URL` but falls back to `VITE_SUPABASE_URL`.
 If `SUPABASE_URL` is not set, **do not delete `VITE_SUPABASE_URL`** — it is what
 the function is actually using, and removing it takes the contact form down. Add
 `SUPABASE_URL` first, redeploy, then it is safe to remove. `VITE_SUPABASE_ANON_KEY`
 is genuinely unused now and can go at any time.
+
+You no longer have to guess which one is live: when the fallback fires, the
+function logs `contact: falling back to VITE_SUPABASE_URL` on every request. If
+that line is absent from the runtime logs after a deploy, `SUPABASE_URL` is set
+and the VITE_ name is safe to remove.
+
+## Tests
+
+`npm test` runs the Vitest suite. The contact endpoint is tested through its
+seam — `contact/handler.ts` takes a human check and an inquiry store, so the
+tests wire the in-memory adapters from `contact/human-check.ts` and
+`contact/inquiry-store.ts` and reach neither Cloudflare nor Supabase. No
+network, no credentials, no `vercel dev` required.

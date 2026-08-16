@@ -13,6 +13,7 @@
  */
 
 import { identity } from './identity';
+import type { InquiryProblem } from '../contact/inquiry';
 
 export const serverMessages = {
   notConfigured: 'The contact form is not configured. Please email us directly.',
@@ -31,6 +32,17 @@ export const clientMessages = {
   humanCheckUnavailable: `The human check could not load. Check your connection, or email ${identity.email}.`,
   submitFailed: 'Transmission failed — try again.',
 } as const;
+
+/**
+ * What each Inquiry rule says when it fails. Both sides read this map — the
+ * browser to explain a bad field before it POSTs, the function to answer with
+ * the same words after it re-checks.
+ */
+export const inquiryProblemMessages: Record<InquiryProblem, string> = {
+  'missing-name': serverMessages.missingName,
+  'invalid-email': serverMessages.invalidEmail,
+  'missing-message': serverMessages.missingMessage,
+};
 
 export type ServerMessages = typeof serverMessages;
 export type ClientMessages = typeof clientMessages;

@@ -2,7 +2,14 @@ import { useRef, useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
 import { Mail, Calendar, ArrowRight, Loader2 } from 'lucide-react';
 import { contactCopy, type ContactCopy } from '@/content/sections/contact';
-import { clientMessages } from '@/content/messages';
+import { clientMessages, inquiryProblemMessages } from '@/content/messages';
+import {
+  FIELD_LIMITS,
+  cleanField,
+  cleanInquiry,
+  validateInquiry,
+  type InquiryRequest,
+} from '@/contact/inquiry';
 import { Turnstile, type TurnstileHandle } from '../ui/Turnstile';
 import { Reveal, reveal } from '../ui/Reveal';
 import { SectionHeader } from '../ui/SectionHeader';
@@ -24,7 +31,22 @@ export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) =
     }
 
     const form = e.currentTarget;
-    const fields = new FormData(form);
+    const fields = Object.fromEntries(new FormData(form).entries());
+
+    // Same rules the endpoint applies — checked here only to skip a pointless
+    // round-trip. The server re-checks, because a client-side check is not a gate.
+    const inquiry = cleanInquiry(fields);
+    const problem = validateInquiry(inquiry);
+    if (problem) {
+      setErrorMessage(inquiryProblemMessages[problem]);
+      return;
+    }
+
+    const request: InquiryRequest = {
+      ...inquiry,
+      website: cleanField(fields.website, FIELD_LIMITS.website), // honeypot — verified server-side
+      turnstileToken: humanToken,
+    };
 
     setStatus('loading');
     setErrorMessage(null);
@@ -33,14 +55,7 @@ export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) =
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          name: fields.get('name'),
-          email: fields.get('email'),
-          company: fields.get('company'),
-          message: fields.get('message'),
-          website: fields.get('website'), // honeypot — verified server-side
-          turnstileToken: humanToken,
-        }),
+        body: JSON.stringify(request),
       });
 
       const result = (await response.json().catch(() => ({}))) as { error?: string };
