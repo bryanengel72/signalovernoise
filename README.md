@@ -72,16 +72,16 @@ Set the variables from `.env.example` in the Vercel project settings —
 `VITE_TURNSTILE_SITE_KEY` is needed at build time, the rest at runtime. Env var
 changes only take effect on a **redeploy**; editing them alone does nothing.
 
-⚠️ `contact/config.ts` reads `SUPABASE_URL` but falls back to `VITE_SUPABASE_URL`.
-If `SUPABASE_URL` is not set, **do not delete `VITE_SUPABASE_URL`** — it is what
-the function is actually using, and removing it takes the contact form down. Add
-`SUPABASE_URL` first, redeploy, then it is safe to remove. `VITE_SUPABASE_ANON_KEY`
-is genuinely unused now and can go at any time.
+Only `VITE_TURNSTILE_SITE_KEY` is public — `VITE_` means "compiled into the
+browser bundle", so nothing secret may carry that prefix. The contact function
+reads `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` and `TURNSTILE_SECRET_KEY`,
+all server-only.
 
-You no longer have to guess which one is live: when the fallback fires, the
-function logs `contact: falling back to VITE_SUPABASE_URL` on every request. If
-that line is absent from the runtime logs after a deploy, `SUPABASE_URL` is set
-and the VITE_ name is safe to remove.
+`VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are leftovers from when the
+browser wrote to Supabase directly, which `supabase/lockdown.sql` ended. Nothing
+reads either one now, and both can be deleted from the Vercel project. If you run
+the function locally with `vercel dev`, set `SUPABASE_URL` in `.env.local` — see
+`.env.example`.
 
 ## Checks
 

@@ -27,12 +27,6 @@ export const POST = createContactHandler({
       return null;
     }
 
-    if (config.usedLegacySupabaseUrl) {
-      console.warn(
-        'contact: falling back to VITE_SUPABASE_URL — set SUPABASE_URL in the Vercel project, then the VITE_ name can be removed',
-      );
-    }
-
     return {
       humanCheck: turnstileHumanCheck(config.turnstileSecret),
       store: supabaseInquiryStore(config.supabaseUrl, config.serviceRoleKey),

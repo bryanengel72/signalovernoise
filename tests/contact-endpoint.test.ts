@@ -30,7 +30,6 @@ const configure = () => {
 beforeEach(() => {
   vi.stubEnv('TURNSTILE_SECRET_KEY', '');
   vi.stubEnv('SUPABASE_URL', '');
-  vi.stubEnv('VITE_SUPABASE_URL', '');
   vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', '');
 });
 
