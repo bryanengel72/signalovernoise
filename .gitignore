@@ -24,3 +24,9 @@ Thumbs.db
 
 # Scroll-film / hero-loop working files (large intermediates, ffmpeg symlink)
 experiments/
+# Added by `vercel link`. .env* is deliberately broad, but it also matches the
+# committed env template — which only stays tracked because git ignores rules
+# for files already in the index. Negated so a re-add cannot silently drop it.
+.vercel
+.env*
+!.env.example
