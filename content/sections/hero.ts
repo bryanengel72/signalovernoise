@@ -14,7 +14,12 @@ export type HeroCopy = {
   secondaryCta: string;
   bookingSlug: string;
   scrollCue: string;
-  posterAlt: string;
+  /** The cinematic backdrop. The alt text lives beside the image it describes. */
+  backdrop: {
+    poster: string;
+    posterAlt: string;
+    sources: ReadonlyArray<{ src: string; type: string }>;
+  };
 };
 
 export const heroCopy: HeroCopy = {
@@ -31,5 +36,12 @@ export const heroCopy: HeroCopy = {
   secondaryCta: 'Book Consultation',
   bookingSlug: identity.booking.slug,
   scrollCue: 'Scroll',
-  posterAlt: 'Radio telescope dish locked onto a signal under the Milky Way at night',
+  backdrop: {
+    poster: '/hero-lock-poster.jpg',
+    posterAlt: 'Radio telescope dish locked onto a signal under the Milky Way at night',
+    sources: [
+      { src: '/hero-lock.webm', type: 'video/webm' },
+      { src: '/hero-lock.mp4', type: 'video/mp4' },
+    ],
+  },
 };

@@ -1,7 +1,8 @@
-import { motion, useScroll, useTransform, useSpring, useReducedMotion } from 'motion/react';
+import { motion, useScroll, useTransform } from 'motion/react';
 import { Fragment, useRef } from 'react';
 import { ArrowRight, Crosshair } from 'lucide-react';
 import { heroCopy, type HeroCopy } from '@/content/sections/hero';
+import { HeroBackdrop } from '../ui/HeroBackdrop';
 import { EASE } from '../ui/Reveal';
 
 interface HeroSectionProps {
@@ -9,14 +10,11 @@ interface HeroSectionProps {
   copy?: HeroCopy;
 }
 
-const HERO_POSTER = '/hero-lock-poster.jpg';
-
 /** Headline lines stagger in: 0.10s, 0.25s, 0.40s. */
 const headlineDelay = (index: number) => 0.1 + index * 0.15;
 
 export const HeroSection = ({ scrollTo, copy = heroCopy }: HeroSectionProps) => {
   const ref = useRef<HTMLElement>(null);
-  const prefersReduced = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -24,43 +22,11 @@ export const HeroSection = ({ scrollTo, copy = heroCopy }: HeroSectionProps) => 
   });
 
   const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '-12%']);
-  const rawY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-  const imgY = useSpring(rawY, { stiffness: 60, damping: 20 });
 
   return (
     <section ref={ref} className="relative min-h-[90vh] flex items-end border-b border-grid overflow-hidden bg-black">
 
-      {/* Backdrop: a seamless cinematic loop of the signal lock, with a slow load-in settle.
-          Reduced-motion users get the poster still instead of the video. */}
-      {prefersReduced ? (
-        <motion.img
-          src={HERO_POSTER}
-          alt={copy.posterAlt}
-          fetchPriority="high"
-          style={{ y: imgY }}
-          initial={{ scale: 1.08, opacity: 0 }}
-          animate={{ scale: 1, opacity: 0.85 }}
-          transition={{ scale: { duration: 2.4, ease: EASE }, opacity: { duration: 1.2, ease: 'easeOut' } }}
-          className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center z-10 will-change-transform"
-        />
-      ) : (
-        <motion.video
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster={HERO_POSTER}
-          aria-hidden="true"
-          style={{ y: imgY }}
-          initial={{ scale: 1.08, opacity: 0 }}
-          animate={{ scale: 1, opacity: 0.9 }}
-          transition={{ scale: { duration: 2.4, ease: EASE }, opacity: { duration: 1.4, ease: 'easeOut' } }}
-          className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover object-center z-10 will-change-transform"
-        >
-          <source src="/hero-lock.webm" type="video/webm" />
-          <source src="/hero-lock.mp4" type="video/mp4" />
-        </motion.video>
-      )}
+      <HeroBackdrop targetRef={ref} backdrop={copy.backdrop} />
 
       {/* Refined Overlay: Darker on left (text side), clear on right (image side) */}
       <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent z-20 pointer-events-none" />
