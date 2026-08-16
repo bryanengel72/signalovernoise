@@ -69,9 +69,15 @@ inline there.
 ## Experience
 
 The scroll-film at `/experience.html` — a second Vite build entry, reachable from
-the Navbar. Deliberately not React: its canvas frame-scrubbing engine
-(`src/experience/film.ts`) runs a 161-frame ImageBitmap sliding window so every
-scroll draw is a pure blit, and that earns its own runtime.
+the Navbar. Deliberately not React: a 161-frame canvas scrub earns its own runtime.
+
+Three modules, each with one obligation. The **Projector**
+(`src/experience/projector.ts`) shows frame *n*: it owns the canvas, the load
+pump, and an ImageBitmap window decoded off-thread around the playhead so every
+scroll draw is a pure blit rather than a synchronous JPEG decode. `film.ts` owns
+the choreography — what the overlays do as progress moves 0 → 1 — and exports
+`start()` rather than running on import, so it can be imported without a canvas.
+`main.ts` is the entry that calls it.
 
 It is in the module graph now. Its Copy lives in `content/sections/experience.ts`
 and is substituted into the markup at build time by the `experience-content`

@@ -77,7 +77,7 @@ describe('the film has no runtime dependency outside the lockfile', () => {
 
   it('loads its engine as a bundled module', () => {
     expect(source).toContain('type="module"');
-    expect(source).toContain('/src/experience/film.ts');
+    expect(source).toContain('/src/experience/main.ts');
   });
 });
 
