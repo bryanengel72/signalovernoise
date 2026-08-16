@@ -4,12 +4,12 @@ import { POST } from '@/api/contact';
 import { serverMessages } from '@/content/messages';
 
 /**
- * These exercise the branches of the contact endpoint that never touch the
- * network — misconfiguration, a malformed body, and the honeypot short-circuit.
- * They run without a live Supabase or Cloudflare.
+ * These exercise the real POST export — the composition root in api/contact.ts
+ * with its production adapters wired — through the branches that return before
+ * anything reaches the network.
  *
- * The branches past the honeypot still reach out to Turnstile and Supabase from
- * inside the handler, so they stay untestable until that path gets a seam.
+ * Everything past the honeypot is covered in contact-handler.test.ts, which
+ * drives the same handler through its seam with in-memory adapters.
  */
 
 const post = (body: unknown) =>

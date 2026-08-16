@@ -39,10 +39,10 @@ describe('the theme is declared once', () => {
 });
 
 /**
- * The two files cannot share a module — experience.html is served raw from
- * public/ with no build step. They are kept in sync by hand, so this is the
- * thing that catches a drift. The display font had already drifted once:
- * Outfit in the app against Space Grotesk here.
+ * The two files cannot share one declaration — experience.html is a build entry
+ * now, but it has no Tailwind, so it cannot consume an @theme block. They are
+ * kept in sync by hand, so this is the thing that catches a drift. The display
+ * font had already drifted once: Outfit in the app against Space Grotesk here.
  */
 describe('the scroll-film uses the same theme as the app', () => {
   it.each(SHARED_TOKENS)('%s has the same value in both files', (token) => {
