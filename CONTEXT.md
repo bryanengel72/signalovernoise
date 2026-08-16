@@ -68,11 +68,21 @@ inline there.
 
 ## Experience
 
-The standalone scroll-film at `/experience` — `public/experience.html`, served raw
-with no build step and reachable only from the Navbar. Deliberately outside the
-React module graph: its canvas frame-scrubbing engine is load-bearing depth that
-does not belong in the bundle.
+The scroll-film at `/experience.html` — a second Vite build entry, reachable from
+the Navbar. Deliberately not React: its canvas frame-scrubbing engine
+(`src/experience/film.ts`) runs a 161-frame ImageBitmap sliding window so every
+scroll draw is a pure blit, and that earns its own runtime.
 
-Its chrome (nav, tokens, fonts, OG tags) and its Copy are currently forked from the
-React app and have already drifted. Unifying them is open work, not a settled
-decision.
+It is in the module graph now. Its Copy lives in `content/sections/experience.ts`
+and is substituted into the markup at build time by the `experience-content`
+plugin, so the page stays static HTML in the output. Identity is not duplicated
+there — the booking slug and address come from the same place as everywhere else.
+
+Its Copy is deliberately *not* the site's: the film says "99% faster" where the
+site says "99% time reduction", and runs four delta rows to the site's five.
+Shorter reads better against moving footage. That divergence is art direction,
+not drift.
+
+What it still keeps of its own: the CSS, including a hand-maintained copy of the
+theme tokens. It has no Tailwind, so it cannot consume the `@theme` block;
+`tests/theme.test.ts` fails if the two ever disagree.

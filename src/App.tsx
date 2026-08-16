@@ -13,7 +13,12 @@ import { Footer } from './components/sections/Footer';
 import { PrivacyPage } from './components/sections/PrivacyPage';
 
 export default function App() {
-  const [showPrivacy, setShowPrivacy] = useState(false);
+  // The privacy policy is a modal with no route of its own, so it was
+  // unreachable from anywhere outside this page — the scroll-film had no way to
+  // link to it at all. `/?privacy=1` opens it directly.
+  const [showPrivacy, setShowPrivacy] = useState(
+    () => new URLSearchParams(window.location.search).has('privacy'),
+  );
 
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, mass: 0.4 });

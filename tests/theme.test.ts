@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 const ROOT = join(__dirname, '..');
 const indexCss = readFileSync(join(ROOT, 'src/index.css'), 'utf8');
-const experienceHtml = readFileSync(join(ROOT, 'public/experience.html'), 'utf8');
+const experienceHtml = readFileSync(join(ROOT, 'experience.html'), 'utf8');
 
 const SHARED_TOKENS = [
   '--color-bg',

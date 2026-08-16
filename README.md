@@ -51,6 +51,20 @@ straight at the Supabase REST API.
 - `npm run preview` — serve the production build locally
 - `npm run lint` — type-check with `tsc --noEmit`
 
+## Pages
+
+Two build entries:
+
+- `index.html` — the React site.
+- `experience.html` — **THE LOCK**, the scroll-film. Deliberately not React: its
+  canvas frame-scrubbing engine lives in `src/experience/film.ts` and runs its own
+  loop. Its Copy is in `content/sections/experience.ts` and is substituted into the
+  markup at build time, so the shipped page is static HTML. Frames are the 161
+  JPEGs in `public/film/`.
+
+Append `?jump=<scrollY>` to the film for a deterministic single-frame render — it
+skips smooth scrolling and paints one frame, which is what makes it verifiable.
+
 ## Deployment
 
 Deployed on Vercel as a static Vite site plus the `api/` function (see `vercel.json`).
