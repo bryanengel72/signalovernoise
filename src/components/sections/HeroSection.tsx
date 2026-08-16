@@ -6,14 +6,13 @@ import { HeroBackdrop } from '../ui/HeroBackdrop';
 import { EASE } from '../ui/Reveal';
 
 interface HeroSectionProps {
-  scrollTo: (id: string) => void;
   copy?: HeroCopy;
 }
 
 /** Headline lines stagger in: 0.10s, 0.25s, 0.40s. */
 const headlineDelay = (index: number) => 0.1 + index * 0.15;
 
-export const HeroSection = ({ scrollTo, copy = heroCopy }: HeroSectionProps) => {
+export const HeroSection = ({ copy = heroCopy }: HeroSectionProps) => {
   const ref = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -90,8 +89,8 @@ export const HeroSection = ({ scrollTo, copy = heroCopy }: HeroSectionProps) => 
           transition={{ duration: 0.8, ease: 'easeOut', delay: 0.75 }}
           className="flex flex-wrap items-center gap-6"
         >
-          <motion.button
-            onClick={() => scrollTo('contact')}
+          <motion.a
+            href="#contact"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             transition={{ duration: 0.25, ease: EASE }}
@@ -100,7 +99,7 @@ export const HeroSection = ({ scrollTo, copy = heroCopy }: HeroSectionProps) => 
             <span className="btn-shine" aria-hidden="true" />
             {copy.primaryCta}
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </motion.button>
+          </motion.a>
           <button
             data-cal-link={copy.bookingSlug}
             className="px-8 py-4 text-sm font-semibold text-white border border-white/20 rounded-full hover:bg-white/10 glass transition-all"

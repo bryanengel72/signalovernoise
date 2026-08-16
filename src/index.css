@@ -4,8 +4,9 @@
 /* The theme, declared once.
    Tailwind 4 emits every @theme entry as a :root custom property, so there is
    no second declaration to keep in sync — `bg-signal` and `var(--color-signal)`
-   both come from here. public/experience.html uses the same names and values,
-   by hand: it is served raw with no build step, so it cannot import this. */
+   both come from here. experience.html repeats the same names and values by
+   hand: it is a build entry, but it has no Tailwind, so it cannot consume this
+   block. tests/theme.test.ts fails if the two ever drift apart. */
 @theme {
   --font-display: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
@@ -24,6 +25,12 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Anchor targets clear the fixed navbar instead of landing under it. Reading
+   the same token the navbar's height comes from. */
+section[id] {
+  scroll-margin-top: calc(var(--spacing-nav) + 1rem);
 }
 
 /* Scale the whole layout to 85% on desktop (all sizing is rem-based).

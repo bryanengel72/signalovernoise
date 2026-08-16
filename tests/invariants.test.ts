@@ -79,6 +79,37 @@ describe('chapter boundaries travel with chapter names', () => {
   });
 });
 
+/**
+ * Scrolling to a section was a JS helper prop-drilled through two modules, which
+ * also forced smooth scrolling on visitors who had asked for none —
+ * scrollIntoView({ behavior: 'smooth' }) ignores the reduced-motion rule the
+ * stylesheet already declares.
+ */
+describe('scrolling to a section is declared, not scripted', () => {
+  const hero = read('src/components/sections/HeroSection.tsx');
+
+  it('no module scrolls imperatively', () => {
+    for (const source of [app, navbar, hero]) {
+      expect(source).not.toContain('scrollIntoView');
+      expect(source).not.toContain('scrollTo');
+    }
+  });
+
+  it('the navbar links to its sections', () => {
+    expect(navbar).toContain('href={`#${id}`}');
+    expect(navbar).toContain('href="#contact"');
+  });
+
+  it('the stylesheet owns the behaviour, and drops it under reduced motion', () => {
+    expect(indexCss).toMatch(/html\s*\{[\s\S]*?scroll-behavior:\s*smooth/);
+    expect(indexCss).toMatch(/@media \(prefers-reduced-motion: reduce\)[\s\S]*scroll-behavior:\s*auto/);
+  });
+
+  it('anchor targets clear the fixed navbar, from the same token', () => {
+    expect(indexCss).toMatch(/section\[id\]\s*\{[\s\S]*?scroll-margin-top:[^;]*--spacing-nav/);
+  });
+});
+
 describe('the noise overlay opacity is declared once', () => {
   it('is set in CSS, not overridden by a utility that never applied', () => {
     expect(app).toContain('className="noise-bg"');

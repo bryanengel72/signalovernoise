@@ -23,13 +23,6 @@ export default function App() {
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, mass: 0.4 });
 
-  const scrollTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <MotionConfig reducedMotion="user">
     <div className="min-h-screen bg-bg text-text font-body selection:bg-signal selection:text-black">
@@ -41,10 +34,10 @@ export default function App() {
         className="fixed top-0 left-0 right-0 h-[2px] bg-signal origin-left z-[60] glow-signal"
       />
       
-      <Navbar scrollTo={scrollTo} />
+      <Navbar />
 
       <main className="pt-nav">
-        <HeroSection scrollTo={scrollTo} />
+        <HeroSection />
         <Marquee />
         <ProblemSection />
         <ServicesSection />

@@ -4,11 +4,10 @@ import { navCopy, type NavCopy } from '@/content/sections/nav';
 import { EASE } from '../ui/Reveal';
 
 interface NavbarProps {
-  scrollTo: (id: string) => void;
   copy?: NavCopy;
 }
 
-export const Navbar = ({ scrollTo, copy = navCopy }: NavbarProps) => {
+export const Navbar = ({ copy = navCopy }: NavbarProps) => {
   const { scrollY } = useScroll();
   const [hidden, setHidden] = useState(false);
 
@@ -45,14 +44,14 @@ export const Navbar = ({ scrollTo, copy = navCopy }: NavbarProps) => {
       {/* Nav links */}
       <div className="hidden md:flex items-center gap-8 text-xs tracking-widest uppercase text-muted">
         {copy.links.map(({ label, id }) => (
-          <button
+          <a
             key={id}
-            onClick={() => scrollTo(id)}
+            href={`#${id}`}
             className="relative group hover:text-white transition-colors duration-200"
           >
             {label}
             <span className="absolute -bottom-0.5 left-0 w-0 group-hover:w-full h-[1px] bg-signal transition-all duration-300" />
-          </button>
+          </a>
         ))}
 
         {/* Cinematic scroll-film — full-page experience */}
@@ -70,9 +69,9 @@ export const Navbar = ({ scrollTo, copy = navCopy }: NavbarProps) => {
       </div>
 
       {/* CTA pill — glass style */}
-      <button
-        onClick={() => scrollTo('contact')}
-        className="relative px-5 lg:px-6 py-2 text-xs font-semibold rounded-full text-white overflow-hidden group border border-white/10 hover:border-signal/50 transition-colors duration-300"
+      <a
+        href="#contact"
+        className="relative inline-block px-5 lg:px-6 py-2 text-xs font-semibold rounded-full text-white overflow-hidden group border border-white/10 hover:border-signal/50 transition-colors duration-300"
         style={{
           background: 'rgba(255,255,255,0.06)',
           backdropFilter: 'blur(12px)',
@@ -81,7 +80,7 @@ export const Navbar = ({ scrollTo, copy = navCopy }: NavbarProps) => {
         {/* Hover fill */}
         <span className="absolute inset-0 bg-signal/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
         <span className="relative z-10 group-hover:text-signal transition-colors duration-300">{copy.cta}</span>
-      </button>
+      </a>
     </motion.nav>
   );
 };
