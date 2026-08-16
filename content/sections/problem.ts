@@ -1,4 +1,4 @@
-import type { IconKey } from '../icons';
+import type { IconKey } from '../icons.js';
 
 /**
  * Problem Copy.

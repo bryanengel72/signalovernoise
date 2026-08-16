@@ -1,4 +1,4 @@
-import { identity } from '../identity';
+import { identity } from '../identity.js';
 
 export type ContactField = { label: string; placeholder: string };
 

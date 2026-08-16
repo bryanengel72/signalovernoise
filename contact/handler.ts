@@ -1,8 +1,8 @@
-import { inquiryProblemMessages, serverMessages } from '../content/messages';
-import { FIELD_LIMITS, cleanField, cleanInquiry, validateInquiry } from './inquiry';
-import type { HumanCheck } from './human-check';
-import type { InquiryStore } from './inquiry-store';
-import type { RateLimiter } from './rate-limit';
+import { inquiryProblemMessages, serverMessages } from '../content/messages.js';
+import { FIELD_LIMITS, cleanField, cleanInquiry, validateInquiry } from './inquiry.js';
+import type { HumanCheck } from './human-check.js';
+import type { InquiryStore } from './inquiry-store.js';
+import type { RateLimiter } from './rate-limit.js';
 
 /**
  * The contact endpoint's decision logic, with every dependency in front of it.

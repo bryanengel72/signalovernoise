@@ -1,6 +1,6 @@
-import { identity } from './identity';
-import { experienceCopy } from './sections/experience';
-import { snrSeed } from '../src/experience/telemetry';
+import { identity } from './identity.js';
+import { experienceCopy } from './sections/experience.js';
+import { snrSeed } from '../src/experience/telemetry.js';
 
 /**
  * The values every HTML entry needs, rendered into its markup at build time.

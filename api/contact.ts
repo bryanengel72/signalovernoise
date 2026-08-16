@@ -1,8 +1,8 @@
-import { describeMissing, readContactConfig } from '../contact/config';
-import { createContactHandler } from '../contact/handler';
-import { turnstileHumanCheck } from '../contact/human-check';
-import { supabaseInquiryStore } from '../contact/inquiry-store';
-import { createRateLimiter } from '../contact/rate-limit';
+import { describeMissing, readContactConfig } from '../contact/config.js';
+import { createContactHandler } from '../contact/handler.js';
+import { turnstileHumanCheck } from '../contact/human-check.js';
+import { supabaseInquiryStore } from '../contact/inquiry-store.js';
+import { createRateLimiter } from '../contact/rate-limit.js';
 
 /**
  * Contact endpoint — composition root.

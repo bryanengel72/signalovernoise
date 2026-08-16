@@ -12,8 +12,8 @@
  * Framework-free — imported by both the Vite bundle and the Vercel function.
  */
 
-import { identity } from './identity';
-import type { InquiryProblem } from '../contact/inquiry';
+import { identity } from './identity.js';
+import type { InquiryProblem } from '../contact/inquiry.js';
 
 export const serverMessages = {
   notConfigured: 'The contact form is not configured. Please email us directly.',

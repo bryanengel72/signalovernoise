@@ -1,5 +1,5 @@
-import { identity } from '../identity';
-import type { IconKey } from '../icons';
+import { identity } from '../identity.js';
+import type { IconKey } from '../icons.js';
 
 export type AboutCopy = {
   eyebrow: string;

@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import type { Inquiry } from './inquiry';
+import type { Inquiry } from './inquiry.js';
 
 /**
  * InquiryStore — the seam in front of Supabase.

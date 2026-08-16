@@ -1,4 +1,4 @@
-import { identity } from '../identity';
+import { identity } from '../identity.js';
 
 /**
  * Experience Copy — the scroll-film at /experience.html.

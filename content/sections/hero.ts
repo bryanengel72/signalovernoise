@@ -1,4 +1,4 @@
-import { identity } from '../identity';
+import { identity } from '../identity.js';
 
 /**
  * Hero Copy. `headline` is ordered — each line is revealed in sequence — and
