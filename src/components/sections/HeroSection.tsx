@@ -1,15 +1,20 @@
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from 'motion/react';
-import { useRef } from 'react';
+import { Fragment, useRef } from 'react';
 import { ArrowRight, Crosshair } from 'lucide-react';
+import { heroCopy, type HeroCopy } from '@/content/sections/hero';
 import { EASE } from '../ui/Reveal';
 
 interface HeroSectionProps {
   scrollTo: (id: string) => void;
+  copy?: HeroCopy;
 }
 
 const HERO_POSTER = '/hero-lock-poster.jpg';
 
-export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
+/** Headline lines stagger in: 0.10s, 0.25s, 0.40s. */
+const headlineDelay = (index: number) => 0.1 + index * 0.15;
+
+export const HeroSection = ({ scrollTo, copy = heroCopy }: HeroSectionProps) => {
   const ref = useRef<HTMLElement>(null);
   const prefersReduced = useReducedMotion();
 
@@ -30,7 +35,7 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
       {prefersReduced ? (
         <motion.img
           src={HERO_POSTER}
-          alt="Radio telescope dish locked onto a signal under the Milky Way at night"
+          alt={copy.posterAlt}
           fetchPriority="high"
           style={{ y: imgY }}
           initial={{ scale: 1.08, opacity: 0 }}
@@ -73,21 +78,17 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
           className="flex items-center gap-4 text-signal text-xs tracking-widest uppercase mb-8"
         >
           <Crosshair size={14} />
-          <span>B2B AI Consulting</span>
+          <span>{copy.eyebrow}</span>
         </motion.div>
 
         <h1 className="font-display text-5xl lg:text-8xl tracking-tight mb-8 leading-tight">
-          {[
-            { text: 'Simple AI.', delay: 0.1, bold: false },
-            { text: 'Clear Strategy.', delay: 0.25, bold: false },
-            { text: 'Real Growth.', delay: 0.4, bold: true },
-          ].map(({ text, delay, bold }) => (
+          {copy.headline.map(({ text, emphasis }, i) => (
             <motion.span
               key={text}
               initial={{ opacity: 0, y: 32, filter: 'blur(8px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              transition={{ duration: 0.9, ease: EASE, delay }}
-              className={`block ${bold ? 'font-bold text-signal text-glow-signal' : 'font-light text-white'}`}
+              transition={{ duration: 0.9, ease: EASE, delay: headlineDelay(i) }}
+              className={`block ${emphasis ? 'font-bold text-signal text-glow-signal' : 'font-light text-white'}`}
             >
               {text}
             </motion.span>
@@ -100,7 +101,7 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
           transition={{ duration: 0.8, ease: 'easeOut', delay: 0.55 }}
           className="text-white/80 text-sm lg:text-base max-w-xl mb-8 leading-relaxed"
         >
-          We build custom AI systems that cut costs, accelerate decisions, and deliver measurable ROI — without the hype, lock-in, or guesswork.
+          {copy.subhead}
         </motion.p>
 
         <motion.div
@@ -109,11 +110,12 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.65 }}
           className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-10 text-xs tracking-widest uppercase text-white/40"
         >
-          <span className="whitespace-nowrap">No Lock-In</span>
-          <span className="text-white/20">·</span>
-          <span className="whitespace-nowrap">90-Day ROI Focus</span>
-          <span className="text-white/20">·</span>
-          <span className="whitespace-nowrap">Professional-Grade</span>
+          {copy.trustChips.map((chip, i) => (
+            <Fragment key={chip}>
+              {i > 0 && <span className="text-white/20">·</span>}
+              <span className="whitespace-nowrap">{chip}</span>
+            </Fragment>
+          ))}
         </motion.div>
 
         <motion.div
@@ -130,14 +132,14 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
             className="relative overflow-hidden bg-signal text-black px-8 py-4 text-sm font-semibold rounded-full hover:glow-signal border border-signal transition-shadow flex items-center gap-2 group"
           >
             <span className="btn-shine" aria-hidden="true" />
-            Get Your Free AI Audit
+            {copy.primaryCta}
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </motion.button>
           <button
-            data-cal-link="bryan-engel-amlxcu/30min"
+            data-cal-link={copy.bookingSlug}
             className="px-8 py-4 text-sm font-semibold text-white border border-white/20 rounded-full hover:bg-white/10 glass transition-all"
           >
-            Book Consultation
+            {copy.secondaryCta}
           </button>
         </motion.div>
       </motion.div>
@@ -149,7 +151,7 @@ export const HeroSection = ({ scrollTo }: HeroSectionProps) => {
         transition={{ delay: 1.6, duration: 1 }}
         className="absolute bottom-6 right-8 lg:right-16 z-40 hidden lg:flex flex-col items-center gap-2 text-white/40"
       >
-        <span className="text-[10px] tracking-[0.3em] uppercase [writing-mode:vertical-rl]">Scroll</span>
+        <span className="text-[10px] tracking-[0.3em] uppercase [writing-mode:vertical-rl]">{copy.scrollCue}</span>
         <motion.div
           animate={{ y: [0, 8, 0], opacity: [0.3, 1, 0.3] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}

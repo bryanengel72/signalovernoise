@@ -1,42 +1,38 @@
 import { motion } from 'motion/react';
+import { processCopy, type ProcessCopy } from '@/content/sections/process';
 
-const phases = [
-  { step: "01", title: "Discover", desc: "Map how your business operates today, find the biggest time-wasters, and identify where automation can help most.", tag: "30-60 MIN SCAN" },
-  { step: "02", title: "Design", desc: "Plan the solution. Define exactly what to build, what tools to use, and how everything connects.", tag: "1-2 WEEKS" },
-  { step: "03", title: "Deploy", desc: "Build, test, and launch in your environment. You leave with working automation and training to use it.", tag: "LIVE SYSTEM" }
-];
-
-export const ProcessSection = () => {
+export const ProcessSection = ({ copy = processCopy }: { copy?: ProcessCopy }) => {
   return (
     <section className="border-b border-grid" id="process">
       <div className="p-8 lg:p-16 border-b border-grid">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           className="text-xs text-signal tracking-widest uppercase mb-8 flex items-center gap-4"
         >
           <div className="w-2 h-2 bg-signal rounded-full" />
-          How It Works
+          {copy.eyebrow}
         </motion.div>
-        <motion.h2 
+        <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="font-display text-5xl lg:text-6xl font-light tracking-tight"
         >
-          How It <span className="font-bold text-signal text-glow-signal">Works.</span>
+          {copy.headline.lead}{' '}
+          <span className="font-bold text-signal text-glow-signal">{copy.headline.emphasis}</span>
         </motion.h2>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8 lg:p-16">
-        {phases.map((phase, i) => (
-          <motion.div 
-            key={i}
+        {copy.phases.map((phase, i) => (
+          <motion.div
+            key={phase.step}
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: i * 0.15, duration: 0.6, ease: "easeOut" }}
+            transition={{ delay: i * 0.15, duration: 0.6, ease: 'easeOut' }}
             whileHover={{ y: -8, transition: { duration: 0.3 } }}
             className="p-8 lg:p-12 border border-white/5 rounded-2xl glass relative group cursor-default overflow-hidden"
           >
@@ -73,13 +69,13 @@ export const ProcessSection = () => {
               <motion.span
                 className="w-1.5 h-1.5 rounded-full bg-signal"
                 animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.5 }}
               />
               {phase.tag}
             </motion.div>
 
             {/* Connector arrow between cards */}
-            {i < 2 && (
+            {i < copy.phases.length - 1 && (
               <motion.div
                 className="hidden md:flex absolute top-1/2 -right-6 -translate-y-1/2 items-center gap-1 z-10"
                 initial={{ opacity: 0 }}

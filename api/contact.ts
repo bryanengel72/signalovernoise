@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { serverMessages } from '../content/messages';
 
 /**
  * Contact form endpoint.
@@ -73,14 +74,14 @@ export async function POST(request: Request) {
       hasSupabaseUrl: Boolean(supabaseUrl),
       hasServiceRoleKey: Boolean(serviceRoleKey),
     });
-    return reply({ error: 'The contact form is not configured. Please email us directly.' }, 500);
+    return reply({ error: serverMessages.notConfigured }, 500);
   }
 
   let payload: Record<string, unknown>;
   try {
     payload = (await request.json()) as Record<string, unknown>;
   } catch {
-    return reply({ error: 'Malformed request.' }, 400);
+    return reply({ error: serverMessages.malformed }, 400);
   }
 
   // Honeypot: a hidden field only automation fills in. Report success and drop it.
@@ -90,18 +91,18 @@ export async function POST(request: Request) {
 
   const ip = clientIp(request);
   if (ip && isRateLimited(ip)) {
-    return reply({ error: 'Too many submissions from this connection. Try again shortly.' }, 429);
+    return reply({ error: serverMessages.rateLimited }, 429);
   }
 
   const token = clean(payload.turnstileToken, 4096);
   if (!token) {
-    return reply({ error: 'Please complete the human check and try again.' }, 400);
+    return reply({ error: serverMessages.missingHumanCheck }, 400);
   }
 
   const verdict = await verifyHuman(token, turnstileSecret, ip);
   if (!verdict.ok) {
     console.warn('contact: turnstile rejected submission', { ip, codes: verdict.codes });
-    return reply({ error: 'Human check failed. Please try the check again.' }, 403);
+    return reply({ error: serverMessages.humanCheckFailed }, 403);
   }
 
   const inquiry = {
@@ -114,13 +115,13 @@ export async function POST(request: Request) {
   // Turnstile is the spam gate, so keep these checks to genuinely empty or
   // malformed input and name the field that actually failed.
   if (!inquiry.name) {
-    return reply({ error: 'Please add your name.' }, 400);
+    return reply({ error: serverMessages.missingName }, 400);
   }
   if (!EMAIL_PATTERN.test(inquiry.email)) {
-    return reply({ error: "That email address doesn't look right." }, 400);
+    return reply({ error: serverMessages.invalidEmail }, 400);
   }
   if (!inquiry.message) {
-    return reply({ error: "Please tell us what you're working on." }, 400);
+    return reply({ error: serverMessages.missingMessage }, 400);
   }
 
   const supabase = createClient(supabaseUrl, serviceRoleKey, {
@@ -131,10 +132,7 @@ export async function POST(request: Request) {
 
   if (error) {
     console.error('contact: supabase insert failed', error);
-    return reply(
-      { error: 'We could not save your message. Please email bryan@signalovernoiseai.com.' },
-      500,
-    );
+    return reply({ error: serverMessages.saveFailed }, 500);
   }
 
   return reply({ ok: true }, 200);

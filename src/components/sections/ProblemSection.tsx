@@ -1,15 +1,11 @@
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
-import { Activity, Cpu, Database, Terminal } from 'lucide-react';
 import { useRef } from 'react';
+import { problemCopy, type ProblemCopy } from '@/content/sections/problem';
+import { ICONS } from '../ui/icons';
 
-const problems = [
-  { icon: Activity,  title: "Scattered Data",                   desc: "Data spread across too many places wastes hours every week without producing anything useful.",  color: "#00E5FF" },
-  { icon: Database,  title: "Process Inefficiency",             desc: "Repetitive manual work eats up time that should go toward growth and higher-value tasks.", color: "#00E5FF" },
-  { icon: Terminal,  title: "AI Tools That Never Stick",        desc: "Most AI experiments never make it into daily use — they stall out before anyone sees results.", color: "#00E5FF" },
-  { icon: Cpu,       title: "No Clear Plan",                    desc: "Without a prioritized roadmap, AI spending is scattered and nothing gets measured.", color: "#00E5FF" },
-];
+type Card = ProblemCopy['cards'][number];
 
-function TiltCard({ item, index }: { item: typeof problems[0]; index: number }) {
+function TiltCard({ item, index }: { item: Card; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -26,7 +22,7 @@ function TiltCard({ item, index }: { item: typeof problems[0]; index: number }) 
   };
   const handleMouseLeave = () => { x.set(0); y.set(0); };
 
-  const Icon = item.icon;
+  const Icon = ICONS[item.icon];
 
   return (
     <motion.div
@@ -79,41 +75,41 @@ function TiltCard({ item, index }: { item: typeof problems[0]; index: number }) 
   );
 }
 
-export const ProblemSection = () => {
+export const ProblemSection = ({ copy = problemCopy }: { copy?: ProblemCopy }) => {
   return (
     <section className="grid grid-cols-1 lg:grid-cols-12 border-b border-grid">
       <div className="lg:col-span-5 p-8 lg:p-16 border-b lg:border-b-0 lg:border-r border-grid">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           className="text-xs text-signal tracking-widest uppercase mb-12 flex items-center gap-4"
         >
           <div className="w-2 h-2 bg-signal" />
-          The Problem
+          {copy.eyebrow}
         </motion.div>
-        <motion.h2 
+        <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="font-display text-4xl lg:text-5xl font-light tracking-tight leading-tight mb-6"
         >
-          The Cost of Operating{' '}
-          <span className="font-semibold text-signal text-glow-signal">Without an AI Framework.</span>
+          {copy.headline.lead}{' '}
+          <span className="font-semibold text-signal text-glow-signal">{copy.headline.emphasis}</span>
         </motion.h2>
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.15 }}
           className="text-sm text-muted leading-relaxed"
         >
-          Most businesses are treating AI like an experiment. The result: wasted time, failed tools, and nothing to show for the investment.
+          {copy.intro}
         </motion.p>
       </div>
       <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6 p-8 lg:p-16" style={{ perspective: '1000px' }}>
-        {problems.map((item, i) => (
-          <TiltCard key={i} item={item} index={i} />
+        {copy.cards.map((item, i) => (
+          <TiltCard key={item.title} item={item} index={i} />
         ))}
       </div>
     </section>

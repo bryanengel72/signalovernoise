@@ -1,11 +1,13 @@
 import { useRef, useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
 import { Mail, Calendar, ArrowRight, Loader2 } from 'lucide-react';
+import { contactCopy, type ContactCopy } from '@/content/sections/contact';
+import { clientMessages } from '@/content/messages';
 import { Turnstile, type TurnstileHandle } from '../ui/Turnstile';
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
 
-export const ContactSection = () => {
+export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) => {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [humanToken, setHumanToken] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -15,7 +17,7 @@ export const ContactSection = () => {
     e.preventDefault();
 
     if (!humanToken) {
-      setErrorMessage('Please complete the human check below.');
+      setErrorMessage(clientMessages.humanCheckIncomplete);
       return;
     }
 
@@ -40,7 +42,7 @@ export const ContactSection = () => {
       });
 
       const result = (await response.json().catch(() => ({}))) as { error?: string };
-      if (!response.ok) throw new Error(result.error ?? 'Transmission failed — try again.');
+      if (!response.ok) throw new Error(result.error ?? clientMessages.submitFailed);
 
       setStatus('success');
       form.reset();
@@ -48,7 +50,7 @@ export const ContactSection = () => {
       console.error('Contact form error:', error);
       setStatus('error');
       setErrorMessage(
-        error instanceof Error ? error.message : 'Transmission failed — try again.',
+        error instanceof Error ? error.message : clientMessages.submitFailed,
       );
       // Turnstile tokens are single-use — clear the spent one and re-challenge.
       setHumanToken(null);
@@ -59,14 +61,14 @@ export const ContactSection = () => {
   return (
     <section className="grid grid-cols-1 lg:grid-cols-2 border-b border-grid" id="contact">
       <div className="p-8 lg:p-16 border-b lg:border-b-0 lg:border-r border-grid">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           className="text-xs text-signal tracking-widest uppercase mb-12 flex items-center gap-4"
         >
           <div className="w-2 h-2 bg-signal" />
-          Get in Touch
+          {copy.eyebrow}
         </motion.div>
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
@@ -74,18 +76,19 @@ export const ContactSection = () => {
           viewport={{ once: true }}
           className="font-display text-5xl lg:text-6xl font-light tracking-tight mb-8"
         >
-          Let's <span className="font-bold text-signal text-glow-signal">Talk.</span>
+          {copy.headline.lead}{' '}
+          <span className="font-bold text-signal text-glow-signal">{copy.headline.emphasis}</span>
         </motion.h2>
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-sm text-muted mb-12 max-w-sm"
         >
-          Tell us what you're trying to solve and we'll tell you honestly whether AI can help — and what it would take.
+          {copy.intro}
         </motion.p>
-        
-        <motion.div 
+
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -95,29 +98,29 @@ export const ContactSection = () => {
             <div className="w-10 h-10 border border-grid flex items-center justify-center text-signal bg-surface">
               <Mail size={16} />
             </div>
-            bryan@signalovernoiseai.com
+            {copy.email}
           </div>
           <div className="flex items-center gap-4 text-sm text-muted">
             <div className="w-10 h-10 border border-grid flex items-center justify-center text-signal bg-surface">
               <Calendar size={16} />
             </div>
-            Discovery calls within 48h
+            {copy.responseNote}
           </div>
 
           <button
-            data-cal-link="bryan-engel-amlxcu/30min"
-            data-cal-namespace="30min"
-            data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}'
+            data-cal-link={copy.booking.slug}
+            data-cal-namespace={copy.booking.namespace}
+            data-cal-config={copy.booking.config}
             className="mt-4 w-full sm:w-auto px-8 py-4 text-sm font-semibold bg-signal text-bg rounded-full hover:glow-signal border border-signal transition-all flex items-center gap-2 group"
           >
             <Calendar size={16} />
-            Schedule a Discovery Call
+            {copy.bookingCta}
           </button>
         </motion.div>
       </div>
-      
+
       <div className="p-8 lg:p-16 bg-surface">
-        <motion.form 
+        <motion.form
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
@@ -125,33 +128,33 @@ export const ContactSection = () => {
           onSubmit={handleSubmit}
         >
           <div className="p-6 border-b border-grid bg-surface/50 backdrop-blur-sm">
-            <span className="text-sm font-semibold text-white tracking-widest uppercase">Send a Message</span>
+            <span className="text-sm font-semibold text-white tracking-widest uppercase">{copy.formTitle}</span>
           </div>
-          
+
           <div className="p-6 space-y-6">
             <input name="website" type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 opacity-0" />
             <div className="space-y-2">
-              <label htmlFor="contact-name" className="text-[10px] text-signal uppercase tracking-widest">Name</label>
-              <input id="contact-name" name="name" type="text" required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="Your name" />
+              <label htmlFor="contact-name" className="text-[10px] text-signal uppercase tracking-widest">{copy.fields.name.label}</label>
+              <input id="contact-name" name="name" type="text" required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder={copy.fields.name.placeholder} />
             </div>
             <div className="space-y-2">
-              <label htmlFor="contact-email" className="text-[10px] text-signal uppercase tracking-widest">Email</label>
-              <input id="contact-email" name="email" type="email" required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="your@email.com" />
+              <label htmlFor="contact-email" className="text-[10px] text-signal uppercase tracking-widest">{copy.fields.email.label}</label>
+              <input id="contact-email" name="email" type="email" required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder={copy.fields.email.placeholder} />
             </div>
             <div className="space-y-2">
-              <label htmlFor="contact-company" className="text-[10px] text-signal uppercase tracking-widest">Company</label>
-              <input id="contact-company" name="company" type="text" className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder="Your company (optional)" />
+              <label htmlFor="contact-company" className="text-[10px] text-signal uppercase tracking-widest">{copy.fields.company.label}</label>
+              <input id="contact-company" name="company" type="text" className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder={copy.fields.company.placeholder} />
             </div>
             <div className="space-y-2">
-              <label htmlFor="contact-message" className="text-[10px] text-signal uppercase tracking-widest">What are you working on?</label>
-              <textarea id="contact-message" name="message" rows={4} required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30 resize-none" placeholder="Tell us what you need..." />
+              <label htmlFor="contact-message" className="text-[10px] text-signal uppercase tracking-widest">{copy.fields.message.label}</label>
+              <textarea id="contact-message" name="message" rows={4} required className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30 resize-none" placeholder={copy.fields.message.placeholder} />
             </div>
           </div>
 
           <div className="p-6 bg-surface/30 space-y-4">
             {status === 'success' ? (
               <div className="w-full p-4 bg-white text-black font-semibold text-sm rounded-full flex justify-between items-center">
-                Message Sent <span>✓</span>
+                {copy.submitSuccess} <span>✓</span>
               </div>
             ) : (
               <>
@@ -167,8 +170,7 @@ export const ContactSection = () => {
                   />
                 ) : (
                   <p className="text-[11px] text-red-400 leading-relaxed">
-                    Human verification isn't configured (<code>VITE_TURNSTILE_SITE_KEY</code> is
-                    missing). Email bryan@signalovernoiseai.com in the meantime.
+                    {copy.humanCheckUnconfigured}
                   </p>
                 )}
 
@@ -183,7 +185,7 @@ export const ContactSection = () => {
                   disabled={status === 'loading' || !humanToken}
                   className="w-full p-4 bg-signal text-bg font-semibold text-sm rounded-full hover:glow-signal border border-signal transition-all flex justify-between items-center group disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  {status === 'loading' ? 'Sending...' : 'Send Message'}
+                  {status === 'loading' ? copy.submitLoading : copy.submitIdle}
                   {status === 'loading'
                     ? <Loader2 size={16} className="animate-spin" />
                     : <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />

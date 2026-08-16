@@ -1,40 +1,8 @@
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
+import { efficiencyCopy, type EfficiencyCopy } from '@/content/sections/efficiency';
 
-const rows = [
-  {
-    process:  'Data Synthesis',
-    before:   '10 hrs / week',
-    after:    '< 5 min',
-    gain:     '99% time reduction',
-  },
-  {
-    process:  'Lead Qualification',
-    before:   '3 hrs / day',
-    after:    'Real-time',
-    gain:     'Continuous pipeline',
-  },
-  {
-    process:  'Report Generation',
-    before:   '4 hrs / cycle',
-    after:    'On-demand',
-    gain:     'Zero human overhead',
-  },
-  {
-    process:  'Email Triage & Routing',
-    before:   '90 min / day',
-    after:    'Automated',
-    gain:     '100% coverage',
-  },
-  {
-    process:  'Competitive Intelligence',
-    before:   '6 hrs / week',
-    after:    'Daily digest',
-    gain:     'Always current',
-  },
-];
-
-export const EfficiencySection = () => {
+export const EfficiencySection = ({ copy = efficiencyCopy }: { copy?: EfficiencyCopy }) => {
   return (
     <section className="border-b border-grid" id="efficiency">
       {/* Header */}
@@ -47,7 +15,7 @@ export const EfficiencySection = () => {
             className="text-xs text-signal tracking-widest uppercase mb-8 flex items-center gap-4"
           >
             <div className="w-2 h-2 bg-signal" />
-            Real Results
+            {copy.eyebrow}
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -55,8 +23,8 @@ export const EfficiencySection = () => {
             viewport={{ once: true }}
             className="font-display text-5xl lg:text-6xl font-light tracking-tight"
           >
-            Before vs.{' '}
-            <span className="font-bold text-signal text-glow-signal">After.</span>
+            {copy.headline.lead}{' '}
+            <span className="font-bold text-signal text-glow-signal">{copy.headline.emphasis}</span>
           </motion.h2>
         </div>
         <motion.p
@@ -65,7 +33,7 @@ export const EfficiencySection = () => {
           viewport={{ once: true }}
           className="text-sm text-muted max-w-sm"
         >
-          Real results from businesses like yours — before and after automation.
+          {copy.intro}
         </motion.p>
       </div>
 
@@ -73,16 +41,16 @@ export const EfficiencySection = () => {
       <div className="px-8 lg:px-16 pb-16">
         {/* Column headers */}
         <div className="grid grid-cols-12 py-6 border-b border-grid text-[10px] text-muted uppercase tracking-widest">
-          <div className="col-span-4">Process</div>
-          <div className="col-span-3 text-center">Manual Operation</div>
+          <div className="col-span-4">{copy.columns.process}</div>
+          <div className="col-span-3 text-center">{copy.columns.before}</div>
           <div className="col-span-1" />
-          <div className="col-span-3 text-center text-signal">With Automation</div>
-          <div className="col-span-1 text-right">Delta</div>
+          <div className="col-span-3 text-center text-signal">{copy.columns.after}</div>
+          <div className="col-span-1 text-right">{copy.columns.gain}</div>
         </div>
 
-        {rows.map((row, i) => (
+        {copy.rows.map((row, i) => (
           <motion.div
-            key={i}
+            key={row.process}
             initial={{ opacity: 0, x: -16 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}

@@ -1,4 +1,5 @@
 import { useEffect, useImperativeHandle, useRef, useState, type Ref } from 'react';
+import { clientMessages } from '@/content/messages';
 
 /**
  * Cloudflare Turnstile widget, rendered explicitly so it survives React's
@@ -96,9 +97,7 @@ export const Turnstile = ({ siteKey, onToken, onError, ref }: TurnstileProps) =>
       })
       .catch(() => {
         if (cancelled) return;
-        onErrorRef.current?.(
-          'The human check could not load. Check your connection, or email bryan@signalovernoiseai.com.',
-        );
+        onErrorRef.current?.(clientMessages.humanCheckUnavailable);
       });
 
     return () => {

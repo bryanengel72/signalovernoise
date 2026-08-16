@@ -1,36 +1,9 @@
 import { motion } from 'motion/react';
-import { Cpu, TrendingUp, Network, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
+import { aboutCopy, type AboutCopy } from '@/content/sections/about';
+import { ICONS } from '../ui/icons';
 
-const pillars = [
-  {
-    icon: Cpu,
-    label: 'Technical Architecture',
-    title: 'Systems, Not Prompts.',
-    desc: 'Led by an AI developer with an MS in Innovation & Technology. Every solution is a real working system — not just a chatbot.',
-  },
-  {
-    icon: TrendingUp,
-    label: 'Business ROI',
-    title: 'Strategy That Pays Off.',
-    desc: 'Every engagement is built around measurable results and growth targets. If we can\'t track the impact, we don\'t take the project.',
-  },
-  {
-    icon: Network,
-    label: 'Advanced Frameworks',
-    title: '"Council of 5" Architecture.',
-    desc: 'Our proprietary "Council of 5" system runs five specialized AI roles in parallel — each one checking the others\' work — to deliver better, more reliable results.',
-  },
-];
-
-const credentials = [
-  'MindStudio Level 3 Certified',
-  'PMP Certified Professional',
-  'MBA + MS Innovation & Tech',
-  'Former Program Manager — VA, DoD, USEUCOM, USAFRICOM, USNORTHCOM',
-  '20+ Years Federal IT Program Management',
-];
-
-export const AboutSection = () => {
+export const AboutSection = ({ copy = aboutCopy }: { copy?: AboutCopy }) => {
   return (
     <section className="border-b border-grid" id="about">
       {/* Section header */}
@@ -42,7 +15,7 @@ export const AboutSection = () => {
           className="text-xs text-signal tracking-widest uppercase mb-8 flex items-center gap-4"
         >
           <div className="w-2 h-2 bg-signal" />
-          Why the Signal
+          {copy.eyebrow}
         </motion.div>
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
@@ -50,24 +23,24 @@ export const AboutSection = () => {
           viewport={{ once: true }}
           className="font-display text-5xl lg:text-6xl font-light tracking-tight max-w-3xl"
         >
-          Authority is{' '}
-          <span className="font-bold text-signal text-glow-signal">earned in production,</span>
-          <br />not in slide decks.
+          {copy.headline.lead}{' '}
+          <span className="font-bold text-signal text-glow-signal">{copy.headline.emphasis}</span>
+          <br />{copy.headline.trail}
         </motion.h2>
       </div>
 
       {/* 3-pillar grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 border-b border-grid">
-        {pillars.map((pillar, i) => {
-          const Icon = pillar.icon;
+        {copy.pillars.map((pillar, i) => {
+          const Icon = ICONS[pillar.icon];
           return (
             <motion.div
-              key={i}
+              key={pillar.title}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.12, duration: 0.6, ease: 'easeOut' }}
-              className={`p-8 lg:p-12 relative group ${i < 2 ? 'border-b lg:border-b-0 lg:border-r border-grid' : ''}`}
+              className={`p-8 lg:p-12 relative group ${i < copy.pillars.length - 1 ? 'border-b lg:border-b-0 lg:border-r border-grid' : ''}`}
             >
               {/* Top accent */}
               <div className="absolute top-0 left-8 lg:left-12 w-16 h-[2px] bg-signal opacity-60" />
@@ -91,10 +64,10 @@ export const AboutSection = () => {
         viewport={{ once: true }}
         className="p-8 lg:p-16 bg-surface/40"
       >
-        <div className="text-[10px] text-muted tracking-widest uppercase mb-6">Verified Credentials — Bryan Engel, Founder</div>
+        <div className="text-[10px] text-muted tracking-widest uppercase mb-6">{copy.credentialsLabel}</div>
         <div className="flex flex-wrap gap-x-10 gap-y-3">
-          {credentials.map((cred, i) => (
-            <div key={i} className="flex items-center gap-2 text-xs text-muted">
+          {copy.credentials.map((cred) => (
+            <div key={cred} className="flex items-center gap-2 text-xs text-muted">
               <ChevronRight size={12} className="text-signal flex-shrink-0" />
               <span>{cred}</span>
             </div>
