@@ -1,0 +1,70 @@
+{
+  "title": "Anthropic asked the AI race to slow down.",
+  "handle": "signalovernoiseai.com",
+  "slides": [
+    {
+      "type": "cover",
+      "eyebrow": "Pacing the frontier",
+      "headline": "Anthropic asked the AI race to **slow down.**",
+      "sub": "Dario Amodei’s three-part plan, what Anthropic committed to alone, and the one detail worth watching.",
+      "image": null
+    },
+    {
+      "type": "standard",
+      "eyebrow": "What he actually said",
+      "headline": "The pitch isn’t a pause. It’s a **speed limit.**",
+      "body": [
+        "Amodei’s post argues capability gains must slow, especially AI that builds the next AI.",
+        "Two triggers: the OpenAI-HuggingFace breach, and models accelerating their own successors.",
+        "His line: progress will still seem fast. The point is to use the time you gain.",
+        "Three strategies. Anthropic is committing to one of them alone, starting now."
+      ]
+    },
+    {
+      "type": "quote",
+      "eyebrow": "In his words",
+      "quote": "We must slow the pace at which we improve the **capabilities** of AI models. Progress will still seem fast.",
+      "name": "Dario Amodei",
+      "role": "CEO, Anthropic"
+    },
+    {
+      "type": "checklist",
+      "eyebrow": "The three-part plan",
+      "headline": "Three moves, ordered by **how real they are.**",
+      "items": [
+        "Embed third-party evaluators inside the labs, now",
+        "Coordinate safety limits across democratic-country labs",
+        "Seek global bans on narrow uses, like bioweapons"
+      ]
+    },
+    {
+      "type": "standard",
+      "eyebrow": "The detail that matters",
+      "headline": "Badges, desks, laptops. **Auditors inside.**",
+      "body": [
+        "Evaluators from groups like METR get access on par with Anthropic’s internal risk teams.",
+        "The model is bank examiners: regulators who sit with the staff, not outside it.",
+        "Twenty years in the Air Force taught me the gap between a report and a resident inspector.",
+        "Amodei wants governments to require the same of every lab. Altman says OpenAI will follow."
+      ]
+    },
+    {
+      "type": "standard",
+      "eyebrow": "The pushback",
+      "headline": "The critics’ word for it: **regulatory capture.**",
+      "body": [
+        "Brian Merchant’s read: it mostly serves Anthropic and OpenAI, the labs already out front.",
+        "Others say the doomsday framing distracts from harms the technology causes today.",
+        "Amodei’s answer: the benefits only arrive if the technology is built the right way.",
+        "Both can be true. Watch who gets a badge, and what they’re allowed to see."
+      ]
+    },
+    {
+      "type": "cta",
+      "eyebrow": "The question",
+      "headline": "Would you trust the report, or the **person inside?**",
+      "sub": "The plan lives or dies on evaluator access. Watch what “mostly comparable” turns out to mean in practice.",
+      "action": null
+    }
+  ]
+}
