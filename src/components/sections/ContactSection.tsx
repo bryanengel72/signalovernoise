@@ -150,20 +150,20 @@ export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) =
           <div className="p-6 space-y-6">
             <input name="website" type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 opacity-0" />
             <div className="space-y-2">
-              <label htmlFor="contact-name" className="text-[10px] text-signal uppercase tracking-widest">{copy.fields.name.label}</label>
-              <input id="contact-name" name="name" type="text" required autoComplete="name" maxLength={FIELD_LIMITS.name} className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder={copy.fields.name.placeholder} />
+              <label htmlFor="contact-name" className="text-xs text-signal uppercase tracking-widest">{copy.fields.name.label}</label>
+              <input id="contact-name" name="name" type="text" required autoComplete="name" maxLength={FIELD_LIMITS.name} className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/75" placeholder={copy.fields.name.placeholder} />
             </div>
             <div className="space-y-2">
-              <label htmlFor="contact-email" className="text-[10px] text-signal uppercase tracking-widest">{copy.fields.email.label}</label>
-              <input id="contact-email" name="email" type="email" required autoComplete="email" maxLength={FIELD_LIMITS.email} className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder={copy.fields.email.placeholder} />
+              <label htmlFor="contact-email" className="text-xs text-signal uppercase tracking-widest">{copy.fields.email.label}</label>
+              <input id="contact-email" name="email" type="email" required autoComplete="email" maxLength={FIELD_LIMITS.email} className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/75" placeholder={copy.fields.email.placeholder} />
             </div>
             <div className="space-y-2">
-              <label htmlFor="contact-company" className="text-[10px] text-signal uppercase tracking-widest">{copy.fields.company.label}</label>
-              <input id="contact-company" name="company" type="text" autoComplete="organization" maxLength={FIELD_LIMITS.company} className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30" placeholder={copy.fields.company.placeholder} />
+              <label htmlFor="contact-company" className="text-xs text-signal uppercase tracking-widest">{copy.fields.company.label}</label>
+              <input id="contact-company" name="company" type="text" autoComplete="organization" maxLength={FIELD_LIMITS.company} className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/75" placeholder={copy.fields.company.placeholder} />
             </div>
             <div className="space-y-2">
-              <label htmlFor="contact-message" className="text-[10px] text-signal uppercase tracking-widest">{copy.fields.message.label}</label>
-              <textarea id="contact-message" name="message" rows={4} required maxLength={FIELD_LIMITS.message} className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/30 resize-none" placeholder={copy.fields.message.placeholder} />
+              <label htmlFor="contact-message" className="text-xs text-signal uppercase tracking-widest">{copy.fields.message.label}</label>
+              <textarea id="contact-message" name="message" rows={4} required maxLength={FIELD_LIMITS.message} className="w-full bg-transparent border-b border-grid pb-2 text-sm text-white focus:outline-none focus:border-signal transition-colors placeholder:text-muted/75 resize-none" placeholder={copy.fields.message.placeholder} />
             </div>
           </div>
 
@@ -196,13 +196,13 @@ export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) =
                     onError={setErrorMessage}
                   />
                 ) : (
-                  <p className="text-[11px] text-red-400 leading-relaxed">
+                  <p className="text-xs text-red-400 leading-relaxed">
                     {copy.humanCheckUnconfigured}
                   </p>
                 )}
 
                 {errorMessage && (
-                  <p role="alert" className="text-[11px] text-red-400 leading-relaxed">
+                  <p role="alert" className="text-xs text-red-400 leading-relaxed">
                     {errorMessage}
                   </p>
                 )}

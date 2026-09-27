@@ -16,7 +16,9 @@ export const Marquee = ({ copy = marqueeCopy }: { copy?: MarqueeCopy }) => {
         className="marquee-track flex gap-8 items-center text-xs font-bold tracking-widest uppercase min-w-max group-hover:[animation-play-state:paused]"
       >
         {[...Array(REPEATS)].map((_, i) => (
-          <div key={i} className="flex gap-8 items-center">
+          // The copies exist only to make the loop seamless; a screen reader
+          // hears the phrases once.
+          <div key={i} className="flex gap-8 items-center" aria-hidden={i > 0 ? true : undefined}>
             {copy.phrases.map((phrase) => (
               <span key={phrase} className="flex gap-8 items-center">
                 <span>{phrase}</span>

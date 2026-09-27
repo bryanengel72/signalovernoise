@@ -34,7 +34,7 @@ export const AboutSection = ({ copy = aboutCopy }: { copy?: AboutCopy }) => {
                 <Icon size={20} />
               </div>
 
-              <div className="text-[10px] text-signal tracking-widest uppercase mb-3">{pillar.label}</div>
+              <div className="text-xs tracking-widest uppercase text-signal mb-3">{pillar.label}</div>
               <h3 className="font-display text-2xl font-bold text-white mb-4 tracking-tight">{pillar.title}</h3>
               <p className="text-sm text-muted leading-relaxed">{pillar.desc}</p>
             </Reveal>
@@ -44,7 +44,7 @@ export const AboutSection = ({ copy = aboutCopy }: { copy?: AboutCopy }) => {
 
       {/* Credentials row */}
       <Reveal className="p-8 lg:p-16 bg-surface/40">
-        <div className="text-[10px] text-muted tracking-widest uppercase mb-6">{copy.credentialsLabel}</div>
+        <div className="text-xs text-muted tracking-widest uppercase mb-6">{copy.credentialsLabel}</div>
         <div className="flex flex-wrap gap-x-10 gap-y-3">
           {copy.credentials.map((cred) => (
             <div key={cred} className="flex items-center gap-2 text-xs text-muted">

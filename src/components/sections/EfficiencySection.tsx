@@ -22,7 +22,7 @@ export const EfficiencySection = ({ copy = efficiencyCopy }: { copy?: Efficiency
         {/* Column headers. Below md the Delta column is dropped — at phone
             width it was 26px wide and its text ran off the screen — and
             Process takes its share. The scroll-film's table does the same. */}
-        <div className="grid grid-cols-12 py-6 border-b border-grid text-[10px] text-muted uppercase tracking-widest">
+        <div className="grid grid-cols-12 py-6 border-b border-grid text-xs text-muted uppercase tracking-widest">
           <div className="col-span-5 md:col-span-4">{copy.columns.process}</div>
           <div className="col-span-3 text-center">{copy.columns.before}</div>
           <div className="col-span-1" />
@@ -45,7 +45,7 @@ export const EfficiencySection = ({ copy = efficiencyCopy }: { copy?: Efficiency
 
             {/* Before */}
             <div className="col-span-3 text-center">
-              <span className="text-sm text-muted/70 tabular-nums line-through decoration-white/20">{row.before}</span>
+              <span className="text-sm text-muted/80 tabular-nums line-through decoration-white/20">{row.before}</span>
             </div>
 
             {/* Arrow */}
@@ -60,7 +60,7 @@ export const EfficiencySection = ({ copy = efficiencyCopy }: { copy?: Efficiency
 
             {/* Gain */}
             <div className="hidden md:block col-span-1 text-right">
-              <span className="text-[10px] text-signal/70 tracking-wide tabular-nums">{row.gain}</span>
+              <span className="text-xs text-signal/70 tracking-wide tabular-nums">{row.gain}</span>
             </div>
           </Reveal>
         ))}

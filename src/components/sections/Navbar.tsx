@@ -48,13 +48,13 @@ export const Navbar = ({ copy = navCopy }: NavbarProps) => {
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
 
       {/* Logo */}
-      <div className="flex items-center gap-2.5 sm:gap-3 font-display font-semibold text-base sm:text-lg lg:text-xl tracking-wide text-white whitespace-nowrap">
+      <a href="/" aria-label={`${copy.wordmark} — home`} className="flex items-center gap-2.5 sm:gap-3 font-display font-semibold text-base sm:text-lg lg:text-xl tracking-wide text-white whitespace-nowrap">
         <div className="relative flex items-center justify-center w-4 h-4">
           <div className="absolute w-full h-full border border-signal rounded-full animate-ping opacity-40" />
           <div className="w-2 h-2 bg-signal rounded-full glow-signal" />
         </div>
         {copy.wordmark}
-      </div>
+      </a>
 
       {/* Nav links */}
       <div className="hidden md:flex items-center gap-8 text-xs tracking-widest uppercase text-muted">

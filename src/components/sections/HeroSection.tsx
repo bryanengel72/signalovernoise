@@ -73,11 +73,11 @@ export const HeroSection = ({ copy = heroCopy }: HeroSectionProps) => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.65 }}
-          className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-10 text-xs tracking-widest uppercase text-white/40"
+          className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-10 text-xs tracking-widest uppercase text-white/60"
         >
           {copy.trustChips.map((chip, i) => (
             <Fragment key={chip}>
-              {i > 0 && <span className="text-white/20">·</span>}
+              {i > 0 && <span className="text-white/20" aria-hidden="true">·</span>}
               <span className="whitespace-nowrap">{chip}</span>
             </Fragment>
           ))}
@@ -116,9 +116,9 @@ export const HeroSection = ({ copy = heroCopy }: HeroSectionProps) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.6, duration: 1 }}
-        className="absolute bottom-6 right-8 lg:right-16 z-40 hidden lg:flex flex-col items-center gap-2 text-white/40"
+        className="absolute bottom-6 right-8 lg:right-16 z-40 hidden lg:flex flex-col items-center gap-2 text-white/60"
       >
-        <span className="text-[10px] tracking-[0.3em] uppercase [writing-mode:vertical-rl]">{copy.scrollCue}</span>
+        <span className="text-xs tracking-[0.3em] uppercase [writing-mode:vertical-rl]">{copy.scrollCue}</span>
         <div
           className="loop-scroll-cue w-[1px] h-10 bg-gradient-to-b from-signal to-transparent"
         />

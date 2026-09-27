@@ -33,10 +33,23 @@ section[id] {
 }
 
 /* Scale the whole layout to 85% on desktop (all sizing is rem-based).
-   Tailwind breakpoints use the initial font size, so they are unaffected. */
+   Tailwind breakpoints use the initial font size, so they are unaffected.
+
+   A percentage, not a fixed 13.6px: it scales from the visitor's own browser
+   font-size setting instead of overriding it.
+
+   The small text steps are floored at the same time. At 85%, `text-xs` came
+   out at 10.2px and `text-sm` — most body copy — at 11.9px. On desktop they
+   now render at 11.9px and 13.6px; phones keep Tailwind's 12px and 14px.
+   Set on `html`, not a second :root block: Tailwind declares its theme inside a
+   cascade layer, and an unlayered rule outranks it whatever the specificity. */
 @media (min-width: 1024px) {
   html {
-    font-size: 13.6px;
+    font-size: 85%;
+    --text-xs: 0.875rem;
+    --text-xs--line-height: calc(1.25 / 0.875);
+    --text-sm: 1rem;
+    --text-sm--line-height: calc(1.5 / 1);
   }
 }
 

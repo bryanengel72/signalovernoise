@@ -50,7 +50,7 @@ export const ProcessSection = ({ copy = processCopy }: { copy?: ProcessCopy }) =
 
               {/* Tag — glows and expands on hover */}
               <m.div
-                className="inline-flex items-center gap-2 bg-signal/10 text-signal text-[10px] font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full group-hover:bg-signal/20 group-hover:glow-signal transition-all duration-300"
+                className="inline-flex items-center gap-2 bg-signal/10 text-signal text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full group-hover:bg-signal/20 group-hover:glow-signal transition-all duration-300"
               >
                 <span
                   className="loop-beat-fade w-1.5 h-1.5 rounded-full bg-signal"
