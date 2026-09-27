@@ -66,7 +66,21 @@ const installStub = (win: Window, doc: Document) => {
   win.Cal = cal;
 };
 
-export const installLazyCal = (win: Window = window, doc: Document = document) => {
+type LazyCalOptions = {
+  /** A booking button was pressed; `source` is its `data-track-cta` label, or the page path. */
+  onOpen?: (source: string) => void;
+  /** Cal reported a completed booking. */
+  onBooked?: () => void;
+  win?: Window;
+  doc?: Document;
+};
+
+export const installLazyCal = ({
+  onOpen,
+  onBooked,
+  win = window,
+  doc = document,
+}: LazyCalOptions = {}) => {
   const { namespace } = identity.booking;
   let requested = false;
   let ready = false;
@@ -77,6 +91,7 @@ export const installLazyCal = (win: Window = window, doc: Document = document) =
     installStub(win, doc);
     win.Cal!('init', namespace, { origin: ORIGIN });
     win.Cal!.ns![namespace]('ui', { hideEventTypeDetails: false, layout: 'month_view' });
+    if (onBooked) win.Cal!.ns![namespace]('on', { action: 'bookingSuccessful', callback: onBooked });
     doc
       .querySelector<HTMLScriptElement>(`script[src="${EMBED_SRC}"]`)
       ?.addEventListener('load', () => {
@@ -93,7 +108,9 @@ export const installLazyCal = (win: Window = window, doc: Document = document) =
 
   const onClick = (event: MouseEvent) => {
     const button = trigger(event);
-    if (!button || ready) return; // once ready, Cal's own listener opens the modal
+    if (!button) return;
+    onOpen?.(button.dataset.trackCta || win.location.pathname);
+    if (ready) return; // once ready, Cal's own listener opens the modal
     load();
     event.preventDefault();
 

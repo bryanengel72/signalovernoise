@@ -233,7 +233,7 @@
       <nav class="chrome-nav">
         %NAV%
       </nav>
-      <a class="chrome-cta" href="#contact">%NAV_CTA%</a>
+      <a class="chrome-cta" href="#contact" data-track-cta="film-nav">%NAV_CTA%</a>
     </div>
   </header>
 
@@ -263,7 +263,7 @@
           </h1>
           <p id="tagline">%TAGLINE%</p>
           <div id="film-cta">
-            <a class="btn btn-primary" href="#contact">%FILM_CTA_PRIMARY% <span class="arr">→</span></a>
+            <a class="btn btn-primary" href="#contact" data-track-cta="film-hero">%FILM_CTA_PRIMARY% <span class="arr">→</span></a>
             <a class="btn btn-ghost" href="#capabilities">%FILM_CTA_SECONDARY%</a>
           </div>
         </div>
@@ -302,7 +302,7 @@
       <h2 class="h2 reveal">%CTA_HEADLINE%</h2>
       <p class="sub reveal" style="margin:22px auto 0;text-align:center">%CTA_SUB%</p>
       <div class="row reveal">
-        <button type="button" class="btn btn-primary" data-cal-link="%BOOKING_SLUG%" data-cal-namespace="%BOOKING_NAMESPACE%" data-cal-config='%BOOKING_CONFIG%'>%CTA_PRIMARY% <span class="arr">→</span></button>
+        <button type="button" class="btn btn-primary" data-track-cta="film-book" data-cal-link="%BOOKING_SLUG%" data-cal-namespace="%BOOKING_NAMESPACE%" data-cal-config='%BOOKING_CONFIG%'>%CTA_PRIMARY% <span class="arr">→</span></button>
         <a class="btn btn-ghost" href="/">%CTA_SECONDARY%</a>
       </div>
       <p class="fine reveal">%CTA_FINE%</p>

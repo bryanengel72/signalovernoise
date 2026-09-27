@@ -91,6 +91,7 @@ export const HeroSection = ({ copy = heroCopy }: HeroSectionProps) => {
         >
           <m.a
             href="#contact"
+            data-track-cta="hero-audit"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             transition={{ duration: 0.25, ease: EASE }}
@@ -102,6 +103,7 @@ export const HeroSection = ({ copy = heroCopy }: HeroSectionProps) => {
           </m.a>
           <button
             data-cal-link={copy.booking.slug}
+            data-track-cta="hero-book"
             data-cal-namespace={copy.booking.namespace}
             data-cal-config={copy.booking.config}
             className="px-8 py-4 text-sm font-semibold text-white border border-white/20 rounded-full hover:bg-white/10 glass transition-all"

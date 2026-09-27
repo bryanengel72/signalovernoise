@@ -87,6 +87,7 @@ export const Navbar = ({ copy = navCopy }: NavbarProps) => {
         {/* CTA pill — glass style */}
         <a
           href="#contact"
+          data-track-cta="nav-get-started"
           onClick={closeMenu}
           className="relative inline-block px-4 sm:px-5 lg:px-6 py-2 text-xs whitespace-nowrap font-semibold rounded-full text-white overflow-hidden group border border-white/10 hover:border-signal/50 transition-colors duration-300"
           style={{

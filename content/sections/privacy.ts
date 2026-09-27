@@ -54,7 +54,7 @@ We will never sell, rent, or share your personal information with third parties 
     },
     {
       title: '4. Third-Party Services',
-      body: `Our site may use limited third-party services for analytics or form processing (e.g., Resend to deliver contact form submissions to our inbox, Cal.com for scheduling, and Cloudflare Turnstile to confirm that contact form submissions come from a person rather than automated software). These services have their own privacy policies governing their use of your data. We do not share your information with any third party beyond what is strictly necessary to operate the site.`,
+      body: `Our site may use limited third-party services for analytics or form processing (e.g., Vercel Web Analytics and Speed Insights for anonymous, cookie-free visit and performance statistics, Resend to deliver contact form submissions to our inbox, Cal.com for scheduling, and Cloudflare Turnstile to confirm that contact form submissions come from a person rather than automated software). These services have their own privacy policies governing their use of your data. We do not share your information with any third party beyond what is strictly necessary to operate the site.`,
     },
     {
       title: '5. Security',

@@ -7,9 +7,14 @@ import '@fontsource-variable/inter';
 import '@fontsource-variable/space-grotesk';
 import './index.css';
 import { installLazyCal } from './booking/cal';
+import { EVENTS, installAnalytics, trackEvent } from './analytics';
 
+installAnalytics();
 // Cal.com's embed loads when someone reaches for a booking button, not before.
-installLazyCal();
+installLazyCal({
+  onOpen: (source) => trackEvent(EVENTS.bookingOpened, { source }),
+  onBooked: () => trackEvent(EVENTS.bookingCompleted),
+});
 
 const root = document.getElementById('root')!;
 const app = (

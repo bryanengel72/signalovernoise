@@ -1,6 +1,7 @@
 import '@fontsource-variable/inter';
 import '@fontsource-variable/space-grotesk';
 import { installLazyCal } from '../booking/cal';
+import { EVENTS, installAnalytics, trackEvent } from '../analytics';
 import { start } from './film';
 
 /**
@@ -10,5 +11,9 @@ import { start } from './film';
  * engine grabs the canvas and rewrites the wordmark, so doing that at import
  * time made every module on the page untestable.
  */
-installLazyCal();
+installAnalytics();
+installLazyCal({
+  onOpen: (source) => trackEvent(EVENTS.bookingOpened, { source }),
+  onBooked: () => trackEvent(EVENTS.bookingCompleted),
+});
 start();

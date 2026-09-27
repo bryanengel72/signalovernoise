@@ -11,6 +11,7 @@ import {
   type InquiryRequest,
 } from '@/contact/inquiry';
 import { Turnstile, type TurnstileHandle } from '../ui/Turnstile';
+import { EVENTS, trackEvent } from '../../analytics';
 import { Reveal, reveal } from '../ui/Reveal';
 import { SectionHeader } from '../ui/SectionHeader';
 
@@ -82,6 +83,7 @@ export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) =
 
       setStatus('success');
       form.reset();
+      trackEvent(EVENTS.inquirySent);
     } catch (error) {
       console.error('Contact form error:', error);
       setStatus('error');
@@ -125,6 +127,7 @@ export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) =
 
           <button
             data-cal-link={copy.booking.slug}
+            data-track-cta="contact-book"
             data-cal-namespace={copy.booking.namespace}
             data-cal-config={copy.booking.config}
             className="mt-4 w-full sm:w-auto px-8 py-4 text-sm font-semibold bg-signal text-bg rounded-full hover:glow-signal border border-signal transition-all flex items-center gap-2 group"
