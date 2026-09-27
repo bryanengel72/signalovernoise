@@ -23,14 +23,12 @@ const post = (body: unknown) =>
 
 const configure = () => {
   vi.stubEnv('TURNSTILE_SECRET_KEY', 'test-secret');
-  vi.stubEnv('SUPABASE_URL', 'https://project.supabase.co');
-  vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'test-service-role-key');
+  vi.stubEnv('RESEND_API_KEY', 're_test_key');
 };
 
 beforeEach(() => {
   vi.stubEnv('TURNSTILE_SECRET_KEY', '');
-  vi.stubEnv('SUPABASE_URL', '');
-  vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', '');
+  vi.stubEnv('RESEND_API_KEY', '');
 });
 
 afterEach(() => {

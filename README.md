@@ -11,12 +11,20 @@ Submissions POST to `api/contact.ts`, a Vercel Function that:
 1. drops anything that fills the hidden honeypot field,
 2. throttles bursts from a single IP,
 3. verifies a **Cloudflare Turnstile** token server-side, and
-4. only then inserts into the Supabase `booking_inquiries` table using the service-role key.
+4. only then emails the inquiry to the address in `content/identity.ts` through
+   **Resend**, with Reply-To set to the visitor.
 
-The browser has no Supabase credentials at all, and `anon` has no privileges on
-that table — see [`supabase/lockdown.sql`](supabase/lockdown.sql). Both halves
-matter: without the DB lockdown, the human check is bypassable by POSTing
-straight at the Supabase REST API.
+There is no database — the inbox is the record. If the send fails, the visitor
+is told to email directly.
+
+### Resend setup
+
+1. Create an account at [resend.com](https://resend.com) and add
+   `signalovernoiseai.com` as a domain (region `us-east-1`).
+2. Add the DNS records Resend lists (a DKIM TXT and two CNAMEs) at the domain's
+   DNS host, Hostinger, then verify. Keep the existing DMARC record — do not add
+   a second one.
+3. Create an API key with sending access → `RESEND_API_KEY`.
 
 ### Turnstile setup
 
@@ -74,14 +82,7 @@ changes only take effect on a **redeploy**; editing them alone does nothing.
 
 Only `VITE_TURNSTILE_SITE_KEY` is public — `VITE_` means "compiled into the
 browser bundle", so nothing secret may carry that prefix. The contact function
-reads `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` and `TURNSTILE_SECRET_KEY`,
-all server-only.
-
-`VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are leftovers from when the
-browser wrote to Supabase directly, which `supabase/lockdown.sql` ended. Nothing
-reads either one now, and both can be deleted from the Vercel project. If you run
-the function locally with `vercel dev`, set `SUPABASE_URL` in `.env.local` — see
-`.env.example`.
+reads `RESEND_API_KEY` and `TURNSTILE_SECRET_KEY`, both server-only.
 
 ## Checks
 
@@ -103,7 +104,7 @@ green tests, dead endpoint.
 ## Tests
 
 `npm test` runs the Vitest suite. The contact endpoint is tested through its
-seam — `contact/handler.ts` takes a human check and an inquiry store, so the
+seam — `contact/handler.ts` takes a human check and an inquiry inbox, so the
 tests wire the in-memory adapters from `contact/human-check.ts` and
-`contact/inquiry-store.ts` and reach neither Cloudflare nor Supabase. No
+`contact/inquiry-inbox.ts` and reach neither Cloudflare nor Resend. No
 network, no credentials, no `vercel dev` required.

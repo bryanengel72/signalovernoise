@@ -24,7 +24,7 @@ export const serverMessages = {
   missingName: 'Please add your name.',
   invalidEmail: "That email address doesn't look right.",
   missingMessage: "Please tell us what you're working on.",
-  saveFailed: `We could not save your message. Please email ${identity.email}.`,
+  deliveryFailed: `We could not send your message. Please email ${identity.email}.`,
 } as const;
 
 export const clientMessages = {

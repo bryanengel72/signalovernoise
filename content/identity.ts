@@ -22,6 +22,12 @@ export const identity = {
   linkedin: 'https://www.linkedin.com/in/bryanengel/',
   copyrightYear: 2026,
 
+  /**
+   * The sender on contact-form notifications. Must be on the domain verified in
+   * Resend; the recipient is `email` above.
+   */
+  inquirySender: 'Signal Over Noise Website <inquiries@signalovernoiseai.com>',
+
   /** Cal.com element-click embed. The namespace must match index.html's Cal("init", ...). */
   booking: {
     slug: 'bryan-engel-amlxcu/30min',

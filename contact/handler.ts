@@ -1,22 +1,20 @@
 import { inquiryProblemMessages, serverMessages } from '../content/messages.js';
 import { FIELD_LIMITS, cleanField, cleanInquiry, validateInquiry } from './inquiry.js';
 import type { HumanCheck } from './human-check.js';
-import type { InquiryStore } from './inquiry-store.js';
+import type { InquiryInbox } from './inquiry-inbox.js';
 import type { RateLimiter } from './rate-limit.js';
 
 /**
- * The contact endpoint's decision logic, with every dependency in front of it.
+ * The contact endpoint's decision logic, with every dependency behind a seam.
  *
- * It used to reach for `fetch`, `createClient` and `process.env` from inside the
- * request handler, so nothing about it could run without a live Supabase and
- * Cloudflare. Now the seam is the interface, and the interface is the test
- * surface: `api/contact.ts` wires the production adapters, tests wire in-memory
- * ones, and every branch below is reachable offline.
+ * The seam is the test surface: `api/contact.ts` wires the production
+ * adapters, tests wire in-memory ones, and every branch below is reachable
+ * offline.
  */
 
 export type ContactServices = {
   humanCheck: HumanCheck;
-  store: InquiryStore;
+  inbox: InquiryInbox;
 };
 
 export type ContactDeps = {
@@ -78,10 +76,10 @@ export const createContactHandler =
       return reply({ error: inquiryProblemMessages[problem] }, 400);
     }
 
-    const result = await resolved.store.save(inquiry);
+    const result = await resolved.inbox.deliver(inquiry);
     if (!result.ok) {
-      console.error('contact: supabase insert failed', result.error);
-      return reply({ error: serverMessages.saveFailed }, 500);
+      console.error('contact: inquiry delivery failed', result.error);
+      return reply({ error: serverMessages.deliveryFailed }, 500);
     }
 
     return reply({ ok: true }, 200);

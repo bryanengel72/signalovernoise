@@ -20,7 +20,7 @@ export type PrivacyCopy = {
 export const privacyCopy: PrivacyCopy = {
   eyebrow: 'Data.Privacy',
   title: 'Privacy Policy',
-  lastUpdated: 'Last updated: March 2026',
+  lastUpdated: 'Last updated: September 2026',
   preamble: {
     lead: `${identity.name} ("Company", "we", "us", or "our") is committed to protecting your personal information. This Privacy Policy describes how we collect, use, and share information when you visit`,
     domain: identity.domain,
@@ -54,7 +54,7 @@ We will never sell, rent, or share your personal information with third parties 
     },
     {
       title: '4. Third-Party Services',
-      body: `Our site may use limited third-party services for analytics or form processing (e.g., Supabase for form storage, and Cloudflare Turnstile to confirm that contact form submissions come from a person rather than automated software). These services have their own privacy policies governing their use of your data. We do not share your information with any third party beyond what is strictly necessary to operate the site.`,
+      body: `Our site may use limited third-party services for analytics or form processing (e.g., Resend to deliver contact form submissions to our inbox, Cal.com for scheduling, and Cloudflare Turnstile to confirm that contact form submissions come from a person rather than automated software). These services have their own privacy policies governing their use of your data. We do not share your information with any third party beyond what is strictly necessary to operate the site.`,
     },
     {
       title: '5. Security',

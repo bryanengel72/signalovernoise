@@ -64,4 +64,8 @@ describe('Identity is the only source of the contact address', () => {
     expect(identity.email).toMatch(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/);
     expect(identity.email.endsWith(`@${identity.domain}`)).toBe(true);
   });
+
+  it('sends contact-form notifications from the verified domain', () => {
+    expect(identity.inquirySender).toMatch(new RegExp(`<[^@\\s>]+@${identity.domain.replace('.', '\\.')}>$`));
+  });
 });

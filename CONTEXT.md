@@ -6,16 +6,15 @@ module names, types, and commit messages before inventing new ones.
 ## Inquiry
 
 A contact-form submission: name, email, company, message. Created in the browser,
-carried across the network seam by `POST /api/contact`, and stored in the
-`booking_inquiries` table once Cloudflare Turnstile confirms a human sent it.
+carried across the network seam by `POST /api/contact`, and emailed to the
+consultancy once Cloudflare Turnstile confirms a human sent it.
 
 Defined once, in `contact/inquiry.ts`, along with the rules it must satisfy. Both
 sides import them — the browser to skip a pointless round-trip, the function
 because a client-side check is not a gate.
 
-An Inquiry is only ever written server-side. `supabase/lockdown.sql` revokes all
-privileges from the `anon` role — that revocation is what makes the Turnstile gate
-non-bypassable, and it is the invariant the whole contact path rests on.
+An Inquiry is only ever delivered server-side. The browser holds no credential
+that could send one, which is what makes the Turnstile gate non-bypassable.
 
 ## HumanCheck
 
@@ -23,11 +22,11 @@ The seam in front of Cloudflare Turnstile: given a token and a caller address, i
 answers whether a human solved the challenge. Two adapters — Turnstile in
 production, a stub in tests.
 
-## InquiryStore
+## InquiryInbox
 
-The seam in front of Supabase: it saves an Inquiry and says whether that worked.
-Two adapters — the service-role Supabase write in production, an in-memory array
-in tests.
+The seam in front of Resend: it delivers an Inquiry to the consultancy's inbox and
+says whether that worked. Two adapters — a Resend email in production, an
+in-memory array in tests. There is no database; the inbox is the record.
 
 Together with HumanCheck, this is what lets the whole contact path be exercised
 without a network. `api/contact.ts` is now only a composition root: it chooses
