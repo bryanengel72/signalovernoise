@@ -56,15 +56,21 @@ is told to email directly.
 ## Scripts
 
 - `npm run dev` — dev server on port 3000
-- `npm run build` — production build to `dist/`
+- `npm run build` — production build to `dist/`: the browser build, then a
+  Node build of `src/entry-server.tsx`, then `scripts/prerender.mjs` writes the
+  rendered page into `dist/index.html`
 - `npm run preview` — serve the production build locally
 - `npm run lint` — type-check with `tsc --noEmit`
 
 ## Pages
 
-Two build entries:
+Three build entries:
 
-- `index.html` — the React site.
+- `index.html` — the React site. Pre-rendered at build time, so the HTML
+  carries every Section for crawlers that do not run JavaScript; `main.tsx`
+  hydrates it. `tests/prerender.test.tsx` fails on any hydration mismatch.
+- `privacy.html` — the privacy policy at `/privacy`, a static page rendered from
+  `content/sections/privacy.ts` like the scroll-film's Copy. No JavaScript.
 - `experience.html` — **THE LOCK**, the scroll-film. Deliberately not React: its
   canvas frame-scrubbing engine lives in `src/experience/film.ts` and runs its own
   loop. Its Copy is in `content/sections/experience.ts` and is substituted into the

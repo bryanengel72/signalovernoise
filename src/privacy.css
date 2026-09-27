@@ -1,0 +1,5 @@
+/* The privacy page's stylesheet: the app's theme and utilities, plus the
+   self-hosted fonts that the React pages import from JavaScript instead. */
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/space-grotesk';
+@import './index.css';

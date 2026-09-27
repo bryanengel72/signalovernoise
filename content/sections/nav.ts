@@ -14,6 +14,6 @@ export const navCopy: NavCopy = {
     { label: 'Process', id: 'process' },
     { label: 'About', id: 'about' },
   ],
-  experience: { label: 'Experience', href: '/experience.html' },
+  experience: { label: 'Experience', href: '/experience' },
   cta: 'Get Started',
 };

@@ -58,6 +58,14 @@
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
+    <!-- The page is pre-rendered, but its entrance animations start hidden
+         (opacity 0) until JavaScript runs. Without JavaScript, show everything. -->
+    <noscript>
+      <style>
+        #root [style*="opacity:0"] { opacity: 1 !important; transform: none !important; filter: none !important; }
+      </style>
+    </noscript>
+
   </head>
   <body>
     <div id="root"></div>

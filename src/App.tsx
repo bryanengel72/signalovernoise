@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { AnimatePresence, LazyMotion, MotionConfig, domAnimation, m, useScroll, useSpring } from 'motion/react';
+import { LazyMotion, MotionConfig, domAnimation, m, useScroll, useSpring } from 'motion/react';
 import { Marquee } from './components/ui/Marquee';
 import { Navbar } from './components/sections/Navbar';
 import { HeroSection } from './components/sections/HeroSection';
@@ -10,16 +9,8 @@ import { ProcessSection } from './components/sections/ProcessSection';
 import { AboutSection } from './components/sections/AboutSection';
 import { ContactSection } from './components/sections/ContactSection';
 import { Footer } from './components/sections/Footer';
-import { PrivacyPage } from './components/sections/PrivacyPage';
 
 export default function App() {
-  // The privacy policy is a modal with no route of its own, so it was
-  // unreachable from anywhere outside this page — the scroll-film had no way to
-  // link to it at all. `/?privacy=1` opens it directly.
-  const [showPrivacy, setShowPrivacy] = useState(
-    () => new URLSearchParams(window.location.search).has('privacy'),
-  );
-
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, mass: 0.4 });
 
@@ -52,11 +43,7 @@ export default function App() {
         <ContactSection />
       </main>
       
-      <Footer onPrivacy={() => setShowPrivacy(true)} />
-
-      <AnimatePresence>
-        {showPrivacy && <PrivacyPage onClose={() => setShowPrivacy(false)} />}
-      </AnimatePresence>
+      <Footer />
     </div>
     </LazyMotion>
     </MotionConfig>

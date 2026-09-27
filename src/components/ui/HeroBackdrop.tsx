@@ -1,5 +1,5 @@
 import { m, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react';
-import type { RefObject } from 'react';
+import { useEffect, useState, type RefObject } from 'react';
 import type { HeroCopy } from '@/content/sections/hero';
 import { EASE } from './Reveal';
 
@@ -34,8 +34,23 @@ type HeroBackdropProps = {
   backdrop: HeroCopy['backdrop'];
 };
 
+/**
+ * The visitor's reduced-motion setting, but only after the first render.
+ *
+ * The page is pre-rendered, and the server cannot know the setting, so it
+ * renders the video. If the browser's first render chose the still instead,
+ * hydration would mismatch and React would throw the Hero away and rebuild it.
+ * Matching the server first and switching a tick later avoids that.
+ */
+const useReducedAfterHydration = () => {
+  const reduced = useReducedMotion();
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+  return hydrated && Boolean(reduced);
+};
+
 export const HeroBackdrop = ({ targetRef, backdrop }: HeroBackdropProps) => {
-  const prefersReduced = useReducedMotion();
+  const prefersReduced = useReducedAfterHydration();
 
   const { scrollYProgress } = useScroll({
     target: targetRef,

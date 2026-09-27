@@ -21,22 +21,43 @@ const htmlTokens = (): Plugin => ({
   },
 });
 
-export default defineConfig(() => {
+/**
+ * Clean URLs in dev, matching `cleanUrls` in vercel.json: /experience and
+ * /privacy serve their .html entries instead of falling through to the app.
+ */
+const CLEAN_URLS = ['/experience', '/privacy'];
+const cleanUrls = (): Plugin => ({
+  name: 'clean-urls',
+  configureServer(server) {
+    server.middlewares.use((req, _res, next) => {
+      const path = req.url?.split('?')[0];
+      if (path && CLEAN_URLS.includes(path)) req.url = req.url!.replace(path, `${path}.html`);
+      next();
+    });
+  },
+});
+
+export default defineConfig(({ isSsrBuild }) => {
   return {
-    plugins: [react(), tailwindcss(), htmlTokens()],
+    plugins: [react(), tailwindcss(), htmlTokens(), cleanUrls()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
       },
     },
-    build: {
-      rollupOptions: {
-        input: {
-          main: path.resolve(__dirname, 'index.html'),
-          experience: path.resolve(__dirname, 'experience.html'),
+    // The SSR build (see scripts/prerender.mjs) takes its entry from the CLI;
+    // only the browser build has the three HTML pages as inputs.
+    build: isSsrBuild
+      ? {}
+      : {
+          rollupOptions: {
+            input: {
+              main: path.resolve(__dirname, 'index.html'),
+              experience: path.resolve(__dirname, 'experience.html'),
+              privacy: path.resolve(__dirname, 'privacy.html'),
+            },
+          },
         },
-      },
-    },
     server: {
       // Set DISABLE_HMR=true to serve without hot reload. Useful when an agent is
       // editing files underneath the dev server and the reloads fight the edits.

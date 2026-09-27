@@ -2,8 +2,14 @@
   "framework": "vite",
   "buildCommand": "npm run verify",
   "outputDirectory": "dist",
-  "rewrites": [
-    { "source": "/experience", "destination": "/experience.html" }
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "query", "key": "privacy" }],
+      "destination": "/privacy",
+      "permanent": true
+    }
   ],
   "headers": [
     {

@@ -56,7 +56,7 @@ describe('the booking buttons', () => {
 
 describe('the footer', () => {
   it('links to LinkedIn in a new tab', () => {
-    render(<Footer onPrivacy={() => {}} />);
+    render(<Footer />);
     const link = screen.getByText('LinkedIn').closest('a')!;
 
     expect(link.getAttribute('href')).toBe(identity.linkedin);

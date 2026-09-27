@@ -114,9 +114,7 @@ describe('SectionHeader is the only place the header markup lives', () => {
     .filter((full) => statSync(full).isFile() && full.endsWith('.tsx'));
 
   it('no Section hand-rolls the eyebrow block', () => {
-    // PrivacyPage is an overlay, not a Section — its header bar is a different shape.
     const offenders = sectionFiles
-      .filter((file) => !file.endsWith('PrivacyPage.tsx'))
       .filter((file) => readFileSync(file, 'utf8').includes(EYEBROW_CLASSES));
 
     expect(offenders.map((f) => relative(ROOT, f))).toEqual([]);

@@ -1,5 +1,6 @@
 import { identity } from './identity.js';
 import { experienceCopy } from './sections/experience.js';
+import { privacyCopy } from './sections/privacy.js';
 import { snrSeed } from '../src/experience/telemetry.js';
 
 /**
@@ -103,14 +104,38 @@ export const experienceTokens: Record<string, string> = {
     .join('\n        '),
 };
 
+/** Copy is plain text; anything rendered into markup from it is escaped. */
+const escapeHtml = (text: string) =>
+  text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/** Substituted into privacy.html only — the policy as a real, crawlable page. */
+export const privacyTokens: Record<string, string> = {
+  '%PRIVACY_EYEBROW%': escapeHtml(privacyCopy.eyebrow),
+  '%PRIVACY_TITLE%': escapeHtml(privacyCopy.title),
+  '%PRIVACY_UPDATED%': escapeHtml(privacyCopy.lastUpdated),
+  '%PRIVACY_PREAMBLE%':
+    `${escapeHtml(privacyCopy.preamble.lead)} ` +
+    `<span class="text-signal">${escapeHtml(privacyCopy.preamble.domain)}</span> ` +
+    escapeHtml(privacyCopy.preamble.trail),
+  '%PRIVACY_SECTIONS%': privacyCopy.sections
+    .map(
+      (section) =>
+        `<section>\n          <h2 class="font-display text-lg font-semibold text-white mb-3">${escapeHtml(section.title)}</h2>\n` +
+        `          <p class="whitespace-pre-line">${escapeHtml(section.body)}</p>\n        </section>`,
+    )
+    .join('\n        '),
+  '%PRIVACY_FOOTER%': escapeHtml(privacyCopy.footer),
+};
+
 const apply = (html: string, tokens: Record<string, string>) =>
   Object.entries(tokens).reduce((out, [token, value]) => out.split(token).join(value), html);
 
 /** Every token available to a given HTML entry. */
-export const tokensFor = (filename: string): Record<string, string> =>
-  filename.endsWith('experience.html')
-    ? { ...identityTokens, ...experienceTokens }
-    : identityTokens;
+export const tokensFor = (filename: string): Record<string, string> => {
+  if (filename.endsWith('experience.html')) return { ...identityTokens, ...experienceTokens };
+  if (filename.endsWith('privacy.html')) return { ...identityTokens, ...privacyTokens };
+  return identityTokens;
+};
 
 /** Substitute every %TOKEN% an HTML entry declares. */
 export const renderHtml = (html: string, filename: string): string =>

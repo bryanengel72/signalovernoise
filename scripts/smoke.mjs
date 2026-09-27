@@ -104,8 +104,14 @@ await check('POST /api/contact swallows a filled honeypot', async () => {
 const PAGES = [
   ['/', 'id="root"'],
   ['/', 'Signal Over Noise'],
+  // Pre-rendered: the Sections are in the HTML itself, not built by JavaScript.
+  ['/', 'id="services"'],
+  ['/', 'id="contact"'],
   ['/experience.html', 'id="film-canvas"'],
   ['/experience', 'id="film-canvas"'],
+  ['/experience', 'href="https://www.signalovernoiseai.com/experience"'],
+  ['/privacy', '<h1'],
+  ['/privacy', 'rel="canonical" href="https://www.signalovernoiseai.com/privacy"'],
 ];
 
 for (const [path, marker] of PAGES) {
@@ -119,7 +125,7 @@ for (const [path, marker] of PAGES) {
 /* ---------- the build-time substitution actually ran ---------- */
 
 await check('no unsubstituted %TOKEN% reached production', async () => {
-  for (const [path, marker] of [['/', 'id="root"'], ['/experience.html', 'id="film-canvas"']]) {
+  for (const [path, marker] of [['/', 'id="root"'], ['/experience.html', 'id="film-canvas"'], ['/privacy', '<h1']]) {
     const { body } = await get(path);
     // Without this the check passes vacuously on any page that happens to have
     // no tokens in it — an auth page, an error page, anything at all.

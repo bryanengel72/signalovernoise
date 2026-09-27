@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy | %SITE_NAME%</title>
+    <meta name="description" content="How %SITE_NAME% collects, uses and protects the information you share through this site." />
+    <link rel="canonical" href="%SITE_URL%/privacy" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- A static page: its text is rendered from content/sections/privacy.ts at
+         build time, and it ships no JavaScript. -->
+    <link rel="stylesheet" href="/src/privacy.css" />
+  </head>
+  <body class="min-h-screen bg-bg text-text font-body">
+    <header class="border-b border-white/5 flex items-center justify-between px-6 sm:px-8 py-5">
+      <a href="/" class="flex items-center gap-3 font-display font-semibold text-white tracking-wide">
+        <span class="w-2 h-2 bg-signal rounded-full glow-signal"></span>
+        %SITE_NAME%
+      </a>
+      <span class="text-xs text-signal tracking-widest uppercase font-semibold">%PRIVACY_EYEBROW%</span>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-6 sm:px-8 py-16 text-sm text-muted leading-relaxed space-y-10">
+      <div>
+        <h1 class="font-display text-4xl font-light text-white tracking-tight mb-3">%PRIVACY_TITLE%</h1>
+        <p class="text-xs text-muted">%PRIVACY_UPDATED%</p>
+      </div>
+
+      <p>%PRIVACY_PREAMBLE%</p>
+
+      %PRIVACY_SECTIONS%
+
+      <div class="pt-8 border-t border-white/5 text-xs text-muted flex flex-wrap justify-between gap-4">
+        <span>%PRIVACY_FOOTER%</span>
+        <a href="/" class="text-signal hover:underline">← Back to the site</a>
+      </div>
+    </main>
+  </body>
+</html>

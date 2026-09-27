@@ -3,11 +3,10 @@ import { footerCopy, type FooterCopy } from '@/content/sections/footer';
 import { reveal } from '../ui/Reveal';
 
 interface FooterProps {
-  onPrivacy: () => void;
   copy?: FooterCopy;
 }
 
-export const Footer = ({ onPrivacy, copy = footerCopy }: FooterProps) => {
+export const Footer = ({ copy = footerCopy }: FooterProps) => {
   return (
     <m.footer
       {...reveal()}
@@ -25,7 +24,9 @@ export const Footer = ({ onPrivacy, copy = footerCopy }: FooterProps) => {
             {label}
           </a>
         ))}
-        <button onClick={onPrivacy} className="hover:text-signal transition-colors cursor-pointer">{copy.privacyLabel}</button>
+        {/* A real page, not a modal: it has a URL, search engines can read it,
+            and the scroll-film links to it like any other page. */}
+        <a href="/privacy" className="hover:text-signal transition-colors">{copy.privacyLabel}</a>
       </div>
     </m.footer>
   );

@@ -138,7 +138,7 @@ export const experienceCopy: ExperienceCopy = {
     copyright: `© ${identity.copyrightYear} ${identity.name}`,
     links: [
       { label: 'Home', href: '/' },
-      { label: 'Privacy', href: '/?privacy=1' },
+      { label: 'Privacy', href: '/privacy' },
       { label: 'Capabilities', href: '#capabilities' },
     ],
   },

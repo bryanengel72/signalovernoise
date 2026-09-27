@@ -48,7 +48,7 @@ describe('Identity is the only source of the contact address', () => {
     expect(offenders.map((f) => relative(ROOT, f))).toEqual([]);
   });
 
-  it.each(['index.html', 'experience.html'])('%s spells out neither the address nor the booking slug', (page) => {
+  it.each(['index.html', 'experience.html', 'privacy.html'])('%s spells out neither the address nor the booking slug', (page) => {
     const html = readFileSync(join(ROOT, page), 'utf8');
     expect(html).not.toContain(identity.email);
     expect(html).not.toContain(identity.booking.slug);
