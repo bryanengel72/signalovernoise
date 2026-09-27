@@ -12,49 +12,53 @@ export const ProcessSection = ({ copy = processCopy }: { copy?: ProcessCopy }) =
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8 lg:p-16">
         {copy.phases.map((phase, i) => (
-          // Hand-rolled: these cards carry a hover lift on top of the reveal.
-          <motion.div
-            key={phase.step}
-            {...reveal('rise', { delay: i * 0.15, duration: 0.6 })}
-            whileHover={{ y: -8, transition: { duration: 0.3 } }}
-            className="p-8 lg:p-12 border border-white/5 rounded-2xl glass relative group cursor-default overflow-hidden"
-          >
-            {/* Animated glow border on hover */}
+          // The connector lives beside the card, not inside it: the card clips
+          // its glow with overflow-hidden, which also clipped an arrow placed
+          // in the gap — it never showed, and its in-view reveal never fired.
+          <div key={phase.step} className="relative">
+            {/* Hand-rolled: these cards carry a hover lift on top of the reveal. */}
             <motion.div
-              className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-              style={{
-                background: 'linear-gradient(135deg, color-mix(in srgb, var(--color-signal) 8%, transparent) 0%, transparent 60%)',
-                boxShadow: 'inset 0 0 40px -20px var(--color-signal)'
-              }}
-            />
-
-            {/* Top accent line that grows on hover */}
-            <div className="absolute top-0 left-0 h-[2px] w-0 group-hover:w-full bg-gradient-to-r from-signal/80 to-transparent transition-all duration-500 ease-out rounded-full" />
-
-            {/* Step number — highlights on hover */}
-            <motion.div
-              className="font-display text-7xl font-bold mb-8 transition-colors duration-300 text-white/5 group-hover:text-signal/20"
+              {...reveal('rise', { delay: i * 0.15, duration: 0.6 })}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="h-full p-8 lg:p-12 border border-white/5 rounded-2xl glass relative group cursor-default overflow-hidden"
             >
-              {phase.step}
-            </motion.div>
-
-            <h3 className="font-display text-2xl font-bold uppercase text-white mb-4 group-hover:text-signal transition-colors duration-300">
-              {phase.title}
-            </h3>
-            <p className="text-sm text-muted mb-8 leading-relaxed group-hover:text-text/70 transition-colors duration-300">
-              {phase.desc}
-            </p>
-
-            {/* Tag — glows and expands on hover */}
-            <motion.div
-              className="inline-flex items-center gap-2 bg-signal/10 text-signal text-[10px] font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full group-hover:bg-signal/20 group-hover:glow-signal transition-all duration-300"
-            >
-              <motion.span
-                className="w-1.5 h-1.5 rounded-full bg-signal"
-                animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.5 }}
+              {/* Animated glow border on hover */}
+              <motion.div
+                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{
+                  background: 'linear-gradient(135deg, color-mix(in srgb, var(--color-signal) 8%, transparent) 0%, transparent 60%)',
+                  boxShadow: 'inset 0 0 40px -20px var(--color-signal)'
+                }}
               />
-              {phase.tag}
+
+              {/* Top accent line that grows on hover */}
+              <div className="absolute top-0 left-0 h-[2px] w-0 group-hover:w-full bg-gradient-to-r from-signal/80 to-transparent transition-all duration-500 ease-out rounded-full" />
+
+              {/* Step number — highlights on hover */}
+              <motion.div
+                className="font-display text-7xl font-bold mb-8 transition-colors duration-300 text-white/5 group-hover:text-signal/20"
+              >
+                {phase.step}
+              </motion.div>
+
+              <h3 className="font-display text-2xl font-bold uppercase text-white mb-4 group-hover:text-signal transition-colors duration-300">
+                {phase.title}
+              </h3>
+              <p className="text-sm text-muted mb-8 leading-relaxed group-hover:text-text/70 transition-colors duration-300">
+                {phase.desc}
+              </p>
+
+              {/* Tag — glows and expands on hover */}
+              <motion.div
+                className="inline-flex items-center gap-2 bg-signal/10 text-signal text-[10px] font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full group-hover:bg-signal/20 group-hover:glow-signal transition-all duration-300"
+              >
+                <motion.span
+                  className="w-1.5 h-1.5 rounded-full bg-signal"
+                  animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.5 }}
+                />
+                {phase.tag}
+              </motion.div>
             </motion.div>
 
             {/* Connector arrow between cards — its own draw-in, not a reveal */}
@@ -76,7 +80,7 @@ export const ProcessSection = ({ copy = processCopy }: { copy?: ProcessCopy }) =
                 <div className="w-1.5 h-1.5 border-t border-r border-signal/60 rotate-45 -ml-1" />
               </motion.div>
             )}
-          </motion.div>
+          </div>
         ))}
       </div>
     </section>

@@ -101,7 +101,9 @@ export const HeroSection = ({ copy = heroCopy }: HeroSectionProps) => {
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </motion.a>
           <button
-            data-cal-link={copy.bookingSlug}
+            data-cal-link={copy.booking.slug}
+            data-cal-namespace={copy.booking.namespace}
+            data-cal-config={copy.booking.config}
             className="px-8 py-4 text-sm font-semibold text-white border border-white/20 rounded-full hover:bg-white/10 glass transition-all"
           >
             {copy.secondaryCta}

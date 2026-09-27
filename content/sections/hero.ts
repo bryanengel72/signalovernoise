@@ -12,7 +12,8 @@ export type HeroCopy = {
   trustChips: ReadonlyArray<string>;
   primaryCta: string;
   secondaryCta: string;
-  bookingSlug: string;
+  /** The Cal.com embed — slug, namespace and config, the same trio the Contact button uses. */
+  booking: { slug: string; namespace: string; config: string };
   scrollCue: string;
   /** The cinematic backdrop. The alt text lives beside the image it describes. */
   backdrop: {
@@ -34,7 +35,7 @@ export const heroCopy: HeroCopy = {
   trustChips: ['No Lock-In', '90-Day ROI Focus', 'Professional-Grade'],
   primaryCta: 'Get Your Free AI Audit',
   secondaryCta: 'Book Consultation',
-  bookingSlug: identity.booking.slug,
+  booking: identity.booking,
   scrollCue: 'Scroll',
   backdrop: {
     poster: '/hero-lock-poster.jpg',

@@ -8,7 +8,6 @@ export type FooterCopy = {
 
 export const footerCopy: FooterCopy = {
   copyright: `© ${identity.copyrightYear} ${identity.name.toUpperCase()}.`,
-  /** Empty until there is somewhere to point it. A link to '#' is worse than no link. */
-  links: [],
+  links: [{ label: 'LinkedIn', href: identity.linkedin }],
   privacyLabel: 'Privacy Policy',
 };

@@ -15,7 +15,15 @@ export const Footer = ({ onPrivacy, copy = footerCopy }: FooterProps) => {
       <div>{copy.copyright}</div>
       <div className="flex gap-8">
         {copy.links.map(({ label, href }) => (
-          <a key={label} href={href} className="hover:text-signal transition-colors">{label}</a>
+          <a
+            key={label}
+            href={href}
+            // Off-site links open in a new tab; on-site ones navigate in place.
+            {...(href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            className="hover:text-signal transition-colors"
+          >
+            {label}
+          </a>
         ))}
         <button onClick={onPrivacy} className="hover:text-signal transition-colors cursor-pointer">{copy.privacyLabel}</button>
       </div>
