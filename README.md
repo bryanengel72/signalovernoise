@@ -20,11 +20,12 @@ is told to email directly.
 ### Resend setup
 
 1. Create an account at [resend.com](https://resend.com) and add
-   `signalovernoiseai.com` as a domain (region `us-east-1`).
-2. Add the DNS records Resend lists (a DKIM TXT and two CNAMEs) at the domain's
-   DNS host, Hostinger, then verify. Keep the existing DMARC record — do not add
-   a second one.
-3. Create an API key with sending access → `RESEND_API_KEY`.
+   `notify.signalovernoiseai.com` as a domain (region `us-east-1`). The sender in
+   `content/identity.ts` must be on this subdomain.
+2. Add the DNS records Resend lists (a DKIM TXT and two CNAMEs, all under
+   `notify.`) at the domain's DNS host, Hostinger, then verify.
+3. Create an API key with sending access **in the same Resend account** →
+   `RESEND_API_KEY`. A key from another account gets "domain is not verified".
 
 ### Turnstile setup
 

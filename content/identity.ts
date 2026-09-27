@@ -24,9 +24,10 @@ export const identity = {
 
   /**
    * The sender on contact-form notifications. Must be on the domain verified in
-   * Resend; the recipient is `email` above.
+   * Resend — the `notify.` subdomain, which keeps website mail apart from the
+   * mailbox on the bare domain. The recipient is `email` above.
    */
-  inquirySender: 'Signal Over Noise Website <inquiries@signalovernoiseai.com>',
+  inquirySender: 'Signal Over Noise Website <inquiries@notify.signalovernoiseai.com>',
 
   /** Cal.com element-click embed. The namespace must match index.html's Cal("init", ...). */
   booking: {
