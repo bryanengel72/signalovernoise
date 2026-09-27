@@ -19,13 +19,15 @@ export const EfficiencySection = ({ copy = efficiencyCopy }: { copy?: Efficiency
 
       {/* Comparison table */}
       <div className="px-8 lg:px-16 pb-16">
-        {/* Column headers */}
+        {/* Column headers. Below md the Delta column is dropped — at phone
+            width it was 26px wide and its text ran off the screen — and
+            Process takes its share. The scroll-film's table does the same. */}
         <div className="grid grid-cols-12 py-6 border-b border-grid text-[10px] text-muted uppercase tracking-widest">
-          <div className="col-span-4">{copy.columns.process}</div>
+          <div className="col-span-5 md:col-span-4">{copy.columns.process}</div>
           <div className="col-span-3 text-center">{copy.columns.before}</div>
           <div className="col-span-1" />
           <div className="col-span-3 text-center text-signal">{copy.columns.after}</div>
-          <div className="col-span-1 text-right">{copy.columns.gain}</div>
+          <div className="hidden md:block col-span-1 text-right">{copy.columns.gain}</div>
         </div>
 
         {copy.rows.map((row, i) => (
@@ -37,7 +39,7 @@ export const EfficiencySection = ({ copy = efficiencyCopy }: { copy?: Efficiency
             className="grid grid-cols-12 py-6 border-b border-grid/60 items-center group hover:bg-surface/30 transition-colors duration-200 -mx-8 lg:-mx-16 px-8 lg:px-16"
           >
             {/* Process name */}
-            <div className="col-span-4">
+            <div className="col-span-5 md:col-span-4">
               <span className="text-sm font-semibold text-white">{row.process}</span>
             </div>
 
@@ -57,7 +59,7 @@ export const EfficiencySection = ({ copy = efficiencyCopy }: { copy?: Efficiency
             </div>
 
             {/* Gain */}
-            <div className="col-span-1 text-right">
+            <div className="hidden md:block col-span-1 text-right">
               <span className="text-[10px] text-signal/70 tracking-wide tabular-nums">{row.gain}</span>
             </div>
           </Reveal>
