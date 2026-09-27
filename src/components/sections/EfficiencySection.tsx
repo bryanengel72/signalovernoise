@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { efficiencyCopy, type EfficiencyCopy } from '@/content/sections/efficiency';
 import { Reveal, reveal } from '../ui/Reveal';
@@ -12,9 +12,9 @@ export const EfficiencySection = ({ copy = efficiencyCopy }: { copy?: Efficiency
         <div>
           <SectionHeader eyebrow={copy.eyebrow} headline={copy.headline} />
         </div>
-        <motion.p {...reveal()} className="text-sm text-muted max-w-sm">
+        <m.p {...reveal()} className="text-sm text-muted max-w-sm">
           {copy.intro}
-        </motion.p>
+        </m.p>
       </div>
 
       {/* Comparison table */}

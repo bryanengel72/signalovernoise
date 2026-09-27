@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
+import { m, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { useRef } from 'react';
 import { problemCopy, type ProblemCopy } from '@/content/sections/problem';
 import { ICONS } from '../ui/icons';
@@ -27,7 +27,7 @@ function TiltCard({ item, index }: { item: Card; index: number }) {
   const Icon = ICONS[item.icon];
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -38,42 +38,40 @@ function TiltCard({ item, index }: { item: Card; index: number }) {
       style={{ rotateX, rotateY, transformStyle: 'preserve-3d', perspective: 800 }}
       className="p-8 border border-white/5 rounded-2xl glass hover:border-signal/30 transition-colors duration-300 relative group overflow-hidden cursor-default"
     >
-      <motion.div
+      <m.div
         className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
         style={{ background: 'radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--color-signal) 7%, transparent) 0%, transparent 70%)' }}
       />
-      <motion.div
+      <m.div
         className="absolute top-0 left-0 h-[1px] bg-gradient-to-r from-transparent via-signal to-transparent w-full opacity-0 group-hover:opacity-100"
         initial={{ scaleX: 0 }}
         whileHover={{ scaleX: 1 }}
         transition={{ duration: 0.4 }}
       />
       <div className="relative w-12 h-12 mb-6">
-        <motion.div
-          className="absolute inset-0 rounded-full border border-signal/30 opacity-0 group-hover:opacity-100"
-          animate={{ scale: [1, 1.5, 1], opacity: [0.4, 0, 0.4] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: index * 0.3 }}
+        <div
+          className="loop-ring absolute inset-0 rounded-full border border-signal/30"
+          style={{ animationDelay: `${index * 0.3}s` }}
         />
-        <motion.div
+        <m.div
           className="w-12 h-12 rounded-full bg-signal/10 flex items-center justify-center text-signal border border-signal/20 group-hover:bg-signal/20 group-hover:border-signal/50 transition-colors duration-300"
           whileHover={{ rotate: [0, -8, 8, 0] }}
           transition={{ duration: 0.4 }}
         >
           <Icon size={18} />
-        </motion.div>
+        </m.div>
       </div>
-      <motion.h3 className="font-display text-xl font-bold mb-3 text-white group-hover:text-signal transition-colors duration-300">
+      <m.h3 className="font-display text-xl font-bold mb-3 text-white group-hover:text-signal transition-colors duration-300">
         {item.title}
-      </motion.h3>
+      </m.h3>
       <p className="text-xs text-muted leading-relaxed group-hover:text-text/60 transition-colors duration-300">
         {item.desc}
       </p>
-      <motion.div
-        className="absolute bottom-4 right-4 w-1.5 h-1.5 rounded-full bg-signal opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        animate={{ scale: [1, 1.4, 1] }}
-        transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut', delay: index * 0.4 }}
+      <div
+        className="loop-beat absolute bottom-4 right-4 w-1.5 h-1.5 rounded-full bg-signal opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{ animationDelay: `${index * 0.4}s` }}
       />
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -88,9 +86,9 @@ export const ProblemSection = ({ copy = problemCopy }: { copy?: ProblemCopy }) =
           looseEyebrow
           headlineClassName="mb-6"
         />
-        <motion.p {...reveal('rise', { delay: 0.15 })} className="text-sm text-muted leading-relaxed">
+        <m.p {...reveal('rise', { delay: 0.15 })} className="text-sm text-muted leading-relaxed">
           {copy.intro}
-        </motion.p>
+        </m.p>
       </div>
       <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6 p-8 lg:p-16" style={{ perspective: '1000px' }}>
         {copy.cards.map((item, i) => (

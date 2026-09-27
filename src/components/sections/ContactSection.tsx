@@ -1,5 +1,5 @@
-import { useRef, useState, type FormEvent } from 'react';
-import { motion } from 'motion/react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { m } from 'motion/react';
 import { Mail, Calendar, ArrowRight, Loader2 } from 'lucide-react';
 import { contactCopy, type ContactCopy } from '@/content/sections/contact';
 import { clientMessages, inquiryProblemMessages } from '@/content/messages';
@@ -21,6 +21,25 @@ export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) =
   const [humanToken, setHumanToken] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const turnstileRef = useRef<TurnstileHandle>(null);
+
+  // The human check loads Cloudflare's script, so it waits until the form is
+  // close to the screen (or a field takes focus) instead of loading with the
+  // page for visitors who never scroll this far. Managed mode passes within
+  // a second or two, well before anyone finishes typing.
+  const formRef = useRef<HTMLFormElement>(null);
+  const [checkWanted, setCheckWanted] = useState(false);
+
+  useEffect(() => {
+    if (checkWanted || !formRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) setCheckWanted(true);
+      },
+      { rootMargin: '600px 0px' },
+    );
+    observer.observe(formRef.current);
+    return () => observer.disconnect();
+  }, [checkWanted]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -84,9 +103,9 @@ export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) =
           looseEyebrow
           headlineClassName="mb-8"
         />
-        <motion.p {...reveal()} className="text-sm text-muted mb-12 max-w-sm">
+        <m.p {...reveal()} className="text-sm text-muted mb-12 max-w-sm">
           {copy.intro}
-        </motion.p>
+        </m.p>
 
         <Reveal className="space-y-6">
           <div className="flex items-center gap-4 text-sm text-muted">
@@ -117,10 +136,12 @@ export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) =
       </div>
 
       <div className="p-8 lg:p-16 bg-surface">
-        <motion.form
+        <m.form
           {...reveal('scale')}
+          ref={formRef}
           className="border border-grid bg-bg flex flex-col"
           onSubmit={handleSubmit}
+          onFocus={() => setCheckWanted(true)}
         >
           <div className="p-6 border-b border-grid bg-surface/50 backdrop-blur-sm">
             <span className="text-sm font-semibold text-white tracking-widest uppercase">{copy.formTitle}</span>
@@ -153,7 +174,10 @@ export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) =
               </div>
             ) : (
               <>
-                {TURNSTILE_SITE_KEY ? (
+                {TURNSTILE_SITE_KEY && !checkWanted ? (
+                  // Holds the widget's height so the form does not jump when it mounts.
+                  <div className="min-h-[65px]" />
+                ) : TURNSTILE_SITE_KEY ? (
                   <Turnstile
                     ref={turnstileRef}
                     siteKey={TURNSTILE_SITE_KEY}
@@ -197,7 +221,7 @@ export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) =
               </>
             )}
           </div>
-        </motion.form>
+        </m.form>
       </div>
     </section>
   );

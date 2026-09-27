@@ -54,10 +54,12 @@ describe('Identity is the only source of the contact address', () => {
     expect(html).not.toContain(identity.booking.slug);
   });
 
-  it('index.html takes the Cal namespace from Identity rather than hardcoding it', () => {
-    const html = readFileSync(join(ROOT, 'index.html'), 'utf8');
-    expect(html).toContain('%BOOKING_NAMESPACE%');
-    expect(html).not.toContain(`"${identity.booking.namespace}"`);
+  it('neither page inlines the Cal snippet — the lazy loader reads the namespace from Identity', () => {
+    for (const page of ['index.html', 'experience.html']) {
+      const html = readFileSync(join(ROOT, page), 'utf8');
+      expect(html).not.toContain('embed.js');
+      expect(html).not.toContain(`"${identity.booking.namespace}"`);
+    }
   });
 
   it('the address is well-formed', () => {

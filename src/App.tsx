@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AnimatePresence, MotionConfig, motion, useScroll, useSpring } from 'motion/react';
+import { AnimatePresence, LazyMotion, MotionConfig, domAnimation, m, useScroll, useSpring } from 'motion/react';
 import { Marquee } from './components/ui/Marquee';
 import { Navbar } from './components/sections/Navbar';
 import { HeroSection } from './components/sections/HeroSection';
@@ -25,11 +25,16 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion="user">
+    {/* Components render as `m.*` and take their animation features from here:
+        domAnimation covers everything the page uses (enter/exit, hover, tap,
+        in-view) and leaves out drag and layout animation, which it does not.
+        `strict` fails loudly if a full `motion.*` component sneaks back in. */}
+    <LazyMotion features={domAnimation} strict>
     <div className="min-h-screen bg-bg text-text font-body selection:bg-signal selection:text-black">
       <div className="noise-bg" />
 
       {/* Scroll progress indicator */}
-      <motion.div
+      <m.div
         style={{ scaleX: progress }}
         className="fixed top-0 left-0 right-0 h-[2px] bg-signal origin-left z-[60] glow-signal"
       />
@@ -53,6 +58,7 @@ export default function App() {
         {showPrivacy && <PrivacyPage onClose={() => setShowPrivacy(false)} />}
       </AnimatePresence>
     </div>
+    </LazyMotion>
     </MotionConfig>
   );
 }

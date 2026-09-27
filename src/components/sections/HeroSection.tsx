@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'motion/react';
+import { m, useScroll, useTransform } from 'motion/react';
 import { Fragment, useRef } from 'react';
 import { ArrowRight, Crosshair } from 'lucide-react';
 import { heroCopy, type HeroCopy } from '@/content/sections/hero';
@@ -32,11 +32,11 @@ export const HeroSection = ({ copy = heroCopy }: HeroSectionProps) => {
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-20 pointer-events-none" />
 
       {/* Content */}
-      <motion.div
+      <m.div
         style={{ y: contentY }}
         className="relative z-40 w-full max-w-4xl p-8 lg:p-16 pb-16 lg:pb-24 will-change-transform"
       >
-        <motion.div
+        <m.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
@@ -44,11 +44,11 @@ export const HeroSection = ({ copy = heroCopy }: HeroSectionProps) => {
         >
           <Crosshair size={14} />
           <span>{copy.eyebrow}</span>
-        </motion.div>
+        </m.div>
 
         <h1 className="font-display text-5xl lg:text-8xl tracking-tight mb-8 leading-tight">
           {copy.headline.map(({ text, emphasis }, i) => (
-            <motion.span
+            <m.span
               key={text}
               initial={{ opacity: 0, y: 32, filter: 'blur(8px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
@@ -56,20 +56,20 @@ export const HeroSection = ({ copy = heroCopy }: HeroSectionProps) => {
               className={`block ${emphasis ? 'font-bold text-signal text-glow-signal' : 'font-light text-white'}`}
             >
               {text}
-            </motion.span>
+            </m.span>
           ))}
         </h1>
 
-        <motion.p
+        <m.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut', delay: 0.55 }}
           className="text-white/80 text-sm lg:text-base max-w-xl mb-8 leading-relaxed"
         >
           {copy.subhead}
-        </motion.p>
+        </m.p>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.65 }}
@@ -81,15 +81,15 @@ export const HeroSection = ({ copy = heroCopy }: HeroSectionProps) => {
               <span className="whitespace-nowrap">{chip}</span>
             </Fragment>
           ))}
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut', delay: 0.75 }}
           className="flex flex-wrap items-center gap-6"
         >
-          <motion.a
+          <m.a
             href="#contact"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
@@ -99,7 +99,7 @@ export const HeroSection = ({ copy = heroCopy }: HeroSectionProps) => {
             <span className="btn-shine" aria-hidden="true" />
             {copy.primaryCta}
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </motion.a>
+          </m.a>
           <button
             data-cal-link={copy.booking.slug}
             data-cal-namespace={copy.booking.namespace}
@@ -108,23 +108,21 @@ export const HeroSection = ({ copy = heroCopy }: HeroSectionProps) => {
           >
             {copy.secondaryCta}
           </button>
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
 
       {/* Scroll cue */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.6, duration: 1 }}
         className="absolute bottom-6 right-8 lg:right-16 z-40 hidden lg:flex flex-col items-center gap-2 text-white/40"
       >
         <span className="text-[10px] tracking-[0.3em] uppercase [writing-mode:vertical-rl]">{copy.scrollCue}</span>
-        <motion.div
-          animate={{ y: [0, 8, 0], opacity: [0.3, 1, 0.3] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          className="w-[1px] h-10 bg-gradient-to-b from-signal to-transparent"
+        <div
+          className="loop-scroll-cue w-[1px] h-10 bg-gradient-to-b from-signal to-transparent"
         />
-      </motion.div>
+      </m.div>
     </section>
   );
 };

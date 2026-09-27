@@ -51,14 +51,24 @@ describe('the scroll-film uses the same theme as the app', () => {
   });
 
   it('both use Space Grotesk for display', () => {
-    expect(indexCss).toContain('Space Grotesk');
-    expect(experienceHtml).toContain('Space+Grotesk');
+    expect(indexCss).toContain('"Space Grotesk Variable"');
+    expect(experienceHtml).toContain("'Space Grotesk Variable'");
     expect(indexCss).not.toContain('Outfit');
   });
 
   it('both use Inter for body text', () => {
-    expect(indexCss).toContain('"Inter"');
-    expect(experienceHtml).toContain('Inter');
+    expect(indexCss).toContain('"Inter Variable"');
+    expect(experienceHtml).toContain("'Inter Variable'");
+  });
+
+  it('neither page fetches fonts from Google — both entries import them self-hosted', () => {
+    expect(indexCss).not.toContain('fonts.googleapis.com');
+    expect(experienceHtml).not.toContain('fonts.googleapis.com');
+    for (const entry of ['src/main.tsx', 'src/experience/main.ts']) {
+      const source = readFileSync(join(ROOT, entry), 'utf8');
+      expect(source).toContain("import '@fontsource-variable/inter'");
+      expect(source).toContain("import '@fontsource-variable/space-grotesk'");
+    }
   });
 
   it('no longer names a mono token that points at a proportional face', () => {

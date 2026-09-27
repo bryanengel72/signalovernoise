@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'motion/react';
+import { AnimatePresence, m, useMotionValueEvent, useScroll } from 'motion/react';
 import { Menu, X } from 'lucide-react';
 import { navCopy, type NavCopy } from '@/content/sections/nav';
 import { EASE } from '../ui/Reveal';
@@ -32,7 +32,7 @@ export const Navbar = ({ copy = navCopy }: NavbarProps) => {
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <motion.nav
+    <m.nav
       initial={{ y: -80, opacity: 0 }}
       // An open menu keeps the bar in place; it would otherwise slide away mid-tap.
       animate={{ y: hidden && !menuOpen ? '-100%' : 0, opacity: 1 }}
@@ -113,7 +113,7 @@ export const Navbar = ({ copy = navCopy }: NavbarProps) => {
 
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
+          <m.div
             id="mobile-menu"
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -129,9 +129,9 @@ export const Navbar = ({ copy = navCopy }: NavbarProps) => {
             <a href={copy.experience.href} onClick={closeMenu} className="py-3 text-signal/80 hover:text-signal transition-colors">
               {copy.experience.label}
             </a>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </m.nav>
   );
 };

@@ -24,6 +24,19 @@ const installFakeTurnstile = () => {
   };
 };
 
+/** An IntersectionObserver that reports every target as on screen straight away. */
+class OnScreenObserver {
+  constructor(private readonly callback: IntersectionObserverCallback) {}
+  observe(target: Element) {
+    this.callback([{ isIntersecting: true, target } as IntersectionObserverEntry], this as never);
+  }
+  unobserve() {}
+  disconnect() {}
+  takeRecords() {
+    return [];
+  }
+}
+
 const loadSection = async () => {
   vi.stubEnv('VITE_TURNSTILE_SITE_KEY', 'test-site-key');
   vi.resetModules();
@@ -43,12 +56,16 @@ const fillAndSend = () => {
   fireEvent.submit(sendButton().closest('form')!);
 };
 
+const realObserver = globalThis.IntersectionObserver;
+
 beforeEach(() => {
   installFakeTurnstile();
+  globalThis.IntersectionObserver = OnScreenObserver as unknown as typeof IntersectionObserver;
   vi.spyOn(console, 'error').mockImplementation(() => {});
 });
 
 afterEach(() => {
+  globalThis.IntersectionObserver = realObserver;
   vi.unstubAllEnvs();
   vi.restoreAllMocks();
   delete window.turnstile;
@@ -99,5 +116,20 @@ describe('ContactSection when the send fails', () => {
 
     expect(await screen.findByText('Message Sent')).toBeTruthy();
     expect(messageField().value).toBe('');
+  });
+});
+
+describe('ContactSection before the form is near the screen', () => {
+  it('does not load the human check until the form approaches or takes focus', async () => {
+    globalThis.IntersectionObserver = realObserver; // the setup stub never reports anything
+    const render_ = vi.spyOn(window.turnstile!, 'render');
+    const ContactSection = await loadSection();
+
+    render(<ContactSection />);
+    await act(async () => {});
+    expect(render_).not.toHaveBeenCalled();
+
+    fireEvent.focus(screen.getByLabelText('Name'));
+    await waitFor(() => expect(render_).toHaveBeenCalledTimes(1));
   });
 });

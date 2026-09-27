@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { createProjector, nearestAvailable } from '@/src/experience/projector';
+import { createProjector, loadOrder, nearestAvailable } from '@/src/experience/projector';
 
 /**
  * The frame window used to be eleven module-level mutables inside a file that
@@ -180,5 +180,60 @@ describe('showing a frame', () => {
     projector.repaint();
 
     expect(ctx.drawImage).not.toHaveBeenCalled();
+  });
+});
+
+describe('loadOrder — sparse first, then finer', () => {
+  it('fetches every frame exactly once', () => {
+    const { order } = loadOrder(161);
+
+    expect(order).toHaveLength(161);
+    expect(new Set(order).size).toBe(161);
+  });
+
+  it('opens with the first and last frames, then every 16th', () => {
+    const { order, firstPass } = loadOrder(161);
+    const first = order.slice(0, firstPass);
+
+    expect(first.slice(0, 2)).toEqual([0, 160]);
+    expect(first).toContain(16);
+    expect(first).toContain(144);
+    // About a tenth of the reel is enough to start.
+    expect(firstPass).toBeLessThan(161 / 8);
+  });
+
+  it('copes with a reel shorter than the first stride', () => {
+    expect(loadOrder(3)).toEqual({ order: [0, 2, 1], firstPass: 2 });
+  });
+});
+
+describe('starting before the whole reel is in', () => {
+  it('signals the first pass before the load finishes', async () => {
+    const { projector, count } = build(40, 4);
+    let loadedAtFirstPass = -1;
+    let loaded = 0;
+
+    await projector.load(
+      (n) => { loaded = n; },
+      () => { loadedAtFirstPass = loaded; },
+    );
+
+    expect(loadedAtFirstPass).toBeGreaterThan(0);
+    expect(loadedAtFirstPass).toBeLessThan(count);
+  });
+
+  it('swaps in a closer frame when it arrives, without waiting for a scroll', async () => {
+    const { projector, drawn } = build(40, 1);
+    projector.resize();
+
+    await projector.loadOne(0);
+    projector.show(10, 0); // only frame 0 exists — it stands in
+    expect(drawn).toHaveLength(1);
+
+    await projector.loadOne(9); // closer to 10 than 0 is
+    expect(drawn).toHaveLength(2);
+
+    await projector.loadOne(30); // further away — no repaint
+    expect(drawn).toHaveLength(2);
   });
 });

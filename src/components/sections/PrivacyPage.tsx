@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { X } from 'lucide-react';
 import { privacyCopy, type PrivacyCopy } from '@/content/sections/privacy';
 
@@ -9,7 +9,7 @@ interface PrivacyPageProps {
 
 export const PrivacyPage = ({ onClose, copy = privacyCopy }: PrivacyPageProps) => {
   return (
-    <motion.div
+    <m.div
         key="privacy-overlay"
         initial={{ opacity: 0, y: '100%' }}
         animate={{ opacity: 1, y: 0 }}
@@ -53,6 +53,6 @@ export const PrivacyPage = ({ onClose, copy = privacyCopy }: PrivacyPageProps) =
             {copy.footer}
           </div>
         </div>
-    </motion.div>
+    </m.div>
   );
 };

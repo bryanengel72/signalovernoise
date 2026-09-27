@@ -81,6 +81,12 @@ Set the variables from `.env.example` in the Vercel project settings —
 `VITE_TURNSTILE_SITE_KEY` is needed at build time, the rest at runtime. Env var
 changes only take effect on a **redeploy**; editing them alone does nothing.
 
+`vercel.json` sets caching: hashed files in `/assets/` are immutable for a year;
+the film frames, hero video, poster and OG image are cached for a week. Those
+are not content-hashed, so if you regenerate the frames, write them to a new
+folder (e.g. `public/film-v2/`) and update `framePath` in `src/experience/film.ts`,
+or returning visitors may see the old ones for up to a week.
+
 Only `VITE_TURNSTILE_SITE_KEY` is public — `VITE_` means "compiled into the
 browser bundle", so nothing secret may carry that prefix. The contact function
 reads `RESEND_API_KEY` and `TURNSTILE_SECRET_KEY`, both server-only.

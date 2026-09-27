@@ -23,9 +23,7 @@
 <meta name="twitter:image" content="https://www.signalovernoiseai.com/og-image.png" />
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Fonts are self-hosted: src/experience/main.ts imports them, and Vite links the CSS here. -->
 <style>
   /* Same names and values as the @theme block in src/index.css. This page is
      served raw with no build step, so it cannot import them — the six shared
@@ -47,12 +45,12 @@
   body{
     background:var(--color-bg);
     color:var(--color-text);
-    font-family:'Inter',sans-serif;
+    font-family:'Inter Variable','Inter',sans-serif;
     overflow-x:hidden;
     -webkit-font-smoothing:antialiased;
     text-rendering:optimizeLegibility;
   }
-  h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.02em;line-height:1.02;}
+  h1,h2,h3,.display{font-family:'Space Grotesk Variable','Space Grotesk',sans-serif;letter-spacing:-0.02em;line-height:1.02;}
   a{color:inherit;text-decoration:none;}
   ::selection{background:var(--color-signal);color:#04121a;}
   .mono{font-variant-numeric:tabular-nums;font-feature-settings:"tnum";}
@@ -78,7 +76,7 @@
     mix-blend-mode:normal;
     transition:opacity .4s ease, transform .5s cubic-bezier(.22,1,.36,1);
   }
-  .logo{display:flex;align-items:center;gap:11px;font-family:'Space Grotesk';font-weight:600;font-size:16px;letter-spacing:.01em;}
+  .logo{display:flex;align-items:center;gap:11px;font-family:'Space Grotesk Variable','Space Grotesk',sans-serif;font-weight:600;font-size:16px;letter-spacing:.01em;}
   .logo-mark{position:relative;width:15px;height:15px;display:flex;align-items:center;justify-content:center;}
   .logo-mark .ring{position:absolute;inset:0;border:1px solid var(--color-signal);border-radius:50%;opacity:.4;animation:ping 3s cubic-bezier(0,0,.2,1) infinite;}
   .logo-mark .core{width:7px;height:7px;border-radius:50%;background:var(--color-signal);box-shadow:0 0 10px var(--color-signal);}
@@ -186,7 +184,7 @@
   .cap::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(0,229,255,.08),transparent 70%);opacity:0;transition:opacity .4s;}
   .cap:hover{border-color:rgba(0,229,255,.4);}
   .cap:hover::after{opacity:1;}
-  .cap .n{font-family:'Space Grotesk';font-size:30px;font-weight:700;color:rgba(255,255,255,.1);margin-bottom:30px;}
+  .cap .n{font-family:'Space Grotesk Variable','Space Grotesk',sans-serif;font-size:30px;font-weight:700;color:rgba(255,255,255,.1);margin-bottom:30px;}
   .cap h3{font-size:19px;font-weight:600;margin-bottom:12px;}
   .cap p{font-size:13.5px;color:var(--color-muted);line-height:1.6;}
 
@@ -221,12 +219,6 @@
   }
 </style>
 
-<!-- Cal element-click embed — the booking CTA in the closing band -->
-<script type="text/javascript">
-  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
-  Cal("init", "%BOOKING_NAMESPACE%", {origin:"https://app.cal.com"});
-  Cal.ns["%BOOKING_NAMESPACE%"]("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
-</script>
 </head>
 <body>
 

@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { processCopy, type ProcessCopy } from '@/content/sections/process';
 import { reveal } from '../ui/Reveal';
 import { SectionHeader } from '../ui/SectionHeader';
@@ -17,13 +17,13 @@ export const ProcessSection = ({ copy = processCopy }: { copy?: ProcessCopy }) =
           // in the gap — it never showed, and its in-view reveal never fired.
           <div key={phase.step} className="relative">
             {/* Hand-rolled: these cards carry a hover lift on top of the reveal. */}
-            <motion.div
+            <m.div
               {...reveal('rise', { delay: i * 0.15, duration: 0.6 })}
               whileHover={{ y: -8, transition: { duration: 0.3 } }}
               className="h-full p-8 lg:p-12 border border-white/5 rounded-2xl glass relative group cursor-default overflow-hidden"
             >
               {/* Animated glow border on hover */}
-              <motion.div
+              <m.div
                 className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                 style={{
                   background: 'linear-gradient(135deg, color-mix(in srgb, var(--color-signal) 8%, transparent) 0%, transparent 60%)',
@@ -35,11 +35,11 @@ export const ProcessSection = ({ copy = processCopy }: { copy?: ProcessCopy }) =
               <div className="absolute top-0 left-0 h-[2px] w-0 group-hover:w-full bg-gradient-to-r from-signal/80 to-transparent transition-all duration-500 ease-out rounded-full" />
 
               {/* Step number — highlights on hover */}
-              <motion.div
+              <m.div
                 className="font-display text-7xl font-bold mb-8 transition-colors duration-300 text-white/5 group-hover:text-signal/20"
               >
                 {phase.step}
-              </motion.div>
+              </m.div>
 
               <h3 className="font-display text-2xl font-bold uppercase text-white mb-4 group-hover:text-signal transition-colors duration-300">
                 {phase.title}
@@ -49,28 +49,27 @@ export const ProcessSection = ({ copy = processCopy }: { copy?: ProcessCopy }) =
               </p>
 
               {/* Tag — glows and expands on hover */}
-              <motion.div
+              <m.div
                 className="inline-flex items-center gap-2 bg-signal/10 text-signal text-[10px] font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full group-hover:bg-signal/20 group-hover:glow-signal transition-all duration-300"
               >
-                <motion.span
-                  className="w-1.5 h-1.5 rounded-full bg-signal"
-                  animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.5 }}
+                <span
+                  className="loop-beat-fade w-1.5 h-1.5 rounded-full bg-signal"
+                  style={{ animationDelay: `${i * 0.5}s` }}
                 />
                 {phase.tag}
-              </motion.div>
-            </motion.div>
+              </m.div>
+            </m.div>
 
             {/* Connector arrow between cards — its own draw-in, not a reveal */}
             {i < copy.phases.length - 1 && (
-              <motion.div
+              <m.div
                 className="hidden md:flex absolute top-1/2 -right-6 -translate-y-1/2 items-center gap-1 z-10"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ delay: i * 0.15 + 0.4 }}
                 viewport={{ once: true }}
               >
-                <motion.div
+                <m.div
                   className="h-[1px] bg-gradient-to-r from-signal/60 to-signal/20"
                   initial={{ width: 0 }}
                   whileInView={{ width: 16 }}
@@ -78,7 +77,7 @@ export const ProcessSection = ({ copy = processCopy }: { copy?: ProcessCopy }) =
                   viewport={{ once: true }}
                 />
                 <div className="w-1.5 h-1.5 border-t border-r border-signal/60 rotate-45 -ml-1" />
-              </motion.div>
+              </m.div>
             )}
           </div>
         ))}

@@ -1,4 +1,4 @@
-import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react';
+import { m, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react';
 import type { RefObject } from 'react';
 import type { HeroCopy } from '@/content/sections/hero';
 import { EASE } from './Reveal';
@@ -60,7 +60,7 @@ export const HeroBackdrop = ({ targetRef, backdrop }: HeroBackdropProps) => {
 
   if (prefersReduced) {
     return (
-      <motion.img
+      <m.img
         {...shared}
         src={backdrop.poster}
         alt={backdrop.posterAlt}
@@ -70,10 +70,10 @@ export const HeroBackdrop = ({ targetRef, backdrop }: HeroBackdropProps) => {
   }
 
   return (
-    <motion.video {...shared} autoPlay muted loop playsInline poster={backdrop.poster} aria-hidden="true">
+    <m.video {...shared} autoPlay muted loop playsInline poster={backdrop.poster} aria-hidden="true">
       {backdrop.sources.map((source) => (
         <source key={source.src} src={source.src} type={source.type} />
       ))}
-    </motion.video>
+    </m.video>
   );
 };

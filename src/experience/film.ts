@@ -132,15 +132,23 @@ export const start = () => {
   };
 
   /* ---------- main loop ---------- */
+  // Progress last painted. Repainting is a full-screen blit, two gradients and
+  // a dozen style writes, so it only happens when progress actually moved —
+  // it used to run on every display frame, scrolling or not.
+  let painted = NaN;
+
   const frame = () => {
     film.target = computeProgress();
     // lerp for butter; snap when extremely close
     film.current += (film.target - film.current) * 0.14;
     if (Math.abs(film.target - film.current) < 0.0004) film.current = film.target;
 
-    // only paint when the stage is on screen
+    // only paint when the stage is on screen, and only when something changed
     const r = filmEl.getBoundingClientRect();
-    if (r.bottom > 0 && r.top < window.innerHeight) render(film.current);
+    if (r.bottom > 0 && r.top < window.innerHeight && film.current !== painted) {
+      render(film.current);
+      painted = film.current;
+    }
 
     requestAnimationFrame(frame);
   };
@@ -177,11 +185,16 @@ export const start = () => {
       return;
     }
 
+    // Start once the sparse first pass is in; the rest streams in behind the
+    // playhead. The loader counts toward that first pass, not the whole reel.
     const label = document.getElementById('loader-label');
-    await projector.load((loaded, total) => {
-      if (label) {
-        label.textContent = `${experienceCopy.loaderLabel} · ${Math.round((loaded / total) * 100)}%`;
-      }
+    await new Promise<void>((firstPassIn) => {
+      void projector.load((loaded, _total, firstPass) => {
+        if (label) {
+          const pct = Math.round((Math.min(loaded, firstPass) / firstPass) * 100);
+          label.textContent = `${experienceCopy.loaderLabel} · ${pct}%`;
+        }
+      }, firstPassIn);
     });
 
     if (jump === null) {

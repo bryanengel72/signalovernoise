@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import type { ReactNode } from 'react';
 
 /** Signature easing used across all entrance animations — fast start, long luxurious settle. */
@@ -58,7 +58,7 @@ type RevealProps = RevealOptions & {
 
 /** Standard scroll-triggered reveal. Renders one div, so it drops straight into a grid. */
 export const Reveal = ({ children, variant = 'rise', className, ...options }: RevealProps) => (
-  <motion.div {...reveal(variant, options)} className={className}>
+  <m.div {...reveal(variant, options)} className={className}>
     {children}
-  </motion.div>
+  </m.div>
 );
