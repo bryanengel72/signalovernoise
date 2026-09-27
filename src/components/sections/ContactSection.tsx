@@ -157,7 +157,15 @@ export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) =
                     siteKey={TURNSTILE_SITE_KEY}
                     onToken={(token) => {
                       setHumanToken(token);
-                      if (token) setErrorMessage(null);
+                      // A fresh token only answers the "complete the human check"
+                      // prompt. A failed send resets the widget, which re-passes
+                      // within a second — clearing every error here wiped the
+                      // failure message before anyone could read it.
+                      if (token) {
+                        setErrorMessage((current) =>
+                          current === clientMessages.humanCheckIncomplete ? null : current,
+                        );
+                      }
                     }}
                     onError={setErrorMessage}
                   />
