@@ -1,5 +1,4 @@
-import { inject, track } from '@vercel/analytics';
-import { injectSpeedInsights } from '@vercel/speed-insights';
+import { track } from '@vercel/analytics';
 
 /**
  * Visit and conversion measurement: Vercel Web Analytics (cookie-free page
@@ -28,13 +27,10 @@ export const trackEvent = (name: EventName, properties?: Record<string, string>)
 };
 
 /**
- * Starts both scripts, and reports clicks on anything marked
- * `data-track-cta="<label>"` — the markup names the CTA, this counts it.
+ * Reports clicks on anything marked `data-track-cta="<label>"` — the markup
+ * names the CTA, this counts it.
  */
 export const installAnalytics = (doc: Document = document) => {
-  inject();
-  injectSpeedInsights();
-
   doc.addEventListener('click', (event) => {
     const target = event.target instanceof Element ? event.target.closest<HTMLElement>('[data-track-cta]') : null;
     if (target) trackEvent(EVENTS.ctaClick, { cta: target.dataset.trackCta! });
