@@ -1,5 +1,6 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import { readFileSync } from 'fs';
 import path from 'path';
 import { defineConfig, type Plugin } from 'vite';
 import { renderHtml } from './content/html-tokens';
@@ -37,6 +38,28 @@ const cleanUrls = (): Plugin => ({
   },
 });
 
+/**
+ * The security headers vercel.json sends on every route, applied to
+ * `vite preview` too — so the production build can be exercised locally under
+ * the same Content-Security-Policy that production enforces. Not the dev
+ * server: Vite's HMR client and React's refresh preamble are inline scripts.
+ */
+const siteHeaders = (): Record<string, string> => {
+  const vercel = JSON.parse(readFileSync(path.resolve(__dirname, 'vercel.json'), 'utf8')) as {
+    headers: Array<{ source: string; headers: Array<{ key: string; value: string }> }>;
+  };
+  const everyRoute = vercel.headers.find((rule) => rule.source === '/(.*)');
+  // CSP_ENFORCE=1 turns a report-only policy into an enforced one locally, to
+  // see what it would block before production enforces it.
+  const enforce = process.env.CSP_ENFORCE === '1';
+  return Object.fromEntries(
+    (everyRoute?.headers ?? []).map(({ key, value }) => [
+      enforce ? key.replace('-Report-Only', '') : key,
+      value,
+    ]),
+  );
+};
+
 export default defineConfig(({ isSsrBuild }) => {
   return {
     plugins: [react(), tailwindcss(), htmlTokens(), cleanUrls()],
@@ -58,6 +81,9 @@ export default defineConfig(({ isSsrBuild }) => {
             },
           },
         },
+    preview: {
+      headers: siteHeaders(),
+    },
     server: {
       // Set DISABLE_HMR=true to serve without hot reload. Useful when an agent is
       // editing files underneath the dev server and the reloads fight the edits.

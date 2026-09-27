@@ -87,6 +87,13 @@ Set the variables from `.env.example` in the Vercel project settings —
 `VITE_TURNSTILE_SITE_KEY` is needed at build time, the rest at runtime. Env var
 changes only take effect on a **redeploy**; editing them alone does nothing.
 
+`vercel.json` also sends security headers on every route, including a
+Content-Security-Policy: scripts only from this site, Cal.com and Cloudflare
+Turnstile, no inline scripts, and frames only for those two embeds. Adding a
+third-party script or embed means adding its origin there, or the browser will
+block it. `npm run build && CSP_ENFORCE=1 npx vite preview` serves the build
+locally under the same headers, enforced, to check a change before it ships.
+
 `vercel.json` sets caching: hashed files in `/assets/` are immutable for a year;
 the film frames, hero video, poster and OG image are cached for a week. Those
 are not content-hashed, so if you regenerate the frames, write them to a new

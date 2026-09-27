@@ -30,6 +30,20 @@
         "--strictPort"
       ],
       "port": 3200
+    },
+    {
+      "name": "signal2noise-build-csp",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "vite",
+        "preview",
+        "--port=3300",
+        "--strictPort"
+      ],
+      "port": 3300,
+      "env": {
+        "CSP_ENFORCE": "1"
+      }
     }
   ]
 }
