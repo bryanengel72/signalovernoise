@@ -31,8 +31,9 @@ describe('security headers on every route', () => {
 });
 
 describe('the Content-Security-Policy', () => {
-  it('exists', () => {
-    expect(csp).not.toBe('');
+  it('is enforced, not report-only', () => {
+    expect(header('Content-Security-Policy')).toBeDefined();
+    expect(header('Content-Security-Policy-Report-Only')).toBeUndefined();
   });
 
   it('allows no inline script, and scripts only from this site and the two embeds', () => {
