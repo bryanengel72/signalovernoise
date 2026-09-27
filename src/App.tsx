@@ -1,4 +1,6 @@
 import { LazyMotion, MotionConfig, domAnimation, m, useScroll, useSpring } from 'motion/react';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { Marquee } from './components/ui/Marquee';
 import { Navbar } from './components/sections/Navbar';
 import { HeroSection } from './components/sections/HeroSection';
@@ -53,6 +55,9 @@ export default function App() {
       </main>
       
       <Footer />
+      
+      <Analytics />
+      <SpeedInsights />
     </div>
     </LazyMotion>
     </MotionConfig>

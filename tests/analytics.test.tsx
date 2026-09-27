@@ -3,13 +3,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const tracked = vi.hoisted(() => [] as Array<[string, Record<string, string> | undefined]>);
 vi.mock('@vercel/analytics', () => ({
-  inject: vi.fn(),
   track: (name: string, props?: Record<string, string>) => tracked.push([name, props]),
 }));
-vi.mock('@vercel/speed-insights', () => ({ injectSpeedInsights: vi.fn() }));
 
-import { inject } from '@vercel/analytics';
-import { injectSpeedInsights } from '@vercel/speed-insights';
 import { EVENTS, installAnalytics, trackEvent } from '@/src/analytics';
 import { installLazyCal } from '@/src/booking/cal';
 import { HeroSection } from '@/src/components/sections/HeroSection';
@@ -22,13 +18,15 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe('installAnalytics', () => {
-  it('starts Web Analytics and Speed Insights', () => {
-    installAnalytics();
-    expect(inject).toHaveBeenCalled();
-    expect(injectSpeedInsights).toHaveBeenCalled();
+  it('sets up CTA click tracking', () => {
+    // installAnalytics() now only sets up click tracking, not the inject calls
+    // The Analytics and SpeedInsights components handle injection automatically
+    const result = installAnalytics();
+    expect(result).toBeUndefined();
   });
 
   it('counts a click on a marked CTA, by its label', () => {
+    installAnalytics();
     // installAnalytics' listener from the test above is already on the document.
     render(<Navbar />);
     fireEvent.click(screen.getByText('Get Started'));
