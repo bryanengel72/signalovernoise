@@ -105,9 +105,9 @@ export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) =
           looseEyebrow
           headlineClassName="mb-8"
         />
-        <m.p {...reveal()} className="text-sm text-muted mb-12 max-w-sm">
+        <p {...reveal()} className="text-sm text-muted mb-12 max-w-sm">
           {copy.intro}
-        </m.p>
+        </p>
 
         <Reveal className="space-y-6">
           <div className="flex items-center gap-4 text-sm text-muted">
@@ -139,7 +139,7 @@ export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) =
       </div>
 
       <div className="p-8 lg:p-16 bg-surface">
-        <m.form
+        <form
           {...reveal('scale')}
           ref={formRef}
           className="border border-grid bg-bg flex flex-col"
@@ -224,7 +224,7 @@ export const ContactSection = ({ copy = contactCopy }: { copy?: ContactCopy }) =
               </>
             )}
           </div>
-        </m.form>
+        </form>
       </div>
     </section>
   );

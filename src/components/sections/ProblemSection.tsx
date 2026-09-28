@@ -2,7 +2,7 @@ import { m, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { useRef } from 'react';
 import { problemCopy, type ProblemCopy } from '@/content/sections/problem';
 import { ICONS } from '../ui/icons';
-import { reveal } from '../ui/Reveal';
+import { Reveal, reveal } from '../ui/Reveal';
 import { SectionHeader } from '../ui/SectionHeader';
 
 type Card = ProblemCopy['cards'][number];
@@ -31,12 +31,8 @@ function TiltCard({ item, index }: { item: Card; index: number }) {
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.12, duration: 0.6, ease: 'easeOut' }}
       style={{ rotateX, rotateY, transformStyle: 'preserve-3d', perspective: 800 }}
-      className="p-8 border border-white/5 rounded-2xl glass hover:border-signal/30 transition-colors duration-300 relative group overflow-hidden cursor-default"
+      className="h-full p-8 border border-white/5 rounded-2xl glass hover:border-signal/30 transition-colors duration-300 relative group overflow-hidden cursor-default"
     >
       <m.div
         className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
@@ -86,13 +82,16 @@ export const ProblemSection = ({ copy = problemCopy }: { copy?: ProblemCopy }) =
           looseEyebrow
           headlineClassName="mb-6"
         />
-        <m.p {...reveal('rise', { delay: 0.15 })} className="text-sm text-muted leading-relaxed">
+        <p {...reveal('rise', { delay: 0.15 })} className="text-sm text-muted leading-relaxed">
           {copy.intro}
-        </m.p>
+        </p>
       </div>
       <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6 p-8 lg:p-16" style={{ perspective: '1000px' }}>
         {copy.cards.map((item, i) => (
-          <TiltCard key={item.title} item={item} index={i} />
+          // The entrance lives on a wrapper: the card's own transform carries the tilt.
+          <Reveal key={item.title} delay={i * 0.12} duration={0.6}>
+            <TiltCard item={item} index={i} />
+          </Reveal>
         ))}
       </div>
     </section>

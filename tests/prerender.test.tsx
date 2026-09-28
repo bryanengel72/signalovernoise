@@ -41,6 +41,15 @@ describe('the server render', () => {
     }
   });
 
+  it('renders every Section visible — no scroll entrance starts hidden in the HTML', () => {
+    const probe = document.createElement('div');
+    probe.innerHTML = html;
+    const hidden = [...probe.querySelectorAll('section[id] [style*="opacity:0"]')].filter(
+      (el) => (el.textContent ?? '').trim().length > 0,
+    );
+    expect(hidden.map((el) => el.textContent?.slice(0, 40))).toEqual([]);
+  });
+
   it('carries the words, not just the markup', () => {
     // Compare against the text a reader gets, with entities like &amp; decoded.
     const probe = document.createElement('div');

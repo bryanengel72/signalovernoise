@@ -1,4 +1,3 @@
-import { m } from 'motion/react';
 import { Reveal, reveal } from './Reveal';
 
 /**
@@ -42,7 +41,7 @@ export const SectionHeader = ({
       {eyebrow}
     </Reveal>
 
-    <m.h2
+    <h2
       {...reveal('rise')}
       className={`font-display ${compact ? HEADLINE_SIZE.compact : HEADLINE_SIZE.default} font-light tracking-tight ${headlineClassName}`}
     >
@@ -54,6 +53,6 @@ export const SectionHeader = ({
           {headline.trail}
         </>
       )}
-    </m.h2>
+    </h2>
   </>
 );

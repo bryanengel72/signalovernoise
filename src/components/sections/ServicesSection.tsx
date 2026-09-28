@@ -1,4 +1,3 @@
-import { m } from 'motion/react';
 import { servicesCopy, type ServicesCopy } from '@/content/sections/services';
 import { Reveal, reveal } from '../ui/Reveal';
 import { SectionHeader } from '../ui/SectionHeader';
@@ -10,9 +9,9 @@ export const ServicesSection = ({ copy = servicesCopy }: { copy?: ServicesCopy }
         <div>
           <SectionHeader eyebrow={copy.eyebrow} headline={copy.headline} />
         </div>
-        <m.p {...reveal()} className="text-sm text-muted max-w-md">
+        <p {...reveal()} className="text-sm text-muted max-w-md">
           {copy.intro}
-        </m.p>
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-8 lg:px-16 pb-16">

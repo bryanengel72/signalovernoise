@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { LazyMotion, MotionConfig, domAnimation, m, useScroll, useSpring } from 'motion/react';
 import { Marquee } from './components/ui/Marquee';
 import { Navbar } from './components/sections/Navbar';
@@ -9,8 +10,13 @@ import { ProcessSection } from './components/sections/ProcessSection';
 import { AboutSection } from './components/sections/AboutSection';
 import { ContactSection } from './components/sections/ContactSection';
 import { Footer } from './components/sections/Footer';
+import { installRevealOnScroll } from './revealOnScroll';
 
 export default function App() {
+  // Runs in the browser only, after hydration: the pre-rendered page stays
+  // fully visible, and just the below-the-fold Sections are set up to reveal.
+  useEffect(() => installRevealOnScroll(), []);
+
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, mass: 0.4 });
 

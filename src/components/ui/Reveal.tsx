@@ -1,53 +1,40 @@
-import { m } from 'motion/react';
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 /** Signature easing used across all entrance animations — fast start, long luxurious settle. */
 export const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 /**
- * The site's entrance vocabulary.
+ * The site's scroll-entrance vocabulary: rise, fade, slide, scale.
  *
- * Before this module held it, the same reveal preamble was hand-rolled in every
- * Section with twelve different rise distances and four different easings — a
- * system only in the comments. These four variants cover every scroll entrance
- * the site actually uses.
+ * These used to be Motion `initial`/`whileInView` props, which rendered every
+ * Section at opacity 0 in the pre-rendered HTML — so a crawler, or Google's
+ * rendered snapshot, saw the text as hidden until something scrolled it into
+ * view. Now the markup is only marked up: it renders visible on the server and
+ * on first paint, and src/revealOnScroll.ts hides just the elements still below
+ * the fold once the page is live, then reveals each as it arrives. The
+ * variants themselves are CSS, in src/index.css.
  */
-const ENTER = {
-  rise: { opacity: 0, y: 28, filter: 'blur(6px)' },
-  fade: { opacity: 0 },
-  slide: { opacity: 0, x: -16 },
-  scale: { opacity: 0, scale: 0.95 },
-} as const;
 
-const SETTLED = {
-  rise: { opacity: 1, y: 0, filter: 'blur(0px)' },
-  fade: { opacity: 1 },
-  slide: { opacity: 1, x: 0 },
-  scale: { opacity: 1, scale: 1 },
-} as const;
-
-export type RevealVariant = keyof typeof ENTER;
+export type RevealVariant = 'rise' | 'fade' | 'slide' | 'scale';
 
 type RevealOptions = {
   delay?: number;
   duration?: number;
-  /** Re-reveal on every pass. Off by default — reveals fire once. */
-  repeat?: boolean;
 };
 
 /**
- * The reveal policy as spreadable motion props, for the cases that must render
- * a specific element — an `h2`, a `form`, a `footer`. Everything else uses
- * `<Reveal>`, which is this applied to a div.
+ * The reveal as spreadable props, for the cases that must render a specific
+ * element — an `h2`, a `form`, a `footer`. Everything else uses `<Reveal>`.
  */
 export const reveal = (
   variant: RevealVariant = 'rise',
-  { delay = 0, duration = 0.7, repeat = false }: RevealOptions = {},
+  { delay = 0, duration = 0.7 }: RevealOptions = {},
 ) => ({
-  initial: ENTER[variant],
-  whileInView: SETTLED[variant],
-  viewport: { once: !repeat, margin: '-10% 0px' },
-  transition: { duration, ease: EASE, delay },
+  'data-reveal': variant,
+  style: {
+    '--reveal-delay': `${delay}s`,
+    '--reveal-duration': `${duration}s`,
+  } as CSSProperties,
 });
 
 type RevealProps = RevealOptions & {
@@ -58,7 +45,7 @@ type RevealProps = RevealOptions & {
 
 /** Standard scroll-triggered reveal. Renders one div, so it drops straight into a grid. */
 export const Reveal = ({ children, variant = 'rise', className, ...options }: RevealProps) => (
-  <m.div {...reveal(variant, options)} className={className}>
+  <div {...reveal(variant, options)} className={className}>
     {children}
-  </m.div>
+  </div>
 );

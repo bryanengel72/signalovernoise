@@ -1,4 +1,3 @@
-import { m } from 'motion/react';
 import { footerCopy, type FooterCopy } from '@/content/sections/footer';
 import { reveal } from '../ui/Reveal';
 
@@ -8,7 +7,7 @@ interface FooterProps {
 
 export const Footer = ({ copy = footerCopy }: FooterProps) => {
   return (
-    <m.footer
+    <footer
       {...reveal()}
       className="border-t border-white/5 p-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted uppercase tracking-widest">
       <div>{copy.copyright}</div>
@@ -28,6 +27,6 @@ export const Footer = ({ copy = footerCopy }: FooterProps) => {
             and the scroll-film links to it like any other page. */}
         <a href="/privacy" className="hover:text-signal transition-colors">{copy.privacyLabel}</a>
       </div>
-    </m.footer>
+    </footer>
   );
 };

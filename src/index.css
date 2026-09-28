@@ -129,6 +129,20 @@ a, button {
   75%, 100% { transform: translateX(100%); }
 }
 
+/* Scroll entrances (src/components/ui/Reveal.tsx, src/revealOnScroll.ts).
+   Nothing here applies until the script marks an element: the markup renders
+   visible, and only below-the-fold elements are ever set to pending. */
+[data-reveal-state="pending"] { opacity: 0; }
+[data-reveal="rise"][data-reveal-state="pending"]  { transform: translateY(28px); filter: blur(6px); }
+[data-reveal="slide"][data-reveal-state="pending"] { transform: translateX(-16px); }
+[data-reveal="scale"][data-reveal-state="pending"] { transform: scale(0.95); }
+[data-reveal-state="in"] {
+  transition-property: opacity, transform, filter;
+  transition-duration: var(--reveal-duration, 0.7s);
+  transition-delay: var(--reveal-delay, 0s);
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 /* Endless decorative loops. These were Motion animations driven from
    JavaScript every frame, on elements that are mostly invisible until hover;
    as CSS keyframes on transform and opacity the compositor runs them. */
