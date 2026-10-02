@@ -25,6 +25,7 @@ export const efficiencyCopy: EfficiencyCopy = {
   },
   rows: [
     { process: 'Radio Waveform Analysis', before: '120 hrs / report', after: '5 hrs', gain: '96% time reduction' },
+    { process: 'Executive Financial Dashboard', before: '2 hrs / report', after: '3 min', gain: '97% time reduction' },
     { process: 'Data Synthesis', before: '10 hrs / week', after: '< 5 min', gain: '99% time reduction' },
     { process: 'Lead Qualification', before: '3 hrs / day', after: 'Real-time', gain: 'Continuous pipeline' },
     { process: 'Report Generation', before: '4 hrs / cycle', after: 'On-demand', gain: 'Zero human overhead' },
