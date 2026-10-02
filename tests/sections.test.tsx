@@ -77,6 +77,21 @@ describe('Sections render the Copy they are given', () => {
       expect(text).toContain(row.process);
     }
     expect(text).not.toContain('Competitive Intelligence');
+    // No featured case in the fixture, so none of the real one leaks in.
+    expect(text).not.toContain(efficiencyCopy.featured!.title);
+  });
+
+  it('EfficiencySection renders the featured case when one is given', () => {
+    const { container } = render(<EfficiencySection />);
+    const text = container.textContent ?? '';
+    const featured = efficiencyCopy.featured!;
+
+    expect(text).toContain(featured.title);
+    expect(text).toContain(featured.note);
+    for (const stat of featured.stats) {
+      expect(text).toContain(stat.before);
+      expect(text).toContain(stat.after);
+    }
   });
 
   it('AboutSection renders fixture pillars and credentials', () => {

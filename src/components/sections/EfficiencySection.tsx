@@ -16,6 +16,35 @@ export const EfficiencySection = ({ copy = efficiencyCopy }: { copy?: Efficiency
         </p>
       </div>
 
+      {/* Featured engagement — told in more than a row, so it sits above the table */}
+      {copy.featured && (
+        <div className="px-8 lg:px-16 pt-12">
+          <Reveal className="glass border border-white/5 rounded-2xl p-8 lg:p-10">
+            <div className="mb-8">
+              <div className="text-xs text-signal uppercase tracking-widest mb-3">{copy.featured.label}</div>
+              <h3 className="font-display text-2xl lg:text-3xl font-bold text-white mb-2">{copy.featured.title}</h3>
+              <p className="text-sm text-muted max-w-xl">{copy.featured.context}</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {copy.featured.stats.map((stat) => (
+                <div key={stat.label} className="border-t border-grid pt-6">
+                  <div className="text-xs text-muted uppercase tracking-widest mb-4">{stat.label}</div>
+                  <div className="flex items-baseline gap-4 flex-wrap">
+                    <span className="font-display text-2xl text-muted/80 tabular-nums line-through decoration-white/20">{stat.before}</span>
+                    <ArrowRight size={18} className="text-signal opacity-60 self-center" />
+                    <span className="font-display text-4xl lg:text-5xl font-bold text-signal tabular-nums">{stat.after}</span>
+                  </div>
+                  <div className="text-xs text-signal/70 tracking-wide mt-3">{stat.gain}</div>
+                </div>
+              ))}
+            </div>
+
+            <p className="text-xs text-muted mt-8">{copy.featured.note}</p>
+          </Reveal>
+        </div>
+      )}
+
       {/* Comparison table */}
       <div className="px-8 lg:px-16 pb-16">
         {/* Column headers. Below md the Delta column is dropped — at phone
