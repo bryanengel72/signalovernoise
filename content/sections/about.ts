@@ -19,9 +19,9 @@ export const aboutCopy: AboutCopy = {
   pillars: [
     {
       icon: 'cpu',
-      label: 'Technical Architecture',
-      title: 'Systems, Not Prompts.',
-      desc: 'Led by an AI developer with an MS in Innovation & Technology. Every solution is a real working system — not just a chatbot.',
+      label: 'Forward-Deployed Engineering',
+      title: 'Process, Code, and AI.',
+      desc: 'Twenty years running federal programs taught us how work really moves between people. We pair that with production engineering and AI expertise, so every solution is a working system, not just a chatbot.',
     },
     {
       icon: 'trending-up',
@@ -33,7 +33,7 @@ export const aboutCopy: AboutCopy = {
       icon: 'network',
       label: 'Advanced Frameworks',
       title: '"Council of 5" Architecture.',
-      desc: 'Our proprietary "Council of 5" system runs five specialized AI roles in parallel — each one checking the others\' work — to deliver better, more reliable results.',
+      desc: 'Our proprietary "Council of 5" system runs five specialized AI roles in parallel — each one checking the others\' work — on whichever models fit the job, not whichever vendor we\'re tied to.',
     },
   ],
   credentialsLabel: `Verified Credentials — ${identity.founder}, Founder`,

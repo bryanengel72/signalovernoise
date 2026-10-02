@@ -88,7 +88,7 @@ export const experienceCopy: ExperienceCopy = {
   capabilities: {
     leadIn: 'Capabilities',
     headline: { lead: 'What We', emphasis: 'Build.' },
-    sub: 'Every engagement is scoped to your context — healthcare IT, veterinary, legal, media, and professional services. Real working systems, not chatbots.',
+    sub: 'Forward-deployed: embedded with your team, building inside your systems — across healthcare IT, veterinary, legal, media, and professional services. Real working systems, not chatbots.',
     items: [
       {
         num: '01',
@@ -98,7 +98,7 @@ export const experienceCopy: ExperienceCopy = {
       {
         num: '02',
         title: 'Custom AI Agents',
-        desc: 'Purpose-built agents for specific jobs inside your business — scoped, tested, and owned by you.',
+        desc: 'Agents that work inside the tools you already use — scoped, tested, and owned by you. No new app to learn.',
       },
       {
         num: '03',
