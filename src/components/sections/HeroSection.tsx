@@ -89,9 +89,12 @@ export const HeroSection = ({ copy = heroCopy }: HeroSectionProps) => {
           transition={{ duration: 0.8, ease: 'easeOut', delay: 0.75 }}
           className="flex flex-wrap items-center gap-6"
         >
-          <m.a
-            href="#contact"
-            data-track-cta="hero-audit"
+          <m.button
+            type="button"
+            data-cal-link={copy.booking.slug}
+            data-track-cta="hero-book"
+            data-cal-namespace={copy.booking.namespace}
+            data-cal-config={copy.booking.config}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             transition={{ duration: 0.25, ease: EASE }}
@@ -100,16 +103,14 @@ export const HeroSection = ({ copy = heroCopy }: HeroSectionProps) => {
             <span className="btn-shine" aria-hidden="true" />
             {copy.primaryCta}
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </m.a>
-          <button
-            data-cal-link={copy.booking.slug}
-            data-track-cta="hero-book"
-            data-cal-namespace={copy.booking.namespace}
-            data-cal-config={copy.booking.config}
+          </m.button>
+          <a
+            href="#services"
+            data-track-cta="hero-pricing"
             className="px-8 py-4 text-sm font-semibold text-white border border-white/20 rounded-full hover:bg-white/10 glass transition-all"
           >
             {copy.secondaryCta}
-          </button>
+          </a>
         </m.div>
       </m.div>
 

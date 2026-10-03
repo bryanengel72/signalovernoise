@@ -30,10 +30,10 @@ export const contactCopy: ContactCopy = {
   eyebrow: 'Get in Touch',
   headline: { lead: "Let's", emphasis: 'Talk.' },
   intro:
-    "Tell us what you're trying to solve and we'll tell you honestly whether AI can help — and what it would take.",
+    "Tell us what's eating your team's week. We'll tell you honestly whether AI can fix it, and what it would cost.",
   email: identity.email,
   responseNote: 'Discovery calls within 48h',
-  bookingCta: 'Schedule a Discovery Call',
+  bookingCta: 'Book a Free 30-Minute Call',
   booking: identity.booking,
 
   formTitle: 'Send a Message',
@@ -41,7 +41,10 @@ export const contactCopy: ContactCopy = {
     name: { label: 'Name', placeholder: 'Your name' },
     email: { label: 'Email', placeholder: 'your@email.com' },
     company: { label: 'Company', placeholder: 'Your company (optional)' },
-    message: { label: 'What are you working on?', placeholder: 'Tell us what you need...' },
+    message: {
+      label: "What's taking your team the most time?",
+      placeholder: 'e.g. We spend 6 hours a week building client reports by hand.',
+    },
   },
   submitIdle: 'Send Message',
   submitLoading: 'Sending...',

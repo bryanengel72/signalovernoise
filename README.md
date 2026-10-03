@@ -1,6 +1,6 @@
 # Signal Over Noise AI
 
-Marketing site for [Signal Over Noise AI](https://www.signalovernoiseai.com) — AI automation consulting for mid-market B2B.
+Marketing site for [Signal Over Noise AI](https://www.signalovernoiseai.com) — AI automation for professional services firms with 10 to 100 people.
 
 Built with React 19, Vite, Tailwind CSS 4, and Motion. Discovery-call booking is handled by a Cal.com embed.
 

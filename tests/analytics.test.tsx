@@ -14,6 +14,8 @@ import { EVENTS, installAnalytics, trackEvent } from '@/src/analytics';
 import { installLazyCal } from '@/src/booking/cal';
 import { HeroSection } from '@/src/components/sections/HeroSection';
 import { Navbar } from '@/src/components/sections/Navbar';
+import { contactCopy } from '@/content/sections/contact';
+import { heroCopy } from '@/content/sections/hero';
 
 beforeEach(() => {
   tracked.length = 0;
@@ -35,10 +37,10 @@ describe('installAnalytics', () => {
     expect(tracked).toContainEqual([EVENTS.ctaClick, { cta: 'nav-get-started' }]);
   });
 
-  it('counts the hero audit CTA', () => {
+  it('counts the hero pricing CTA', () => {
     render(<HeroSection />);
-    fireEvent.click(screen.getByText(/Free AI Audit/));
-    expect(tracked).toContainEqual([EVENTS.ctaClick, { cta: 'hero-audit' }]);
+    fireEvent.click(screen.getByText(heroCopy.secondaryCta));
+    expect(tracked).toContainEqual([EVENTS.ctaClick, { cta: 'hero-pricing' }]);
   });
 });
 
@@ -47,7 +49,7 @@ describe('booking events', () => {
     const cal = installLazyCal({ onOpen: (source) => trackEvent(EVENTS.bookingOpened, { source }) });
     render(<HeroSection />);
 
-    fireEvent.click(screen.getByText('Book Consultation'));
+    fireEvent.click(screen.getByText(heroCopy.primaryCta));
 
     expect(tracked).toContainEqual([EVENTS.bookingOpened, { source: 'hero-book' }]);
     cal.uninstall();
@@ -90,7 +92,7 @@ describe('the contact form', () => {
     );
     fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Ada' } });
     fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'ada@example.com' } });
-    fireEvent.change(screen.getByLabelText('What are you working on?'), { target: { value: 'Hi' } });
+    fireEvent.change(screen.getByLabelText(contactCopy.fields.message.label), { target: { value: 'Hi' } });
     await act(async () => {
       fireEvent.submit(screen.getByRole('button', { name: /send message/i }).closest('form')!);
     });

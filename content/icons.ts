@@ -11,4 +11,5 @@ export type IconKey =
   | 'terminal'
   | 'cpu'
   | 'trending-up'
-  | 'network';
+  | 'network'
+  | 'shield';

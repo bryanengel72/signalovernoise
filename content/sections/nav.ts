@@ -10,7 +10,7 @@ export type NavCopy = {
 export const navCopy: NavCopy = {
   wordmark: identity.shortName,
   links: [
-    { label: 'Services', id: 'services' },
+    { label: 'Pricing', id: 'services' },
     { label: 'Process', id: 'process' },
     { label: 'About', id: 'about' },
   ],

@@ -16,29 +16,29 @@ export type ProblemCopy = {
 
 export const problemCopy: ProblemCopy = {
   eyebrow: 'The Problem',
-  headline: { lead: 'The Cost of Operating', emphasis: 'Without an AI Framework.' },
+  headline: { lead: 'Your Best People Are', emphasis: 'Doing Admin.' },
   intro:
-    'Most businesses are treating AI like an experiment. The result: wasted time, failed tools, and nothing to show for the investment.',
+    'Client work pays the bills. The admin around it (intake, document prep, status reports, the inbox) eats the hours your team should be spending on clients.',
   cards: [
     {
-      icon: 'activity',
-      title: 'Scattered Data',
-      desc: 'Data spread across too many places wastes hours every week without producing anything useful.',
+      icon: 'database',
+      title: 'Intake by Hand',
+      desc: 'New clients send documents by email and answer the same questions every time. Someone on your team retypes all of it.',
     },
     {
-      icon: 'database',
-      title: 'Process Inefficiency',
-      desc: 'Repetitive manual work eats up time that should go toward growth and higher-value tasks.',
+      icon: 'activity',
+      title: 'Reports Rebuilt Every Cycle',
+      desc: 'Month-end packages, status updates, and client summaries get rebuilt by hand from the same sources, again and again.',
+    },
+    {
+      icon: 'network',
+      title: 'Inboxes Nobody Owns',
+      desc: 'Client requests land in shared and personal inboxes. Some sit for days, and partners end up doing the sorting.',
     },
     {
       icon: 'terminal',
-      title: 'AI Tools That Never Stick',
-      desc: 'Most AI experiments never make it into daily use — they stall out before anyone sees results.',
-    },
-    {
-      icon: 'cpu',
-      title: 'No Clear Plan',
-      desc: 'Without a prioritized roadmap, AI spending is scattered and nothing gets measured.',
+      title: 'AI Tools That Never Stuck',
+      desc: 'Someone bought an AI subscription. A few people tried it. Six months later, nothing in the firm works differently.',
     },
   ],
 };

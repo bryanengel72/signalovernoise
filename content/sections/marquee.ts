@@ -11,8 +11,8 @@ export type MarqueeCopy = {
 
 export const marqueeCopy: MarqueeCopy = {
   phrases: [
-    'AUTOMATE OR STAGNATE',
-    'MEASURABLE ROI',
+    'LESS ADMIN. MORE CLIENTS.',
+    'FIXED PRICES. NO LOCK-IN.',
     'CUT THROUGH THE NOISE',
     'ZERO HYPE. RESULTS ONLY.',
   ],

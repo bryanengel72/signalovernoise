@@ -6,24 +6,24 @@ export type ProcessCopy = {
 
 export const processCopy: ProcessCopy = {
   eyebrow: 'How It Works',
-  headline: { lead: 'Forward-Deployed,', emphasis: 'Not Bolted On.' },
+  headline: { lead: 'Built Into Your Firm,', emphasis: 'Not Bolted On.' },
   phases: [
     {
       step: '01',
       title: 'Map',
-      desc: 'We sit down with the people who actually run the work, study how it moves through your systems, and map every step, handoff, and exception as it really happens.',
-      tag: 'STAKEHOLDER-LED',
+      desc: 'We sit down with the people who do the work and map how a client request actually moves through your firm: every step, handoff, and workaround.',
+      tag: 'WEEK 1',
     },
     {
       step: '02',
       title: 'Re-engineer',
-      desc: 'Every step gets sorted: delete it, automate it with simple rules, hand it to an AI agent, or keep a person in the loop. We baseline time and cost before anything is built.',
-      tag: '1-2 WEEKS',
+      desc: "Every step gets sorted: delete it, automate it with simple rules, hand it to AI, or keep a person on it. We time each one first, so you know what you're buying back.",
+      tag: 'FIXED-PRICE PLAN',
     },
     {
       step: '03',
       title: 'Deploy & Prove',
-      desc: 'Agents go live inside the tools your team already uses, with training to run them. Then we measure against the baseline, so the results are proven, not promised.',
+      desc: 'The automation goes live inside the tools your team already uses, with a person approving anything that reaches a client. We train your team, then measure against the baseline.',
       tag: '90-DAY PROOF',
     },
   ],

@@ -10,7 +10,9 @@ export type HeroCopy = {
   headline: ReadonlyArray<{ text: string; emphasis: boolean }>;
   subhead: string;
   trustChips: ReadonlyArray<string>;
+  /** Opens the Cal.com booking modal. */
   primaryCta: string;
+  /** Jumps to the priced offers in the Services Section. */
   secondaryCta: string;
   /** The Cal.com embed — slug, namespace and config, the same trio the Contact button uses. */
   booking: { slug: string; namespace: string; config: string };
@@ -24,17 +26,17 @@ export type HeroCopy = {
 };
 
 export const heroCopy: HeroCopy = {
-  eyebrow: 'B2B AI Consulting',
+  eyebrow: 'AI for Professional Services Firms',
   headline: [
-    { text: 'Simple AI.', emphasis: false },
-    { text: 'Clear Strategy.', emphasis: false },
-    { text: 'Real Growth.', emphasis: true },
+    { text: 'Less Admin.', emphasis: false },
+    { text: 'More Clients.', emphasis: false },
+    { text: 'Same Team.', emphasis: true },
   ],
   subhead:
-    'We build custom AI systems that cut costs, accelerate decisions, and deliver measurable ROI — without the hype, lock-in, or guesswork.',
-  trustChips: ['No Lock-In', '90-Day ROI Focus', 'Professional-Grade'],
-  primaryCta: 'Get Your Free AI Audit',
-  secondaryCta: 'Book Consultation',
+    'We find the hours your team loses to intake, document prep, reporting, and email, then build AI that does that work inside the tools you already use. Fixed prices. Results measured against where you started.',
+  trustChips: ['Fixed Prices', 'No Lock-In', '90-Day ROI Focus'],
+  primaryCta: 'Book a Free 30-Minute Call',
+  secondaryCta: 'See Pricing',
   booking: identity.booking,
   scrollCue: 'Scroll',
   backdrop: {

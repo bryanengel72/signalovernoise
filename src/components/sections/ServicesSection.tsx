@@ -25,6 +25,9 @@ export const ServicesSection = ({ copy = servicesCopy }: { copy?: ServicesCopy }
             <div className="relative z-10 group-hover:text-black transition-colors duration-500">
               <div className="font-display text-4xl font-bold text-grid group-hover:text-black/20 mb-12 transition-colors duration-500">{svc.num}</div>
               <h3 className="font-display text-xl font-bold uppercase mb-4">{svc.title}</h3>
+              {svc.price && (
+                <div className="font-display text-2xl font-bold text-signal group-hover:text-black tabular-nums mb-4 transition-colors duration-500">{svc.price}</div>
+              )}
               <p className="text-xs text-muted group-hover:text-black/70 transition-colors duration-500">{svc.desc}</p>
             </div>
           </Reveal>

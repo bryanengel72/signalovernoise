@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { contactCopy } from '@/content/sections/contact';
 
 /**
  * The form's failure path, with a fake Turnstile that behaves like the real one
@@ -45,12 +46,12 @@ const loadSection = async () => {
 };
 
 const sendButton = () => screen.getByRole('button', { name: /send message/i }) as HTMLButtonElement;
-const messageField = () => screen.getByLabelText('What are you working on?') as HTMLTextAreaElement;
+const messageField = () => screen.getByLabelText(contactCopy.fields.message.label) as HTMLTextAreaElement;
 
 const fillAndSend = () => {
   fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Ada' } });
   fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'ada@example.com' } });
-  fireEvent.change(screen.getByLabelText('What are you working on?'), {
+  fireEvent.change(screen.getByLabelText(contactCopy.fields.message.label), {
     target: { value: 'Hello' },
   });
   fireEvent.submit(sendButton().closest('form')!);

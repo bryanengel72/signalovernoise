@@ -9,6 +9,7 @@ import { HeroSection } from '@/src/components/sections/HeroSection';
 import { ProcessSection } from '@/src/components/sections/ProcessSection';
 import { FIELD_LIMITS } from '@/contact/inquiry';
 import { identity } from '@/content/identity';
+import { contactCopy } from '@/content/sections/contact';
 
 afterEach(cleanup);
 
@@ -27,7 +28,7 @@ describe('the contact form', () => {
 
   it('stops the message at the server limit rather than truncating it silently', () => {
     render(<ContactSection />);
-    const message = screen.getByLabelText('What are you working on?') as HTMLTextAreaElement;
+    const message = screen.getByLabelText(contactCopy.fields.message.label) as HTMLTextAreaElement;
 
     expect(message.maxLength).toBe(FIELD_LIMITS.message);
   });

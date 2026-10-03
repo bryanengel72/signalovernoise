@@ -61,7 +61,7 @@
       ]
     },
     {
-      "source": "/(hero-lock\\.mp4|hero-lock\\.webm|hero-lock-poster\\.jpg|og-image\\.png)",
+      "source": "/(hero-lock\\.mp4|hero-lock\\.webm|hero-lock-poster\\.jpg|og-image-v2\\.png)",
       "headers": [
         {
           "key": "Cache-Control",

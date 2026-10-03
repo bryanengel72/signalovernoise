@@ -53,18 +53,18 @@ export const experienceCopy: ExperienceCopy = {
   meta: {
     title: `${identity.shortName} — The Lock`,
     description:
-      'From noise to signal. An AI consultancy that cuts through the hype and locks onto measurable ROI.',
+      'From noise to signal. AI automation for professional services firms: fixed prices, no lock-in, measured results.',
     ogTitle: `${identity.name} | THE LOCK`,
     ogDescription:
-      'From noise to signal. We build AI systems that cut through the hype and lock onto measurable ROI — no lock-in, no guesswork, no noise.',
+      'From noise to signal. We find the hours your firm loses to admin and build AI that wins them back. Fixed prices, no lock-in, no noise.',
   },
 
   nav: [
-    { label: 'Capabilities', href: '#capabilities' },
+    { label: 'Pricing', href: '#capabilities' },
     { label: 'Proof', href: '#proof' },
     { label: 'Contact', href: '#contact' },
   ],
-  navCta: 'Get a Free AI Audit',
+  navCta: 'Book a Free Call',
 
   chapters: [
     { n: '01', name: 'Noise', until: 0.24 },
@@ -76,39 +76,39 @@ export const experienceCopy: ExperienceCopy = {
 
   openingBeat: 'Somewhere in the noise',
   tagline:
-    'We build AI systems that cut through the hype and lock onto measurable ROI — no lock-in, no guesswork, no noise.',
-  filmCtaPrimary: 'Get Your Free AI Audit',
-  filmCtaSecondary: 'See What We Build',
+    "We build AI that takes intake, document prep, and reporting off your team's plate. Fixed prices, no lock-in, no noise.",
+  filmCtaPrimary: 'Book a Free Call',
+  filmCtaSecondary: 'See Pricing',
 
   manifesto: {
     leadIn: 'The premise',
-    body: 'Most companies are drowning in AI <em>noise</em> — tools that never stick, pilots that stall, spend nobody can measure. We do one thing: find the <em>signal</em>, and build the system that locks onto it.',
+    body: 'Most firms are drowning in AI <em>noise</em> — tools nobody uses, pilots that stall, spend nobody can measure. We find the <em>signal</em>: the hours your team loses every week, and the system that wins them back.',
   },
 
   capabilities: {
-    leadIn: 'Capabilities',
-    headline: { lead: 'What We', emphasis: 'Build.' },
-    sub: 'Forward-deployed: embedded with your team, building inside your systems — across healthcare IT, veterinary, legal, media, and professional services. Real working systems, not chatbots.',
+    leadIn: 'Pricing',
+    headline: { lead: 'What It', emphasis: 'Costs.' },
+    sub: 'Fixed prices for professional services firms with 10 to 100 people. Working systems inside the tools you already use, not chatbots.',
     items: [
       {
         num: '01',
-        title: 'Workflow Automation',
-        desc: 'Map manual processes, identify ROI targets, and build the workflows that remove the busywork.',
+        title: 'Workflow Assessment',
+        desc: '$1,500. One week to map your workflows, find the three biggest time sinks, and price the fix.',
       },
       {
         num: '02',
-        title: 'Custom AI Agents',
-        desc: 'Agents that work inside the tools you already use — scoped, tested, and owned by you. No new app to learn.',
+        title: 'Automation Build',
+        desc: 'From $5,000. One workflow automated inside your tools, measured against your baseline.',
       },
       {
         num: '03',
-        title: 'Strategy &amp; Roadmap',
-        desc: 'A clear, prioritized 90-day AI roadmap tied to measurable outcomes, not a wish list.',
+        title: 'Monthly Support',
+        desc: 'From $750 / mo. We run, fix, and extend what we built. Month to month.',
       },
       {
         num: '04',
-        title: 'Training &amp; Handoff',
-        desc: "We build your team's capability to maintain and extend everything after we leave.",
+        title: 'Team Training',
+        desc: 'Included. Your team learns to run and change everything we build.',
       },
     ],
   },
@@ -128,10 +128,10 @@ export const experienceCopy: ExperienceCopy = {
   cta: {
     leadIn: 'Get in touch',
     headline: { lead: "Let's find your", emphasis: 'signal.' },
-    sub: "Tell us what you're trying to solve. We'll tell you honestly whether AI can help — and exactly what it would take.",
-    primary: 'Book a Discovery Call',
+    sub: "Tell us what's eating your team's week. We'll tell you honestly whether AI can fix it, and exactly what it would cost.",
+    primary: 'Book a Free 30-Minute Call',
     secondary: 'Enter the Full Site',
-    fine: 'Discovery calls within 48h · No lock-in · 90-day ROI focus',
+    fine: 'Discovery calls within 48h · Fixed prices · No lock-in',
   },
 
   footer: {
@@ -139,7 +139,7 @@ export const experienceCopy: ExperienceCopy = {
     links: [
       { label: 'Home', href: '/' },
       { label: 'Privacy', href: '/privacy' },
-      { label: 'Capabilities', href: '#capabilities' },
+      { label: 'Pricing', href: '#capabilities' },
     ],
   },
 

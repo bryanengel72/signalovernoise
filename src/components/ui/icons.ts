@@ -1,4 +1,4 @@
-import { Activity, Cpu, Database, Network, Terminal, TrendingUp, type LucideIcon } from 'lucide-react';
+import { Activity, Cpu, Database, Network, ShieldCheck, Terminal, TrendingUp, type LucideIcon } from 'lucide-react';
 import type { IconKey } from '@/content/icons';
 
 /**
@@ -15,4 +15,5 @@ export const ICONS: Record<IconKey, LucideIcon> = {
   cpu: Cpu,
   'trending-up': TrendingUp,
   network: Network,
+  shield: ShieldCheck,
 };

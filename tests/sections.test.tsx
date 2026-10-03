@@ -124,6 +124,14 @@ describe('Sections fall back to the site Copy', () => {
     }
   });
 
+  it('shows the price of every offer that has one', () => {
+    const { container } = render(<ServicesSection />);
+    const text = container.textContent ?? '';
+    for (const service of servicesCopy.services) {
+      if (service.price) expect(text).toContain(service.price);
+    }
+  });
+
   it('keeps the About credentials label in sync with Identity', () => {
     const { container } = render(<AboutSection />);
     expect(container.textContent ?? '').toContain(aboutCopy.credentialsLabel);
